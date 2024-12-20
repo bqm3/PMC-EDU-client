@@ -5,14 +5,14 @@
   "description": "PMC Knowledge",
   "private": true,
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "eject": "react-scripts eject",
+    "start": "cross-env PORT=3010 react-app-rewired start",
+    "build": "cross-env PORT=3010 react-app-rewired build",
+    "eject": "cross-env PORT=3010 react-scripts eject",
     "lint": "eslint --ext .ts,.tsx ./src",
     "lint:fix": "eslint --fix --ext .ts,.tsx ./src",
     "clear-all": "rm -rf build node_modules",
-    "re-start": "rm -rf build node_modules && yarn install && yarn start",
-    "re-build": "rm -rf build node_modules && yarn install && yarn build"
+    "re-start": "rm -rf build node_modules && yarn install && cross-env PORT=3010 yarn start",
+    "re-build": "rm -rf build node_modules && yarn install && cross-env PORT=3010 yarn build"
   },
   "eslintConfig": {
     "extends": [

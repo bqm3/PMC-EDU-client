@@ -1,18 +1,18 @@
 {
-  "name": "@minimal/pmc-knowledge",
+  "name": "@quangminh/pmc-knowledge",
   "author": "Quang Minh",
   "version": "4.0.0",
   "description": "PMC Knowledge",
   "private": true,
   "scripts": {
-    "start": "cross-env PORT=3010 react-app-rewired start",
-    "build": "cross-env PORT=3010 react-app-rewired build",
-    "eject": "cross-env PORT=3010 react-scripts eject",
+    "start": "cross-env PORT=8386 react-app-rewired start",
+    "build": "cross-env PORT=8386 react-app-rewired build",
+    "eject": "cross-env PORT=8386 react-scripts eject",
     "lint": "eslint --ext .ts,.tsx ./src",
     "lint:fix": "eslint --fix --ext .ts,.tsx ./src",
     "clear-all": "rm -rf build node_modules",
-    "re-start": "rm -rf build node_modules && yarn install && cross-env PORT=3010 yarn start",
-    "re-build": "rm -rf build node_modules && yarn install && cross-env PORT=3010 yarn build"
+    "re-start": "rm -rf build node_modules && yarn install && cross-env PORT=8386 yarn start",
+    "re-build": "rm -rf build node_modules && yarn install && cross-env PORT=8386 yarn build"
   },
   "eslintConfig": {
     "extends": [
@@ -71,6 +71,7 @@
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "change-case": "^4.1.2",
+    "cross-env": "^7.0.3",
     "date-fns": "^2.29.3",
     "firebase": "^9.12.1",
     "framer-motion": "^7.5.3",

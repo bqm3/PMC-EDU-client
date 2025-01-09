@@ -161,7 +161,7 @@ export default function FileDetailsDrawer({
                         />
                       ))
                     }
-                    renderInput={(params) => <TextField {...params} placeholder="#Add a tags" />}
+                    renderInput={(params: any) => <TextField {...params} placeholder="#Add a tags" />}
                   />
                 </>
               )}

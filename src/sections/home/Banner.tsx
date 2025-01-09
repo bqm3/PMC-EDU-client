@@ -31,10 +31,10 @@ const StyledContent = styled('div')(({ theme }) => ({
     position: 'absolute',
   },
   '& .MuiTypography-root': {
-    fontSize: '1.5rem', // Kích thước mặc định
+    fontSize: '1.2rem', // Kích thước mặc định
 
     [theme.breakpoints.down('sm')]: {
-      fontSize: '1.5rem', // Kích thước cho màn hình nhỏ
+      fontSize: '1.2rem', // Kích thước cho màn hình nhỏ
     }
   }
 }));
@@ -51,7 +51,7 @@ export default function ContactHero() {
               text="TAKE"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
                 color: 'primary.main',
@@ -62,7 +62,7 @@ export default function ContactHero() {
               text="THE"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
                 color: 'primary.main',
@@ -73,7 +73,7 @@ export default function ContactHero() {
               text="FIRST"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
                 color: 'primary.main',
@@ -84,7 +84,7 @@ export default function ContactHero() {
               text="STEP"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
                 color: 'primary.main',
@@ -99,7 +99,7 @@ export default function ContactHero() {
               text="TO"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
               }}
@@ -108,7 +108,7 @@ export default function ContactHero() {
               text="KNOWLEDGE"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
               }}
@@ -117,7 +117,7 @@ export default function ContactHero() {
               text="WITH"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
               }}
@@ -126,7 +126,7 @@ export default function ContactHero() {
               text="US"
               sx={{
                 fontSize: {
-                  xs: '1.5rem', // Kích thước chữ nhỏ
+                  xs: '1.2rem', // Kích thước chữ nhỏ
 
                 },
               }}

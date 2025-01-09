@@ -13,6 +13,8 @@ export type NavItemProps = {
       path: string;
     }[];
   }[];
+  text?: boolean;
+  isAuthButton?: boolean;
 };
 
 export interface NavItemDesktopProps extends ListItemButtonProps {

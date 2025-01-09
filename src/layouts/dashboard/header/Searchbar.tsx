@@ -174,7 +174,7 @@ function Searchbar() {
                 matchFrom: 'start',
                 stringify: (option) => option.title || option.path,
               })}
-              renderInput={(params) => (
+              renderInput={(params: any) => (
                 <InputBase
                   {...params.InputProps}
                   inputProps={params.inputProps}

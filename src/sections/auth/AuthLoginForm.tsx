@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as Yup from 'yup';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,28 +18,31 @@ import FormProvider, { RHFTextField } from '../../components/hook-form';
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
-  email: string;
-  password: string;
+  Tendangnhap: string;
+  Matkhau: string;
   afterSubmit?: string;
 };
 
 export default function AuthLoginForm() {
   const { login } = useAuthContext();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    phoneNumber: Yup.string().required('Số điện thoại là bắt buộc')
+    Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
       .matches(
         /^(03|05|07|08|09)\d{8}$/,
         'Chưa đúng định dạng số điện thoại'
       ),
-    password: Yup.string().required('Mật khẩu là bắt buộc'),
+    Matkhau: Yup.string().required('Mật khẩu là bắt buộc'),
   });
 
   const defaultValues = {
-    phoneNumber: '',
-    password: '',
+    Tendangnhap: '',
+    Matkhau: '',
   };
 
   const methods = useForm<FormValuesProps>({
@@ -56,7 +59,9 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      await login(data.email, data.password);
+      await login(data.Tendangnhap, data.Matkhau);
+      const redirectTo = location.state?.from || '/'; // Nếu không có, chuyển về trang chủ
+      navigate(redirectTo, { replace: true });
     } catch (error) {
       console.error(error);
 
@@ -74,10 +79,10 @@ export default function AuthLoginForm() {
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="phoneNumber" label="Số điện thoại" />
+        <RHFTextField name="Tendangnhap" label="Số điện thoại" />
 
         <RHFTextField
-          name="password"
+          name="Matkhau"
           label="Mật khẩu"
           type={showPassword ? 'text' : 'password'}
           InputProps={{

@@ -1,9 +1,11 @@
 import { createContext, useEffect, useReducer, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 // utils
 import axios from '../utils/axios';
 //
 import { isValidToken, setSession } from './utils';
 import { ActionMapType, AuthStateType, AuthUserType, JWTContextType } from './types';
+import { PATH_PAGE } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -28,9 +30,7 @@ type Payload = {
   [Types.LOGIN]: {
     user: AuthUserType;
   };
-  [Types.REGISTER]: {
-    user: AuthUserType;
-  };
+  [Types.REGISTER]: undefined;
   [Types.LOGOUT]: undefined;
 };
 
@@ -62,8 +62,8 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
   if (action.type === Types.REGISTER) {
     return {
       ...state,
-      isAuthenticated: true,
-      user: action.payload.user,
+      isAuthenticated: false,
+      user: null,
     };
   }
   if (action.type === Types.LOGOUT) {
@@ -88,6 +88,7 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // const navigate = useNavigate();
 
   const initialize = useCallback(async () => {
     try {
@@ -96,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/api/account/my-account');
+        const response = await axios.get('/api/v1/hosohv/my-account');
 
         const { user } = response.data;
 
@@ -117,7 +118,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
       }
     } catch (error) {
-      console.error(error);
       dispatch({
         type: Types.INITIAL,
         payload: {
@@ -133,15 +133,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [initialize]);
 
   // LOGIN
-  const login = async (email: string, password: string) => {
-    const response = await axios.post('/api/account/login', {
-      email,
-      password,
+  const login = async (Tendangnhap: string, Matkhau: string) => {
+    const response = await axios.post('/api/v1/hosohv/login', {
+      Tendangnhap,
+      Matkhau
     });
     const { accessToken, user } = response.data;
 
     setSession(accessToken);
-
     dispatch({
       type: Types.LOGIN,
       payload: {
@@ -151,22 +150,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   // REGISTER
-  const register = async (email: string, password: string, firstName: string, lastName: string) => {
-    const response = await axios.post('/api/account/register', {
-      email,
-      password,
-      firstName,
-      lastName,
+  const register = async (Email: string, Matkhau: string, Hodem: string, Ten: string, Tendangnhap: string, Dctamtru?: string) => {
+    const response = await axios.post('http://localhost:8686/api/v1/hosohv/register', {
+      Email,
+      Matkhau,
+      Hodem,
+      Ten,
+      Tendangnhap,
+      Dctamtru
     });
-    const { accessToken, user } = response.data;
+    const { user } = response.data;
 
-    localStorage.setItem('accessToken', accessToken);
+    // localStorage.setItem('accessToken', accessToken);
 
     dispatch({
       type: Types.REGISTER,
-      payload: {
-        user,
-      },
+      // payload: {
+      //   user,
+      // },
     });
   };
 
@@ -184,9 +185,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...state,
         method: 'jwt',
         login,
-        loginWithGoogle: () => {},
-        loginWithGithub: () => {},
-        loginWithTwitter: () => {},
+        loginWithGoogle: () => { },
+        loginWithGithub: () => { },
+        loginWithTwitter: () => { },
         logout,
         register,
       }}

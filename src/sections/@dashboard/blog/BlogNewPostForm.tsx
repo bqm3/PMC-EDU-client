@@ -201,7 +201,7 @@ export default function BlogNewPostForm() {
                       <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                     ))
                   }
-                  renderInput={(params) => <TextField label="Tags" {...params} />}
+                  renderInput={(params: any) => <TextField label="Tags" {...params} />}
                 />
 
                 <RHFTextField name="metaTitle" label="Meta title" />
@@ -225,7 +225,7 @@ export default function BlogNewPostForm() {
                       <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                     ))
                   }
-                  renderInput={(params) => <TextField label="Meta keywords" {...params} />}
+                  renderInput={(params: any) => <TextField label="Meta keywords" {...params} />}
                 />
               </Stack>
             </Card>

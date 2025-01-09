@@ -75,7 +75,7 @@ export default function BlogPostsSearch() {
           },
         },
       }}
-      renderInput={(params) => (
+      renderInput={(params: any) => (
         <CustomTextField
           {...params}
           width={220}

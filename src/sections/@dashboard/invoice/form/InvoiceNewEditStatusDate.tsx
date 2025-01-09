@@ -63,10 +63,10 @@ export default function InvoiceNewEditStatusDate() {
           <DatePicker
             label="Date create"
             value={field.value}
-            onChange={(newValue) => {
+            onChange={(newValue: any) => {
               field.onChange(newValue);
             }}
-            renderInput={(params) => (
+            renderInput={(params: any) => (
               <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
             )}
           />
@@ -80,10 +80,10 @@ export default function InvoiceNewEditStatusDate() {
           <DatePicker
             label="Due date"
             value={field.value}
-            onChange={(newValue) => {
+            onChange={(newValue: any) => {
               field.onChange(newValue);
             }}
-            renderInput={(params) => (
+            renderInput={(params: any) => (
               <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
             )}
           />

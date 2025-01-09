@@ -86,7 +86,7 @@ export default function InvoiceTableToolbar({
         label="Start date"
         value={filterStartDate}
         onChange={onFilterStartDate}
-        renderInput={(params) => (
+        renderInput={(params: any) => (
           <TextField
             {...params}
             fullWidth
@@ -101,7 +101,7 @@ export default function InvoiceTableToolbar({
         label="End date"
         value={filterEndDate}
         onChange={onFilterEndDate}
-        renderInput={(params) => (
+        renderInput={(params: any) => (
           <TextField
             {...params}
             fullWidth

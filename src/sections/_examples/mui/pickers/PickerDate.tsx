@@ -24,20 +24,20 @@ export default function PickerDate() {
           label="For desktop"
           value={value}
           minDate={new Date('2017-01-01')}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+          renderInput={(params: any) => <TextField fullWidth {...params} margin="normal" />}
         />
 
         <MobileDatePicker
           orientation="portrait"
           label="For mobile"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+          renderInput={(params: any) => <TextField fullWidth {...params} margin="normal" />}
         />
       </Block>
 
@@ -47,10 +47,10 @@ export default function PickerDate() {
           openTo="day"
           value={value}
           shouldDisableDate={isWeekend}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField {...params} />}
+          renderInput={(params: any) => <TextField {...params} />}
         />
       </Block>
 
@@ -59,10 +59,10 @@ export default function PickerDate() {
           views={['year']}
           label="Year only"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => (
+          renderInput={(params: any) => (
             <TextField {...params} fullWidth margin="normal" helperText={null} />
           )}
         />
@@ -72,10 +72,10 @@ export default function PickerDate() {
           minDate={new Date('2012-03-01')}
           maxDate={new Date('2023-06-01')}
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => (
+          renderInput={(params: any) => (
             <TextField {...params} fullWidth margin="normal" helperText={null} />
           )}
         />
@@ -84,10 +84,10 @@ export default function PickerDate() {
           views={['year', 'month', 'day']}
           label="Year, month and date"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => (
+          renderInput={(params: any) => (
             <TextField {...params} fullWidth margin="normal" helperText={null} />
           )}
         />
@@ -95,10 +95,10 @@ export default function PickerDate() {
           views={['day', 'month', 'year']}
           label="Invert the order of views"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => (
+          renderInput={(params: any) => (
             <TextField {...params} fullWidth margin="normal" helperText={null} />
           )}
         />
@@ -106,10 +106,10 @@ export default function PickerDate() {
           views={['day']}
           label="Just date"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => (
+          renderInput={(params: any) => (
             <TextField {...params} fullWidth margin="normal" helperText={null} />
           )}
         />

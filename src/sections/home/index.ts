@@ -13,4 +13,5 @@ export { default as HomeHugePackElements } from './HomeHugePackElements';
 export { default as Archievements } from './Archievements';
 export { default as ContactForm } from './ContactForm';
 export { default as ContactMap } from './ContactMap';
+export { default as AboutTeam } from './AboutTeam';
 

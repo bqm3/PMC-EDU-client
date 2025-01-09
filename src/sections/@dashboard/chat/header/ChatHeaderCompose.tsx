@@ -66,7 +66,7 @@ export default function ChatHeaderCompose({
         onInputChange={(event, value) => setSearchRecipients(value)}
         options={contacts}
         getOptionLabel={(recipient) => recipient.name}
-        renderInput={(params) => (
+        renderInput={(params: any) => (
           <TextField
             {...params}
             size="small"

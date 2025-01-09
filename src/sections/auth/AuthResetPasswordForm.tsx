@@ -10,21 +10,24 @@ import { LoadingButton } from '@mui/lab';
 import { PATH_AUTH } from '../../routes/paths';
 // components
 import FormProvider, { RHFTextField } from '../../components/hook-form';
+import { useSnackbar } from '../../components/snackbar';
+import axios from 'axios';
 
 
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
-  email: string;
-  phoneNumber: string;
+  Email: string;
+  Tendangnhap: string;
 };
 
 export default function AuthResetPasswordForm() {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const ResetPasswordSchema = Yup.object().shape({
-    email: Yup.string().email('Phải đúng định dạng Email').required('Email là bắt buộc'),
-    phoneNumber: Yup.string().required('Số điện thoại là bắt buộc')
+    Email: Yup.string().email('Phải đúng định dạng Email').required('Email là bắt buộc'),
+    Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
       .matches(
         /^(03|05|07|08|09)\d{8}$/,
         'Chưa đúng định dạng số điện thoại'
@@ -33,7 +36,7 @@ export default function AuthResetPasswordForm() {
 
   const methods = useForm<FormValuesProps>({
     resolver: yupResolver(ResetPasswordSchema),
-    defaultValues: { email: '', phoneNumber: '' },
+    defaultValues: { Email: '', Tendangnhap: '' },
   });
 
   const {
@@ -43,11 +46,22 @@ export default function AuthResetPasswordForm() {
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await axios.post("http://localhost:8686/api/v1/hosohv/forget-password", data)
+        .then((res) => {
+          enqueueSnackbar('Vui lòng kiểm tra email để nhận mã xác nhận', {
+            variant: 'success',
+            autoHideDuration: 5000,
+          });
+          navigate(PATH_AUTH.login);
+        })
+        .catch((err) => {
+          enqueueSnackbar(err.message || 'Lỗi! Vui lòng kiểm tra lại', {
+            variant: 'error',
+            autoHideDuration: 5000,
+          });
+          console.error(err);
+        });
 
-      sessionStorage.setItem('email-recovery', data.email);
-
-      navigate(PATH_AUTH.newPassword);
     } catch (error) {
       console.error(error);
     }
@@ -56,8 +70,8 @@ export default function AuthResetPasswordForm() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        <RHFTextField name="email" label="Địa chỉ Email" />
-        <RHFTextField name="phoneNumber" label="Số điện thoại" />
+        <RHFTextField name="Email" label="Địa chỉ Email" />
+        <RHFTextField name="Tendangnhap" label="Số điện thoại" />
       </Stack>
       <LoadingButton
         fullWidth

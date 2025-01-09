@@ -22,20 +22,20 @@ export default function PickerTime() {
         <TimePicker
           label="12 hours"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+          renderInput={(params: any) => <TextField fullWidth {...params} margin="normal" />}
         />
 
         <TimePicker
           ampm={false}
           label="24 hours"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+          renderInput={(params: any) => <TextField fullWidth {...params} margin="normal" />}
         />
       </Block>
 
@@ -44,25 +44,25 @@ export default function PickerTime() {
           orientation="portrait"
           label="For mobile"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+          renderInput={(params: any) => <TextField {...params} fullWidth margin="normal" />}
         />
 
         <DesktopTimePicker
           label="For desktop"
           value={value}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField {...params} margin="normal" fullWidth />}
+          renderInput={(params: any) => <TextField {...params} margin="normal" fullWidth />}
         />
 
         <TimePicker
           value={value}
           onChange={setValue}
-          renderInput={(params) => <TextField {...params} margin="normal" fullWidth />}
+          renderInput={(params: any) => <TextField {...params} margin="normal" fullWidth />}
         />
       </Block>
 
@@ -72,10 +72,10 @@ export default function PickerTime() {
             orientation="portrait"
             displayStaticWrapperAs="mobile"
             value={value}
-            onChange={(newValue) => {
+            onChange={(newValue: any) => {
               setValue(newValue);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params: any) => <TextField {...params} />}
           />
 
           <StaticTimePicker
@@ -83,10 +83,10 @@ export default function PickerTime() {
             orientation="landscape"
             openTo="minutes"
             value={value}
-            onChange={(newValue) => {
+            onChange={(newValue: any) => {
               setValue(newValue);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params: any) => <TextField {...params} />}
           />
         </Stack>
       </Block>

@@ -162,7 +162,7 @@ export default function ReactHookForm() {
                     {...field}
                     label="Start date"
                     inputFormat="dd/MM/yyyy"
-                    renderInput={(params) => (
+                    renderInput={(params: any) => (
                       <TextField
                         fullWidth
                         {...params}
@@ -182,7 +182,7 @@ export default function ReactHookForm() {
                     {...field}
                     label="End date"
                     inputFormat="dd/MM/yyyy"
-                    renderInput={(params) => (
+                    renderInput={(params: any) => (
                       <TextField
                         fullWidth
                         {...params}

@@ -349,10 +349,10 @@ export default function InvoiceListPage() {
             onResetFilter={handleResetFilter}
             filterStartDate={filterStartDate}
             onFilterService={handleFilterService}
-            onFilterStartDate={(newValue) => {
+            onFilterStartDate={(newValue: any) => {
               setFilterStartDate(newValue);
             }}
-            onFilterEndDate={(newValue) => {
+            onFilterEndDate={(newValue: any) => {
               setFilterEndDate(newValue);
             }}
           />

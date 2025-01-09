@@ -2,6 +2,7 @@ import { paramCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Box, Card, Link, Stack, Fab, Typography } from '@mui/material';
+import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
@@ -77,7 +78,7 @@ export default function ShopProductCard({ product }: Props) {
         )} */}
 
         <Fab
-          color="warning"
+          color="success"
           size="medium"
           className="add-cart-btn"
           // onClick={handleAddCart}
@@ -94,7 +95,7 @@ export default function ShopProductCard({ product }: Props) {
               }),
           }}
         >
-          <Iconify icon="ic:round-add-shopping-cart" />
+          <RemoveRedEyeRoundedIcon />
         </Fab>
 
         <Image alt={cover} src={cover} ratio="16/9" sx={{ borderRadius: 1.5 }} />

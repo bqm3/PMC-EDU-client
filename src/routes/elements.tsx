@@ -5,11 +5,11 @@ import LoadingScreen from '../components/loading-screen';
 // ----------------------------------------------------------------------
 
 const Loadable = (Component: ElementType) => (props: any) =>
-  (
-    <Suspense fallback={<LoadingScreen />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<LoadingScreen />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +19,10 @@ export const RegisterPage = Loadable(lazy(() => import('../pages/auth/RegisterPa
 export const VerifyCodePage = Loadable(lazy(() => import('../pages/auth/VerifyCodePage')));
 export const NewPasswordPage = Loadable(lazy(() => import('../pages/auth/NewPasswordPage')));
 export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
+
+// LESSON
+
+export const LearningPage = Loadable(lazy(() => import('../pages/lesson/LearningPage')));
 
 // DASHBOARD: GENERAL
 export const GeneralAppPage = Loadable(lazy(() => import('../pages/dashboard/GeneralAppPage')));
@@ -101,9 +105,12 @@ export const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 export const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
+export const UserPage = Loadable(lazy(() => import('../pages/UserAccountPage')));
 export const FaqsPage = Loadable(lazy(() => import('../pages/FaqsPage')));
 export const AboutPage = Loadable(lazy(() => import('../pages/AboutPage')));
 export const Contact = Loadable(lazy(() => import('../pages/ContactPage')));
+export const CoursePage = Loadable(lazy(() => import('../pages/CoursePage')));
+export const CourseDetailsPage = Loadable(lazy(() => import('../pages/CourseDetailsPage')));
 export const PricingPage = Loadable(lazy(() => import('../pages/PricingPage')));
 export const PaymentPage = Loadable(lazy(() => import('../pages/PaymentPage')));
 export const ComingSoonPage = Loadable(lazy(() => import('../pages/ComingSoonPage')));

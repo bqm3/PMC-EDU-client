@@ -41,6 +41,8 @@ import Label from '../../components/label';
 import navConfig from './nav/config';
 import NavMobile from './nav/mobile';
 import NavDesktop from './nav/desktop';
+import { useAuthContext } from 'src/auth/useAuthContext';
+import AccountPopover from './nav/AccountPopover';
 
 const socialMediaLinks = [
   {
@@ -68,11 +70,20 @@ const socialMediaLinks = [
 export default function Header() {
   const carouselRef = useRef(null);
 
+  const { user, logout } = useAuthContext()
+
   const theme = useTheme();
 
   const isDesktop = useResponsive('up', 'md');
 
   const isOffset = useOffSetTop(HEADER.H_MAIN_DESKTOP);
+
+  const filteredNavConfig = navConfig.filter((link) => {
+    if (user && link.isAuthButton) {
+      return false; // Ẩn các nút đăng ký, đăng nhập nếu user tồn tại
+    }
+    return true; // Hiển thị các mục khác
+  });
 
   return (
     <AppBar ref={carouselRef} color="transparent" sx={{ boxShadow: 0 }}>
@@ -250,15 +261,53 @@ export default function Header() {
           <Logo />
           <Box sx={{ flexGrow: 1 }} />
 
-          {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />}
+          {isDesktop && <NavDesktop isOffset={isOffset} data={filteredNavConfig} />}
 
-          <Button variant="contained" href={PATH_AUTH.register}>
-            Đăng ký
-          </Button>
-          <div style={{ width: 10 }}></div>
-          <Button href={PATH_AUTH.login}>Đăng nhập</Button>
+          {user && (
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: "16px" }}>
+              <Typography sx={{
+                fontSize: {
+                  xs: 14,
+                  md: 16,
+                },
+                cursor: "pointer",
+                // color: 'text.',
+                fontWeight: "medium"
+              }}>Khóa học của tôi</Typography>
 
-          {!isDesktop && <NavMobile isOffset={isOffset} data={navConfig} />}
+              {/* <Typography sx={{
+                fontSize: {
+                  xs: 14,
+                  md: 16,
+                },
+                color: 'text.secondary',
+                fontWeight: "medium"
+              }}>Hi, {user.Ten}!</Typography>
+              <Button
+                variant="outlined"
+                onClick={logout}
+                sx={{
+                  fontSize: {
+                    xs: '0.75rem',
+                    sm: '0.875rem',
+                    md: '1rem',
+                  },
+                  padding: {
+                    xs: '4px 8px',
+                    sm: '6px 12px',
+                    md: '8px 16px',
+                  },
+                }}
+              >
+                Đăng xuất
+              </Button> */}
+
+              <AccountPopover />
+
+            </Box>
+          )}
+
+          {!isDesktop && <NavMobile isOffset={isOffset} data={filteredNavConfig} />}
         </Container>
       </Toolbar>
 

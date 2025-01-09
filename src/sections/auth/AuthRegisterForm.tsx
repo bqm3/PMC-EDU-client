@@ -2,50 +2,59 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 // form
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Stack, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // auth
 import { useAuthContext } from '../../auth/useAuthContext';
+import { useSnackbar } from '../../components/snackbar';
 // components
 import Iconify from '../../components/iconify';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
+import { PATH_AUTH } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
-  email: string;
-  phoneNumber: string;
-  password: string;
-  firstName: string;
-  lastName: string;
+  Email: string;
+  Tendangnhap: string;
+  Matkhau: string;
+  Hodem: string;
+  Ten: string;
+  Dctamtru: string;
   afterSubmit?: string;
 };
 
 export default function AuthRegisterForm() {
   const { register } = useAuthContext();
+  const navigate = useNavigate();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    phoneNumber: Yup.string().required('Số điện thoại là bắt buộc')
+    Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
       .matches(
         /^(03|05|07|08|09)\d{8}$/,
         'Chưa đúng định dạng số điện thoại'
       ),
-    firstName: Yup.string().required('Họ và tên đệm là bắt buộc'),
-    lastName: Yup.string().required('Tên là bắt buộc'),
-    email: Yup.string().email('Email chưa đúng định dạng').required('Email là bắt buộc'),
-    password: Yup.string().required('Mật khẩu là bắt buộc'),
+    Hodem: Yup.string().required('Họ và tên đệm là bắt buộc'),
+    Ten: Yup.string().required('Tên là bắt buộc'),
+    Email: Yup.string().email('Email chưa đúng định dạng').required('Email là bắt buộc'),
+    Matkhau: Yup.string().required('Mật khẩu là bắt buộc'),
+    Dctamtru: Yup.string().required('Địa chỉ tạm trú là bắt buộc')
   });
 
   const defaultValues = {
-    phoneNumber: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+    Tendangnhap: '',
+    Hodem: '',
+    Ten: '',
+    Email: '',
+    Matkhau: '',
+    Dctamtru: ''
   };
 
   const methods = useForm<FormValuesProps>({
@@ -63,11 +72,17 @@ export default function AuthRegisterForm() {
   const onSubmit = async (data: FormValuesProps) => {
     try {
       if (register) {
-        await register(data.email, data.password, data.firstName, data.lastName);
+        await register(data.Email, data.Matkhau, data.Hodem, data.Ten, data.Tendangnhap, data.Dctamtru);
       }
+      navigate(PATH_AUTH.login)
+      enqueueSnackbar('Vui lòng kiểm tra email để nhận mã xác nhận', {
+        variant: 'success',
+        autoHideDuration: 5000,
+      });
+      reset();
     } catch (error) {
       console.error(error);
-      reset();
+      // reset();
       setError('afterSubmit', {
         ...error,
         message: error.message,
@@ -81,18 +96,18 @@ export default function AuthRegisterForm() {
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="firstName" label="Họ tên đệm" />
-          <RHFTextField name="lastName" label="Tên" />
+          <RHFTextField name="Hodem" label="Họ tên đệm" />
+          <RHFTextField name="Ten" label="Tên" />
         </Stack>
 
-        <RHFTextField name="email" label="Email" />
-        <RHFTextField name="email" label="Số điện thoại" />
-        <RHFTextField name="email" label="Địa chỉ" />
+        <RHFTextField name="Email" label="Email" />
+        <RHFTextField name="Dctamtru" label="Địa chỉ tạm trú" />
 
+        <RHFTextField name="Tendangnhap" label="Số điện thoại (Tên đăng nhập)" />
         <RHFTextField
-          name="password"
+          name="Matkhau"
           label="Mật khẩu"
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? 'text' : 'passwpord'}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

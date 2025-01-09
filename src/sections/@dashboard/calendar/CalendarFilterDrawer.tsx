@@ -114,14 +114,14 @@ export default function CalendarFilterDrawer({
           label="Start date"
           value={picker.startDate}
           onChange={picker.onChangeStartDate}
-          renderInput={(params) => <TextField size="small" {...params} />}
+          renderInput={(params: any) => <TextField size="small" {...params} />}
         />
 
         <DatePicker
           label="End date"
           value={picker.endDate}
           onChange={picker.onChangeEndDate}
-          renderInput={(params) => <TextField size="small" {...params} />}
+          renderInput={(params: any) => <TextField size="small" {...params} />}
         />
       </Stack>
 

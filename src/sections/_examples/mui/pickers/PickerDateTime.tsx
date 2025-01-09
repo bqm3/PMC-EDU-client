@@ -28,26 +28,26 @@ export default function PickerDateTime() {
       <Block title="Responsiveness">
         <MobileDateTimePicker
           value={valueResponsive}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValueResponsive(newValue);
           }}
-          renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+          renderInput={(params: any) => <TextField {...params} fullWidth margin="normal" />}
         />
 
         <DesktopDateTimePicker
           value={valueResponsive}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValueResponsive(newValue);
           }}
-          renderInput={(params) => <TextField {...params} margin="normal" fullWidth />}
+          renderInput={(params: any) => <TextField {...params} margin="normal" fullWidth />}
         />
 
         <DateTimePicker
           value={valueResponsive}
-          onChange={(newValue) => {
+          onChange={(newValue: any) => {
             setValueResponsive(newValue);
           }}
-          renderInput={(params) => <TextField {...params} margin="normal" fullWidth />}
+          renderInput={(params: any) => <TextField {...params} margin="normal" fullWidth />}
         />
       </Block>
     </Stack>

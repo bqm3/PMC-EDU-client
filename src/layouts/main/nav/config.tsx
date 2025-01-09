@@ -9,20 +9,33 @@ import Iconify from '../../../components/iconify';
 
 const navConfig = [
   {
-    title: 'Danh mục đào tạo',
+    title: 'Danh mục',
     icon: <Iconify icon="ic:round-grain" />,
     // path: PATH_PAGE.components,
     path: '#',
+    children: [
+      {
+        subheader: '',
+        items: [
+          { title: 'Orientation', path: '/#', },
+          { title: 'Quản lý tài chính kế toán', path: '/#', },
+        ],
+      },
+    ],
   },
   {
     title: 'Cơ hội nghề nghiệp',
     icon: <Iconify icon="eva:home-fill" />,
     path: '/#',
+    isAuthButton: true,
+    text: true
   },
   {
     title: 'Đào tạo kép',
     icon: <Iconify icon="ic:round-grain" />,
     path: '/#',
+    isAuthButton: true,
+    text: true
   },
 
   // {
@@ -69,6 +82,22 @@ const navConfig = [
     title: 'Đối tác đào tạo',
     icon: <Iconify icon="eva:book-open-fill" />,
     path: '/#',
+    isAuthButton: true,
+    text: true
+  },
+  {
+    title: 'Đăng ký',
+    icon: <Iconify icon="eva:edit-fill" />,
+    path: PATH_AUTH.register,
+    isAuthButton: true, // Đánh dấu là nút đăng ký
+    text: false
+  },
+  {
+    title: 'Đăng nhập',
+    icon: <Iconify icon="eva:person-fill" />,
+    path: PATH_AUTH.login,
+    isAuthButton: true, // Đánh dấu là nút đăng nhập
+    text: false
   },
 ];
 

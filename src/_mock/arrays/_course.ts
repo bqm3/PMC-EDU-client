@@ -2,7 +2,7 @@ import _mock from '../_mock';
 import { randomInArray } from '../utils';
 
 
-export const _courseList = [...Array(12)].map((_, index) => ({
+export const _courseList = [...Array(8)].map((_, index) => ({
     id: _mock.id(index),
     title: _mock.text.title(index),
     description: _mock.text.description(index),

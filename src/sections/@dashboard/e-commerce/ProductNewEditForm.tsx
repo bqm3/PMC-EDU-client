@@ -242,7 +242,7 @@ export default function ProductNewEditForm({ isEdit, currentProduct }: Props) {
                       <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                     ))
                   }
-                  renderInput={(params) => <TextField label="Tags" {...params} />}
+                  renderInput={(params: any) => <TextField label="Tags" {...params} />}
                 />
               </Stack>
             </Card>

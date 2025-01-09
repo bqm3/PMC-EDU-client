@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import { Box, Divider, Drawer, Stack, Typography, Tooltip, IconButton } from '@mui/material';
@@ -15,6 +15,7 @@ import { useSettingsContext } from '../SettingsContext';
 import Block from './Block';
 import BadgeDot from './BadgeDot';
 import ToggleButton from './ToggleButton';
+import TopButton from './TopButton';
 import ModeOptions from './ModeOptions';
 import LayoutOptions from './LayoutOptions';
 import StretchOptions from './StretchOptions';
@@ -41,6 +42,34 @@ export default function SettingsDrawer() {
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    // Lắng nghe sự kiện scroll
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      // Hủy lắng nghe khi component bị unmount
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleTop = () => {
+    // Cuộn lên đầu trang
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Ẩn nút sau khi click
+    setShowButton(false);
+  };
 
   const handleToggle = () => {
     setOpen(!open);
@@ -62,6 +91,9 @@ export default function SettingsDrawer() {
     <>
       {!open && <ToggleButton open={open} notDefault={notDefault} onToggle={handleToggle} />}
 
+      {!showButton ? null : (
+        <TopButton open={showButton} onToggle={handleTop} />
+      )}
       <Drawer
         anchor="right"
         open={open}

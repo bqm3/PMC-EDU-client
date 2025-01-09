@@ -42,6 +42,7 @@ export type IProduct = {
 };
 
 export type IProductFilter = {
+  name: string | null;
   gender: string[];
   category: string;
   colors: string[];

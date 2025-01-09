@@ -20,8 +20,8 @@ const options = ['Option 1', 'Option 2'];
 function countryToFlag(isoCode: string) {
   return typeof String.fromCodePoint !== 'undefined'
     ? isoCode
-        .toUpperCase()
-        .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
+      .toUpperCase()
+      .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
     : isoCode;
 }
 
@@ -65,7 +65,7 @@ export default function MUIAutocompletePage() {
               fullWidth
               options={top100Films}
               getOptionLabel={(option) => option.title}
-              renderInput={(params) => <TextField {...params} label="Combo box" margin="none" />}
+              renderInput={(params: any) => <TextField {...params} label="Combo box" margin="none" />}
             />
           </Block>
 
@@ -83,7 +83,7 @@ export default function MUIAutocompletePage() {
                   {option.label} ({option.code}) +{option.phone}
                 </Box>
               )}
-              renderInput={(params) => (
+              renderInput={(params: any) => (
                 <TextField
                   {...params}
                   label="Choose a country"
@@ -109,12 +109,11 @@ export default function MUIAutocompletePage() {
                 onInputChange={(event, newInputValue) => {
                   setInputValue(newInputValue);
                 }}
-                renderInput={(params) => <TextField {...params} label="Controllable" />}
+                renderInput={(params: any) => <TextField {...params} label="Controllable" />}
               />
 
-              <Typography variant="body2" sx={{ mt: 2 }}>{`value: ${
-                value !== null ? `'${value}'` : 'null'
-              }`}</Typography>
+              <Typography variant="body2" sx={{ mt: 2 }}>{`value: ${value !== null ? `'${value}'` : 'null'
+                }`}</Typography>
 
               <Typography variant="body2">{`inputValue: '${inputValue}'`}</Typography>
             </>
@@ -125,7 +124,7 @@ export default function MUIAutocompletePage() {
               fullWidth
               freeSolo
               options={top100Films.map((option) => option.title)}
-              renderInput={(params) => <TextField {...params} label="freeSolo" />}
+              renderInput={(params: any) => <TextField {...params} label="freeSolo" />}
               sx={{ mb: 2 }}
             />
 
@@ -134,7 +133,7 @@ export default function MUIAutocompletePage() {
               freeSolo
               disableClearable
               options={top100Films.map((option) => option.title)}
-              renderInput={(params) => (
+              renderInput={(params: any) => (
                 <TextField
                   {...params}
                   label="Search input"
@@ -152,7 +151,7 @@ export default function MUIAutocompletePage() {
               getOptionLabel={(option) => option.title}
               defaultValue={[top100Films[13]]}
               filterSelectedOptions
-              renderInput={(params) => (
+              renderInput={(params: any) => (
                 <TextField {...params} label="filterSelectedOptions" placeholder="Favorites" />
               )}
             />
@@ -171,7 +170,7 @@ export default function MUIAutocompletePage() {
                   {option.title}
                 </li>
               )}
-              renderInput={(params) => (
+              renderInput={(params: any) => (
                 <TextField {...params} label="Checkboxes" placeholder="Favorites" />
               )}
             />
@@ -184,7 +183,7 @@ export default function MUIAutocompletePage() {
                 options={top100Films}
                 getOptionLabel={(option) => option.title}
                 defaultValue={top100Films[13]}
-                renderInput={(params) => (
+                renderInput={(params: any) => (
                   <TextField {...params} label="Size Medium" placeholder="Favorites" />
                 )}
               />
@@ -198,7 +197,7 @@ export default function MUIAutocompletePage() {
                 options={top100Films}
                 getOptionLabel={(option) => option.title}
                 defaultValue={[top100Films[13]]}
-                renderInput={(params) => (
+                renderInput={(params: any) => (
                   <TextField {...params} label="Size small" placeholder="Favorites" />
                 )}
               />

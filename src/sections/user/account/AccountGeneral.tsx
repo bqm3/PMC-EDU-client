@@ -105,7 +105,7 @@ export default function AccountGeneral() {
 
     try {
       axios
-        .put(`http://localhost:8686/api/v1/hosohv/update-profile`, formData, {
+        .put(`/api/v1/hosohv/update-profile`, formData, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

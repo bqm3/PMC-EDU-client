@@ -14,4 +14,5 @@ export { default as Archievements } from './Archievements';
 export { default as ContactForm } from './ContactForm';
 export { default as ContactMap } from './ContactMap';
 export { default as AboutTeam } from './AboutTeam';
+export { default as HomeNews } from './HomeNews';
 

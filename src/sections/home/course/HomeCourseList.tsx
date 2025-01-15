@@ -5,16 +5,16 @@ import { IProduct } from '../../../@types/product';
 // components
 import { SkeletonProductItem } from '../../../components/skeleton';
 //
-import ShopProductCard from './ShopProductCard';
+import HomeCourseCard from './HomeCourseCard';
 
 // ----------------------------------------------------------------------
 
 interface Props extends BoxProps {
-  products: any;
+  courses: any;
   loading: boolean;
 }
 
-export default function ShopProductList({ products, loading, ...other }: Props) {
+export default function ShopProductList({ courses, loading, ...other }: Props) {
   return (
     <Box
       gap={3}
@@ -27,9 +27,9 @@ export default function ShopProductList({ products, loading, ...other }: Props) 
       }}
       {...other}
     >
-      {(loading ? [...Array(8)] : products).map((product: any, index: number) =>
-        product ? (
-          <ShopProductCard key={product.id} product={product} />
+      {(loading ? [...Array(8)] : courses.slice(0, 8)).map((course: any, index: number) =>
+        course ? (
+          <HomeCourseCard key={course.ID_Khoahoc} course={course} />
         ) : (
           <SkeletonProductItem key={index} />
         )

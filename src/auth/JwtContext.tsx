@@ -151,7 +151,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // REGISTER
   const register = async (Email: string, Matkhau: string, Hodem: string, Ten: string, Tendangnhap: string, Dctamtru?: string) => {
-    const response = await axios.post('http://localhost:8686/api/v1/hosohv/register', {
+    const response = await axios.post('/api/v1/hosohv/register', {
       Email,
       Matkhau,
       Hodem,

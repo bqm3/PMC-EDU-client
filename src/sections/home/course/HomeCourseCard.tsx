@@ -2,6 +2,7 @@ import { paramCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Box, Card, Link, Stack, Fab, Typography } from '@mui/material';
+import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from '../../../routes/paths';
 // utils
@@ -16,47 +17,19 @@ import Iconify from '../../../components/iconify';
 import Label from '../../../components/label';
 import Image from '../../../components/image';
 import { ColorPreview } from '../../../components/color-utils';
-import { IDM_Khoahoc } from 'src/@types/course';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IDM_Khoahoc;
+  course: any;
 };
 
-export default function ShopProductCard({ product }: Props) {
-  const { ID_Khoahoc,
-    Nhomlv,
-    Tenkhoahoc,
-    Gioithieuchung,
-    Sotiethoc,
-    Tongthoigian,
-    Hinhanh,
-    isDelete, } = product;
-
+export default function ShopProductCard({ course }: Props) {
+  const { ID_Khoahoc, Tenkhoahoc, Hinhanh, Tongthoigian, Sotiethoc } = course;
 
   const dispatch = useDispatch();
 
   const linkTo = PATH_PAGE.courses.view(`${ID_Khoahoc}`);
-
-  // const handleAddCart = async () => {
-  //   const newProduct = {
-  //     id,
-  //     name,
-  //     cover,
-  //     available,
-  //     price,
-  //     colors: [colors[0]],
-  //     size: sizes[0],
-  //     quantity: 1,
-  //   };
-  //   try {
-  //     dispatch(addToCart(newProduct));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   return (
     <Card
       sx={{
@@ -81,28 +54,30 @@ export default function ShopProductCard({ product }: Props) {
             {status}
           </Label>
         )} */}
+        <Link to={linkTo} component={RouterLink} color="inherit" variant="subtitle1" noWrap>
 
-        {/* <Fab
-          color="warning"
-          size="medium"
-          className="add-cart-btn"
-          onClick={handleAddCart}
-          sx={{
-            right: 16,
-            bottom: 16,
-            zIndex: 9,
-            opacity: 0,
-            position: 'absolute',
-            transition: (theme) =>
-              theme.transitions.create('all', {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.shorter,
-              }),
-          }}
-        >
-          <Iconify icon="ic:round-add-shopping-cart" />
-        </Fab> */}
+          <Fab
+            color="success"
+            size="medium"
+            className="add-cart-btn"
 
+            // onClick={handleAddCart}
+            sx={{
+              right: 16,
+              bottom: 16,
+              zIndex: 9,
+              opacity: 0,
+              position: 'absolute',
+              transition: (theme) =>
+                theme.transitions.create('all', {
+                  easing: theme.transitions.easing.easeInOut,
+                  duration: theme.transitions.duration.shorter,
+                }),
+            }}
+          >
+            <RemoveRedEyeRoundedIcon />
+          </Fab>
+        </Link>
         <Image alt={Hinhanh} src={Hinhanh} ratio="16/9" sx={{ borderRadius: 1.5 }} />
       </Box>
 

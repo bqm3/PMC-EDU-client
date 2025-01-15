@@ -30,9 +30,10 @@ import {
   ContactForm,
   ContactMap,
   AboutTeam,
+  HomeNews,
 } from '../sections/home';
 
-import { ShopProductList } from '../sections/home/course';
+import { HomeCourseList } from '../sections/home/course';
 import { PATH_AUTH } from 'src/routes/paths';
 import path from 'path';
 
@@ -67,7 +68,7 @@ export default function HomePage() {
     />
   );
 
-  const { products, checkout } = useSelector((state) => state.product);
+  const { dm_khoahoc } = useSelector((state) => state.course);
 
   return (
     <>
@@ -95,7 +96,7 @@ export default function HomePage() {
             my: { xs: 5, md: 10 },
           }}
         >
-          <ShopProductList products={_courseList} loading={!_courseList.length} />
+          <HomeCourseList courses={dm_khoahoc} loading={!dm_khoahoc.length} />
 
           <Button
             variant="contained"
@@ -110,20 +111,6 @@ export default function HomePage() {
         </Container>
         <Archievements />
 
-        {/* <Container sx={{ pt: { md: 10, xs: 5 } }}>
-          <Box
-            gap={10}
-            display="grid"
-            gridTemplateColumns={{
-              xs: 'repeat(1, 1fr)',
-              md: 'repeat(2, 1fr)',
-            }}
-          >
-           
-          </Box>
-        </Container> */}
-
-
         <Container sx={{ pt: { md: 10, xs: 5 } }}>
           <AboutTeam />
           <Box
@@ -137,6 +124,8 @@ export default function HomePage() {
             <ContactForm />
             <ContactMap />
           </Box>
+
+          <HomeNews />
         </Container>
 
         {/* <HomeMinimal />

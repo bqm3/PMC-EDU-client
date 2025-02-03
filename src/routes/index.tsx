@@ -5,6 +5,7 @@ import GuestGuard from '../auth/GuestGuard';
 // layouts
 import MainLayout from '../layouts/main';
 import LessonLayout from '../layouts/lesson';
+import ExerciseLayout from '../layouts/exercise';
 import SimpleLayout from '../layouts/simple';
 import CompactLayout from '../layouts/compact';
 import DashboardLayout from '../layouts/dashboard';
@@ -21,6 +22,9 @@ import {
 
   // Lesson
   LearningPage,
+
+  //Exercise
+  ExercisePage,
 
   // Dashboard: General
   GeneralAppPage,
@@ -171,100 +175,24 @@ export default function Router() {
         },
       ],
     },
-    // LESSON
+    // Học online
     {
-      path: 'learning',
+      path: 'khoa-hoc',
       element: (
         <LessonLayout>
           <LearningPage />
         </LessonLayout>
       ),
     },
-
-    // Dashboard
-    // {
-    //   path: 'dashboard',
-    //   element: (
-    //     <AuthGuard>
-    //       <DashboardLayout />
-    //     </AuthGuard>
-    //   ),
-    //   children: [
-    //     { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
-    //     { path: 'app', element: <GeneralAppPage /> },
-    //     { path: 'ecommerce', element: <GeneralEcommercePage /> },
-    //     { path: 'analytics', element: <GeneralAnalyticsPage /> },
-    //     { path: 'banking', element: <GeneralBankingPage /> },
-    //     { path: 'booking', element: <GeneralBookingPage /> },
-    //     { path: 'file', element: <GeneralFilePage /> },
-    //     {
-    //       path: 'e-commerce',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/e-commerce/shop" replace />, index: true },
-    //         { path: 'shop', element: <EcommerceShopPage /> },
-    //         { path: 'product/:name', element: <EcommerceProductDetailsPage /> },
-    //         { path: 'list', element: <EcommerceProductListPage /> },
-    //         { path: 'product/new', element: <EcommerceProductCreatePage /> },
-    //         { path: 'product/:name/edit', element: <EcommerceProductEditPage /> },
-    //         { path: 'checkout', element: <EcommerceCheckoutPage /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'user',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
-    //         { path: 'profile', element: <UserProfilePage /> },
-    //         { path: 'cards', element: <UserCardsPage /> },
-    //         { path: 'list', element: <UserListPage /> },
-    //         { path: 'new', element: <UserCreatePage /> },
-    //         { path: ':name/edit', element: <UserEditPage /> },
-    //         { path: 'account', element: <UserAccountPage /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'invoice',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/invoice/list" replace />, index: true },
-    //         { path: 'list', element: <InvoiceListPage /> },
-    //         { path: ':id', element: <InvoiceDetailsPage /> },
-    //         { path: ':id/edit', element: <InvoiceEditPage /> },
-    //         { path: 'new', element: <InvoiceCreatePage /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'blog',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/blog/posts" replace />, index: true },
-    //         { path: 'posts', element: <BlogPostsPage /> },
-    //         { path: 'post/:title', element: <BlogPostPage /> },
-    //         { path: 'new', element: <BlogNewPostPage /> },
-    //       ],
-    //     },
-    //     { path: 'files-manager', element: <FileManagerPage /> },
-    //     {
-    //       path: 'mail',
-    //       children: [
-    //         { element: <Navigate to="/dashboard/mail/all" replace />, index: true },
-    //         { path: 'label/:customLabel', element: <MailPage /> },
-    //         { path: 'label/:customLabel/:mailId', element: <MailPage /> },
-    //         { path: ':systemLabel', element: <MailPage /> },
-    //         { path: ':systemLabel/:mailId', element: <MailPage /> },
-    //       ],
-    //     },
-    //     {
-    //       path: 'chat',
-    //       children: [
-    //         { element: <ChatPage />, index: true },
-    //         { path: 'new', element: <ChatPage /> },
-    //         { path: ':conversationKey', element: <ChatPage /> },
-    //       ],
-    //     },
-    //     { path: 'calendar', element: <CalendarPage /> },
-    //     { path: 'kanban', element: <KanbanPage /> },
-    //     { path: 'permission-denied', element: <PermissionDeniedPage /> },
-    //     { path: 'blank', element: <BlankPage /> },
-    //   ],
-    // },
+    // Thi thực
+    {
+      path: 'thi-truc-tuyen',
+      element: (
+        <ExerciseLayout>
+          <ExercisePage />
+        </ExerciseLayout>
+      ),
+    },
 
     // Main Routes
     {
@@ -275,13 +203,13 @@ export default function Router() {
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <FaqsPage /> },
         {
-          path: 'khoa-hoc',
+          path: 'danh-sach-khoa-hoc',
           children: [
-            { element: <Navigate to="/danh-sach" replace />, index: true },
-            { path: 'danh-sach', element: <CoursePage /> },
-            { path: 'product/new', element: <EcommerceProductCreatePage /> },
+            { element: <CoursePage />, index: true },
+            // { path: '', element: <CoursePage /> },
+            // { path: 'product/new', element: <EcommerceProductCreatePage /> },
             { path: ':name', element: <CourseDetailsPage /> },
-            { path: 'checkout', element: <EcommerceCheckoutPage /> },
+            // { path: 'checkout', element: <EcommerceCheckoutPage /> },
           ],
         },
         {
@@ -405,5 +333,92 @@ export default function Router() {
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },
+
+    // Dashboard
+    // {
+    //   path: 'dashboard',
+    //   element: (
+    //     <AuthGuard>
+    //       <DashboardLayout />
+    //     </AuthGuard>
+    //   ),
+    //   children: [
+    //     { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
+    //     { path: 'app', element: <GeneralAppPage /> },
+    //     { path: 'ecommerce', element: <GeneralEcommercePage /> },
+    //     { path: 'analytics', element: <GeneralAnalyticsPage /> },
+    //     { path: 'banking', element: <GeneralBankingPage /> },
+    //     { path: 'booking', element: <GeneralBookingPage /> },
+    //     { path: 'file', element: <GeneralFilePage /> },
+    //     {
+    //       path: 'e-commerce',
+    //       children: [
+    //         { element: <Navigate to="/dashboard/e-commerce/shop" replace />, index: true },
+    //         { path: 'shop', element: <EcommerceShopPage /> },
+    //         { path: 'product/:name', element: <EcommerceProductDetailsPage /> },
+    //         { path: 'list', element: <EcommerceProductListPage /> },
+    //         { path: 'product/new', element: <EcommerceProductCreatePage /> },
+    //         { path: 'product/:name/edit', element: <EcommerceProductEditPage /> },
+    //         { path: 'checkout', element: <EcommerceCheckoutPage /> },
+    //       ],
+    //     },
+    //     {
+    //       path: 'user',
+    //       children: [
+    //         { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
+    //         { path: 'profile', element: <UserProfilePage /> },
+    //         { path: 'cards', element: <UserCardsPage /> },
+    //         { path: 'list', element: <UserListPage /> },
+    //         { path: 'new', element: <UserCreatePage /> },
+    //         { path: ':name/edit', element: <UserEditPage /> },
+    //         { path: 'account', element: <UserAccountPage /> },
+    //       ],
+    //     },
+    //     {
+    //       path: 'invoice',
+    //       children: [
+    //         { element: <Navigate to="/dashboard/invoice/list" replace />, index: true },
+    //         { path: 'list', element: <InvoiceListPage /> },
+    //         { path: ':id', element: <InvoiceDetailsPage /> },
+    //         { path: ':id/edit', element: <InvoiceEditPage /> },
+    //         { path: 'new', element: <InvoiceCreatePage /> },
+    //       ],
+    //     },
+    //     {
+    //       path: 'blog',
+    //       children: [
+    //         { element: <Navigate to="/dashboard/blog/posts" replace />, index: true },
+    //         { path: 'posts', element: <BlogPostsPage /> },
+    //         { path: 'post/:title', element: <BlogPostPage /> },
+    //         { path: 'new', element: <BlogNewPostPage /> },
+    //       ],
+    //     },
+    //     { path: 'files-manager', element: <FileManagerPage /> },
+    //     {
+    //       path: 'mail',
+    //       children: [
+    //         { element: <Navigate to="/dashboard/mail/all" replace />, index: true },
+    //         { path: 'label/:customLabel', element: <MailPage /> },
+    //         { path: 'label/:customLabel/:mailId', element: <MailPage /> },
+    //         { path: ':systemLabel', element: <MailPage /> },
+    //         { path: ':systemLabel/:mailId', element: <MailPage /> },
+    //       ],
+    //     },
+    //     {
+    //       path: 'chat',
+    //       children: [
+    //         { element: <ChatPage />, index: true },
+    //         { path: 'new', element: <ChatPage /> },
+    //         { path: ':conversationKey', element: <ChatPage /> },
+    //       ],
+    //     },
+    //     { path: 'calendar', element: <CalendarPage /> },
+    //     { path: 'kanban', element: <KanbanPage /> },
+    //     { path: 'permission-denied', element: <PermissionDeniedPage /> },
+    //     { path: 'blank', element: <BlankPage /> },
+    //   ],
+    // },
+
+
   ]);
 }

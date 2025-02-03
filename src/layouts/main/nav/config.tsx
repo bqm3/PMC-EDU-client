@@ -9,19 +9,19 @@ import Iconify from '../../../components/iconify';
 
 const navConfig = [
   {
-    title: 'Danh mục',
+    title: 'Danh sách khóa học',
     icon: <Iconify icon="ic:round-grain" />,
     // path: PATH_PAGE.components,
-    path: '#',
-    children: [
-      {
-        subheader: '',
-        items: [
-          { title: 'Orientation', path: '/#', },
-          { title: 'Quản lý tài chính kế toán', path: '/#', },
-        ],
-      },
-    ],
+    path: '/danh-sach-khoa-hoc',
+    // children: [
+    //   {
+    //     subheader: '',
+    //     items: [
+    //       { title: 'Orientation', path: '/#', },
+    //       { title: 'Quản lý tài chính kế toán', path: '/#', },
+    //     ],
+    //   },
+    // ],
   },
   {
     title: 'Cơ hội nghề nghiệp',

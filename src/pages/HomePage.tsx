@@ -36,6 +36,8 @@ import {
 import { HomeCourseList } from '../sections/home/course';
 import { PATH_AUTH } from 'src/routes/paths';
 import path from 'path';
+import { useEffect } from 'react';
+import { getKhoaHocs } from 'src/redux/slices/course';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +46,7 @@ export default function HomePage() {
 
   const { themeStretch } = useSettingsContext();
 
+  const dispatch = useDispatch();
   const { scrollYProgress } = useScroll();
 
   const scaleX = useSpring(scrollYProgress, {
@@ -69,6 +72,10 @@ export default function HomePage() {
   );
 
   const { dm_khoahoc } = useSelector((state) => state.course);
+
+  useEffect(() => {
+    dispatch(getKhoaHocs());
+  }, [dispatch]);
 
   return (
     <>

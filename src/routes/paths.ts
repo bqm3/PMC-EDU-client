@@ -5,7 +5,8 @@ function path(root: string, sublink: string) {
 }
 
 const ROOTS_AUTH = '/auth';
-const ROOTS_LESSON = '/learning';
+const ROOTS_LESSON = '/khoa-hoc';
+const ROOTS_EXERCISE = '/thi-truc-tuyen';
 const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
@@ -24,9 +25,16 @@ export const PATH_AUTH = {
 export const PATH_LESSON = {
   root: ROOTS_LESSON,
   learning: {
-    view: (name: string) => path(ROOTS_LESSON, `/learning/${name}`),
+    view: (name: string) => path(ROOTS_LESSON, `/khoa-hoc/${name}`),
+  },
+ 
+}
+//exercise
+export const PATH_EXERCISE = {
+  root: ROOTS_EXERCISE,
+  practice : {
+    view: (name: string) => path(ROOTS_EXERCISE, `/de-thi/${name}`),
   }
-
 }
 
 export const PATH_PAGE = {
@@ -42,9 +50,9 @@ export const PATH_PAGE = {
   page500: '/500',
   components: '/components',
   courses: {
-    root: '/khoa-hoc/danh-sach',
-    list: '/khoa-hoc/danh-sach',
-    view: (name: string) => `/khoa-hoc/${name}`,
+    root: '/danh-sach-khoa-hoc',
+    list: '/danh-sach-khoa-hoc',
+    view: (name: string) => `/danh-sach-khoa-hoc/${name}`,
   },
   user: {
     root: ( '/user'),

@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 // @mui
 import { Box, Link, Stack, Button, Rating, Divider, Typography, IconButton } from '@mui/material';
 // routes
-import { PATH_AUTH, PATH_DASHBOARD, PATH_LESSON } from '../../../routes/paths';
+import { PATH_AUTH, PATH_DASHBOARD, PATH_EXERCISE, PATH_LESSON } from '../../../routes/paths';
 // utils
 import { fShortenNumber, fCurrency } from '../../../utils/formatNumber';
 // @types
@@ -90,23 +90,25 @@ export default function CourseDetailsAdd({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
-  const onSubmit = async (data: FormValuesProps) => {
+  const onSubmit = async (data: FormValuesProps, event: any) => {
+
+    const clickedButton = event.nativeEvent.submitter; // Lấy thông tin nút được nhấn
+    const action = clickedButton?.name; // Lấy thuộc tính name hoặc value của nút
     try {
-      if (user) {
-        navigate(PATH_LESSON.root);
-      } else {
-        const currentPath = window.location.pathname; // Lấy URL hiện tại
-        navigate(PATH_AUTH.login, { state: { from: currentPath } }); // Lưu đường dẫn
+      if (action === 'register') {
+        // Xử lý cho nút 'Đăng ký học'
+        if (user) {
+          navigate(PATH_LESSON.root);
+        } else {
+          const currentPath = window.location.pathname; // Lấy URL hiện tại
+          navigate(PATH_AUTH.login, { state: { from: currentPath } }); // Lưu đường dẫn
+        }
+      } else if (action === 'registerAdvanced') {
+        // Xử lý cho nút 'Đăng ký học nâng cao'
+        console.log('Đăng ký học nâng cao với dữ liệu:', data);
+        navigate(PATH_EXERCISE.root);
+        // Điều hướng hoặc thực hiện hành động khác
       }
-      // if (!alreadyProduct) {
-      //   onAddCart({
-      //     ...data,
-      //     colors: [values.colors],
-      //     subtotal: data.price * data.quantity,
-      //   });
-      // }
-      // onGotoStep(0);
-      // navigate(PATH_DASHBOARD.eCommerce.checkout);
     } catch (error) {
       console.error(error);
     }
@@ -156,8 +158,11 @@ export default function CourseDetailsAdd({
             Đăng ký
           </Button> */}
 
-        <Button fullWidth size="large" type="submit" variant="contained">
+        <Button fullWidth size="large" type="submit" name="register" variant="contained">
           Đăng ký học
+        </Button>
+        <Button fullWidth size="large" type="submit" name="registerAdvanced" variant="contained">
+          Thi trực tuyến
         </Button>
       </Stack>
       <Stack

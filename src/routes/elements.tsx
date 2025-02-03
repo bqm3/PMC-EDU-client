@@ -21,8 +21,10 @@ export const NewPasswordPage = Loadable(lazy(() => import('../pages/auth/NewPass
 export const ResetPasswordPage = Loadable(lazy(() => import('../pages/auth/ResetPasswordPage')));
 
 // LESSON
-
 export const LearningPage = Loadable(lazy(() => import('../pages/lesson/LearningPage')));
+
+// EXERCISE 
+export const ExercisePage = Loadable(lazy(() => import('../pages/exercise/ExercisePage')));
 
 // DASHBOARD: GENERAL
 export const GeneralAppPage = Loadable(lazy(() => import('../pages/dashboard/GeneralAppPage')));

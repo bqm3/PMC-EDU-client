@@ -101,7 +101,7 @@ export default function Header() {
 
         }}
       >
-        <Link to="/khoa-hoc/danh-sach" component={RouterLink}>
+        <Link to="/danh-sach-khoa-hoc" component={RouterLink}>
           <Typography
             variant="body1"
             sx={{

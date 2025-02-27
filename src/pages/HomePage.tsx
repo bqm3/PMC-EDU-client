@@ -38,6 +38,7 @@ import { PATH_AUTH } from 'src/routes/paths';
 import path from 'path';
 import { useEffect } from 'react';
 import { getKhoaHocs } from 'src/redux/slices/course';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ export default function HomePage() {
   const theme = useTheme();
 
   const { themeStretch } = useSettingsContext();
+  const { user } = useAuthContext();
 
   const dispatch = useDispatch();
   const { scrollYProgress } = useScroll();
@@ -84,9 +86,10 @@ export default function HomePage() {
       </Helmet>
 
       {progress}
+      {
+        !user && <ContactHero />
+      }
 
-      <ContactHero />
-      {/* <HomeHero /> */}
 
       <Box
         sx={{
@@ -103,6 +106,9 @@ export default function HomePage() {
             my: { xs: 5, md: 10 },
           }}
         >
+          {
+            user && <Box paddingY={5}></Box>
+          }
           <HomeCourseList courses={dm_khoahoc} loading={!dm_khoahoc.length} />
 
           <Button
@@ -116,10 +122,16 @@ export default function HomePage() {
             Tất cả các khóa học
           </Button>
         </Container>
-        <Archievements />
+        {
+          !user && <Archievements />
+        }
+
 
         <Container sx={{ pt: { md: 10, xs: 5 } }}>
-          <AboutTeam />
+          {
+            !user && <AboutTeam />
+          }
+
           <Box
             gap={10}
             display="grid"

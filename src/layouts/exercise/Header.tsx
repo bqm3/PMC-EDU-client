@@ -75,13 +75,6 @@ export default function Header() {
 
   const isOffset = useOffSetTop(HEADER.H_MAIN_DESKTOP);
 
-  // const filteredNavConfig = navConfig.filter((link) => {
-  //   if (user && link.isAuthButton) {
-  //     return false; // Ẩn các nút đăng ký, đăng nhập nếu user tồn tại
-  //   }
-  //   return true; // Hiển thị các mục khác
-  // });
-
   return (
     // <AppBar ref={carouselRef} color="transparent" sx={{ boxShadow: 0 }}>
     //   <Box

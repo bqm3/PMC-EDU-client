@@ -34,18 +34,35 @@ export default function AuthRegisterForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordAgain, setShowPasswordAgain] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
-      .matches(
-        /^(03|05|07|08|09)\d{8}$/,
-        'Chưa đúng định dạng số điện thoại'
-      ),
-    Hodem: Yup.string().required('Họ và tên đệm là bắt buộc'),
-    Ten: Yup.string().required('Tên là bắt buộc'),
-    Email: Yup.string().email('Email chưa đúng định dạng').required('Email là bắt buộc'),
-    Matkhau: Yup.string().required('Mật khẩu là bắt buộc'),
-    Dctamtru: Yup.string().required('Địa chỉ tạm trú là bắt buộc')
+    Tendangnhap: Yup.string()
+      .required('Số điện thoại là bắt buộc')
+      .matches(/^(03|05|07|08|09)\d{8}$/, 'Chưa đúng định dạng số điện thoại'),
+
+    Hodem: Yup.string()
+      .matches(/^[A-Za-zÀ-ỹ\s]+$/, 'Họ và tên đệm không được chứa số')
+      .required('Họ và tên đệm là bắt buộc'),
+
+    Ten: Yup.string()
+      .matches(/^[A-Za-zÀ-ỹ\s]+$/, 'Tên không được chứa số')
+      .required('Tên là bắt buộc'),
+
+    Email: Yup.string()
+      .email('Email chưa đúng định dạng')
+      .required('Email là bắt buộc'),
+
+    Matkhau: Yup.string()
+      .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+      .required('Mật khẩu là bắt buộc'),
+
+    Nhaplaimatkhau: Yup.string()
+      .oneOf([Yup.ref('Matkhau'), null], 'Mật khẩu nhập lại không khớp')
+      .required('Vui lòng nhập lại mật khẩu'),
+
+    Dctamtru: Yup.string().required('Địa chỉ tạm trú là bắt buộc'),
+
   });
 
   const defaultValues = {
@@ -96,15 +113,15 @@ export default function AuthRegisterForm() {
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="Hodem" label="Họ tên đệm" />
-          <RHFTextField name="Ten" label="Tên" />
+          <RHFTextField size='small' name="Hodem" label="Họ tên đệm" />
+          <RHFTextField size='small' name="Ten" label="Tên" />
         </Stack>
 
-        <RHFTextField name="Email" label="Email" />
-        <RHFTextField name="Dctamtru" label="Địa chỉ tạm trú" />
+        <RHFTextField size='small' name="Email" label="Email" />
+        <RHFTextField size='small' name="Dctamtru" label="Địa chỉ tạm trú" />
 
-        <RHFTextField name="Tendangnhap" label="Số điện thoại (Tên đăng nhập)" />
-        <RHFTextField
+        <RHFTextField size='small' name="Tendangnhap" label="Số điện thoại (Tên đăng nhập)" />
+        <RHFTextField size='small'
           name="Matkhau"
           label="Mật khẩu"
           type={showPassword ? 'text' : 'passwpord'}
@@ -113,6 +130,22 @@ export default function AuthRegisterForm() {
               <InputAdornment position="end">
                 <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                   <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <RHFTextField
+          size='small'
+          name="Nhaplaimatkhau"
+          label="Nhập lại mật khẩu"
+          type={showPasswordAgain ? 'text' : 'passwpord'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPasswordAgain(!showPasswordAgain)} edge="end">
+                  <Iconify icon={showPasswordAgain ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                 </IconButton>
               </InputAdornment>
             ),

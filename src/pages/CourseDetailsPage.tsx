@@ -2,190 +2,204 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // @mui
-import { alpha } from '@mui/material/styles';
-import { Box, Tab, Tabs, Card, Grid, Divider, Container, Typography, Stack } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Container,
+  Typography,
+  Stack,
+} from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
-import { getProduct, addToCart, gotoStep } from '../redux/slices/product';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
-// @types
-import { ICheckoutCartItem } from '../@types/product';
-// components
-import Iconify from '../components/iconify';
-import Markdown from '../components/markdown';
-import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
 import { SkeletonProductDetails } from '../components/skeleton';
+
 // sections
 import {
   CourseDetailsSummary,
   CourseDetailsReview,
-  CourseDetailsCarousel,
-  CourseDetailsAdd
+  CourseDetailsAdd,
 } from '../sections/courses/details';
-import CartWidget from '../sections/@dashboard/e-commerce/CartWidget';
+import { getDetailKhoaHoc } from 'src/redux/slices/course';
+import { ILophoc } from 'src/@types/course';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
-const SUMMARY = [
-  {
-    title: '100% Original',
-    description: 'Chocolate bar candy canes ice cream toffee cookie halvah.',
-    icon: 'ic:round-verified',
-  },
-  {
-    title: '10 Day Replacement',
-    description: 'Marshmallow biscuit donut dragée fruitcake wafer.',
-    icon: 'eva:clock-fill',
-  },
-  {
-    title: 'Year Warranty',
-    description: 'Cotton candy gingerbread cake I love sugar sweet.',
-    icon: 'ic:round-verified-user',
-  },
-];
-
-// ----------------------------------------------------------------------
-
-export default function EcommerceProductDetailsPage() {
+export default function CourseDetailsPage() {
   const { themeStretch } = useSettingsContext();
 
   const { name } = useParams();
 
   const dispatch = useDispatch();
 
-  const { product, isLoading, checkout } = useSelector((state) => state.product);
+  const { course, isLoading } = useSelector((state) => state.course);
 
-  const [currentTab, setCurrentTab] = useState('description');
+  const [checkCourse, setCheckCourse] = useState();
 
   useEffect(() => {
     if (name) {
-      dispatch(getProduct(name as string));
+      dispatch(getDetailKhoaHoc(name as string));
     }
   }, [dispatch, name]);
 
-  const handleAddCart = (newProduct: ICheckoutCartItem) => {
-    dispatch(addToCart(newProduct));
+  function convertToTime(minutes: number) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours} tiếng ${remainingMinutes} phút`;
+  }
+
+  const [logs, setLogs] = useState<any>(course?.dt_lichhocs);
+  const [expandedAccordions, setExpandedAccordions] = useState<any>([]);
+
+  useEffect(() => {
+    setLogs(course?.dt_lichhocs);
+  }, [course]);
+
+  const handleCheckKhoaHoc = async (course: ILophoc) => {
+    if (!course) return;
+
+    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
+
+    await axios.put(
+      `http://localhost:7676/api/v1/hocvien/khoahoc/${course?.ID_Khoahoc}`,
+      {},
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        }
+      }
+    ).then((response) => {
+      setCheckCourse(response.data);
+    }).catch((error) => {
+      console.error(error);
+    });
   };
 
-  const handleGotoStep = (step: number) => {
-    dispatch(gotoStep(step));
-  };
+  useEffect(() => {
+    if (course) {
+      handleCheckKhoaHoc(course);
+    }
+  }, [course]);
 
-  const TABS = [
-    {
-      value: 'description',
-      label: 'Giới thiệu nội dung',
-      component: product ? <Markdown children={product?.description} /> : null,
-    },
-    {
-      value: 'courses',
-      label: `Bài học (${product ? product.reviews.length : ''})`,
-      component: product ? <CourseDetailsReview product={product} /> : null,
-    },
-    {
-      value: 'reviews',
-      label: `Đánh giá (${product ? product.reviews.length : ''})`,
-      component: product ? <CourseDetailsReview product={product} /> : null,
-    },
-    {
-      value: 'teacher',
-      label: 'Giảng viên',
-      component: product ? <Markdown children={product?.description} /> : null,
-    },
-  ];
+
+
+
+  const expandAll = () => {
+    const newArray: any = [];
+    if (!(expandedAccordions.length > 0)) {
+      logs.forEach((log: any, index: number) => newArray.push(index));
+      setExpandedAccordions(newArray);
+    } else {
+      setExpandedAccordions([]);
+    }
+  };
 
   return (
     <>
       <Helmet>
-        <title>{`Ecommerce: ${product?.name || ''} | Minimal UI`}</title>
+        <title>{`PMC Knowledge - ${course?.Tenlop || ''}`}</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
+        {course && (
+          <Grid container spacing={3}>
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              sx={{
+                p: (theme) => ({
+                  md: theme.spacing(2, 5, 0, 2),
+                }),
+              }}
+            >
+              <CourseDetailsSummary course={course} />
+              <Stack
+                sx={{
+                  gap: 1,
+                  pt: 2,
+                }}
+              >
+                <Typography variant="h5">Nội dung khóa học</Typography>
+                <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <ul
+                    style={{
+                      display: 'flex',
+                      gap: '1rem',
+                      listStyleType: 'none',
+                      padding: 0,
+                      margin: 0,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <li
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      <Typography variant="subtitle1">{course?.dm_khoahoc?.Sotiethoc}</Typography>
+                      <Typography>Tiết học</Typography>
+                      <span style={{ marginLeft: '0.5rem' }}>•</span>
+                    </li>
+                    <li
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        position: 'relative',
+                      }}
+                    >
+                      <Typography variant="subtitle1">{course?.dt_lichhocs.length}</Typography>
+                      <Typography>Bài học</Typography>
+                      <span style={{ marginLeft: '0.5rem' }}>•</span>
+                    </li>
+                    <li
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      <Typography>Thời lượng</Typography>
+                      <Typography variant="subtitle1">
+                        {convertToTime(Number(course?.dm_khoahoc?.Tongthoigian))}
+                      </Typography>
+                    </li>
+                  </ul>
+                  <Typography
+                    sx={{
+                      cursor: 'pointer', // Hiển thị con trỏ như một liên kết
+                      color: 'primary.main', // Màu sắc giống như một liên kết
+                      textDecoration: 'underline', // Gạch chân để trông giống như một liên kết
+                      '&:hover': {
+                        color: 'primary.dark', // Đổi màu khi hover
+                      },
+                    }}
+                    variant="button"
+                    onClick={expandAll}
+                  >
+                    {expandedAccordions.length > 0 ? 'Thu nhỏ' : ' Mở rộng'}
+                  </Typography>
+                </Stack>
+              </Stack>
 
-        {product && (
-          <>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={8}>
-                <CourseDetailsSummary
-                  product={product}
-                  cart={checkout.cart}
-                  onAddCart={handleAddCart}
-                  onGotoStep={handleGotoStep}
+              <Box marginTop={2}>
+                <CourseDetailsReview
+                  course={logs}
                 />
-                <Box marginTop={5}>
-                  <Stack >
-                    <Typography variant="h6">Nội dung khóa học</Typography>
-                    <Stack sx={{ gap: 1, mt: 1, flexDirection: 'row', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }}>
-                      <Stack sx={{ gap: 0.5, flexDirection: 'row', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }}>
-                        <Typography variant="subtitle1"> 4 </Typography>
-                        <Typography variant="subtitle2"> chương</Typography>
-                      </Stack>
-                      <Stack sx={{ gap: 0.5, flexDirection: 'row', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }}>
-                        <Typography variant="subtitle1"> 12 </Typography>
-                        <Typography variant="subtitle2"> bài học</Typography>
-                      </Stack>
-                      <Stack sx={{ gap: 0.5, flexDirection: 'row', justifyItems: 'center', alignContent: 'center', alignItems: 'center' }}>
-                        <Typography variant="subtitle1"> Thời lượng </Typography>
-                        <Typography variant="subtitle2"> 03 giờ 26 phút</Typography>
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                  <CourseDetailsReview product={product} />
-                </Box>
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={4}>
-                <CourseDetailsAdd
-                  product={product}
-                  cart={checkout.cart}
-                  onAddCart={handleAddCart}
-                  onGotoStep={handleGotoStep}
-                />
-              </Grid>
+              </Box>
             </Grid>
 
-
-            {/* <Box
-              marginTop={5}>
-
-              <Card>
-                <Tabs
-                  value={currentTab}
-                  onChange={(event, newValue) => setCurrentTab(newValue)}
-                  sx={{ px: 3, bgcolor: 'background.neutral' }}
-                >
-                  {TABS.map((tab) => (
-                    <Tab key={tab.value} value={tab.value} label={tab.label} />
-                  ))}
-                </Tabs>
-
-                <Divider />
-
-                {TABS.map(
-                  (tab) =>
-                    tab.value === currentTab && (
-                      <Box
-                        key={tab.value}
-                        sx={{
-                          ...(currentTab === 'description' && {
-                            p: 3,
-                          }),
-                        }}
-                      >
-                        {tab.component}
-                      </Box>
-                    )
-                )}
-              </Card>
-
-            </Box> */}
-          </>
+          </Grid>
         )}
 
         {isLoading && <SkeletonProductDetails />}
-      </Container >
+      </Container>
     </>
   );
 }

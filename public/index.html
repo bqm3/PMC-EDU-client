@@ -1,212 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- PWA primary color -->
+    <meta name="theme-color" content="#00AB55" />
 
-  <!-- PWA primary color -->
-  <meta name="theme-color" content="#00AB55" />
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/favicon/apple-touch-icon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="%PUBLIC_URL%/favicon/favicon-logo-pmc.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="%PUBLIC_URL%/favicon/favicon-logo-pmc.png"
+    />
 
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon/favicon-logo-pmc.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon/favicon-logo-pmc.png">
+    <!-- Using Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
 
-  <!-- Using Google Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- Using Local Font -->
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/fonts/index.css" />
+    <script
+      async
+      defer
+      crossorigin="anonymous"
+      src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0"
+    ></script>
 
-  <!-- Using Local Font -->
-  <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/fonts/index.css" />
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0"></script>
+    <title>PMC Knowledge - Trung tâm đào tạo</title>
+    <meta name="description" content="PMC Knowledge - Trung tâm đào tạo" />
+    <meta
+      name="keywords"
+      content="pmc,knowledge, đào tạo, trung tâm, trung tâm đào tạo, chứng chỉ, nghiệp vụ"
+    />
+    <meta name="author" content="Phòng Số Hóa" />
+  </head>
+  <style type="text/css"></style>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
 
-  <title>PMC Knowledge - Trung tâm đào tạo</title>
-  <meta name="description"
-    content="PMC Knowledge - Trung tâm đào tạo" />
-  <meta name="keywords" content="pmc,knowledge, đào tạo, trung tâm, trung tâm đào tạo, chứng chỉ, nghiệp vụ" />
-  <meta name="author" content="Phòng Số Hóa" />
-</head>
-<style type="text/css">
-  /* canvas{display: block} */
- 
-</style>
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-  
-<canvas id="birthday"></canvas>
-</body>
-<!-- <script>
-  const PI2 = Math.PI * 2;
-  const random = (min, max) => Math.random() * (max - min + 1) + min | 0;
-  const timestamp = () => new Date().getTime();
-
-  class Birthday {
-    constructor() {
-      this.resize();
-      this.fireworks = [];
-      this.counter = 0;
-    }
-
-    resize() {
-      this.width = canvas.width = window.innerWidth;
-      let center = (this.width / 2) | 0;
-      this.spawnA = center - (center / 4) | 0;
-      this.spawnB = center + (center / 4) | 0;
-
-      this.height = canvas.height = window.innerHeight;
-      this.spawnC = this.height * 0.1;
-      this.spawnD = this.height * 0.5;
-    }
-
-    onClick(evt) {
-      let x = evt.clientX || (evt.touches && evt.touches[0].pageX);
-      let y = evt.clientY || (evt.touches && evt.touches[0].pageY);
-
-      let count = random(3, 5);
-      for (let i = 0; i < count; i++)
-        this.fireworks.push(
-          new Firework(
-            random(this.spawnA, this.spawnB),
-            this.height,
-            x,
-            y,
-            random(0, 260),
-            random(30, 110)
-          )
-        );
-
-      this.counter = -1;
-    }
-
-    update(delta) {
-      ctx.clearRect(0, 0, this.width, this.height); // Xóa khung hình trước đó
-      ctx.globalCompositeOperation = "lighter";
-      for (let firework of this.fireworks) firework.update(delta);
-
-      this.counter += delta * 3;
-      if (this.counter >= 1) {
-        this.fireworks.push(
-          new Firework(
-            random(this.spawnA, this.spawnB),
-            this.height,
-            random(0, this.width),
-            random(this.spawnC, this.spawnD),
-            random(0, 360),
-            random(30, 110)
-          )
-        );
-        this.counter = 0;
-      }
-
-      if (this.fireworks.length > 1000)
-        this.fireworks = this.fireworks.filter(
-          (firework) => !firework.dead
-        );
-    }
-  }
-
-  class Firework {
-    constructor(x, y, targetX, targetY, shade, offsprings) {
-      this.dead = false;
-      this.offsprings = offsprings;
-
-      this.x = x;
-      this.y = y;
-      this.targetX = targetX;
-      this.targetY = targetY;
-
-      this.shade = shade;
-      this.history = [];
-    }
-    update(delta) {
-      if (this.dead) return;
-
-      let xDiff = this.targetX - this.x;
-      let yDiff = this.targetY - this.y;
-      if (Math.abs(xDiff) > 3 || Math.abs(yDiff) > 3) {
-        this.x += xDiff * 2 * delta;
-        this.y += yDiff * 2 * delta;
-
-        this.history.push({
-          x: this.x,
-          y: this.y,
-        });
-
-        if (this.history.length > 20) this.history.shift();
-      } else {
-        if (this.offsprings && !this.madeChilds) {
-          let babies = this.offsprings / 2;
-          for (let i = 0; i < babies; i++) {
-            let targetX =
-              this.x +
-              this.offsprings *
-                Math.cos((PI2 * i) / babies) |
-              0;
-            let targetY =
-              this.y +
-              this.offsprings *
-                Math.sin((PI2 * i) / babies) |
-              0;
-
-            birthday.fireworks.push(
-              new Firework(
-                this.x,
-                this.y,
-                targetX,
-                targetY,
-                this.shade,
-                0
-              )
-            );
-          }
-        }
-        this.madeChilds = true;
-        this.history.shift();
-      }
-
-      if (this.history.length === 0) this.dead = true;
-      else if (this.offsprings) {
-        for (let i = 0; this.history.length > i; i++) {
-          let point = this.history[i];
-          ctx.beginPath();
-          ctx.fillStyle = "hsl(" + this.shade + ",100%," + i + "%)";
-          ctx.arc(point.x, point.y, 1, 0, PI2, false);
-          ctx.fill();
-        }
-      } else {
-        ctx.beginPath();
-        ctx.fillStyle = "hsl(" + this.shade + ",100%,50%)";
-        ctx.arc(this.x, this.y, 1, 0, PI2, false);
-        ctx.fill();
-      }
-    }
-  }
-
-  const canvas = document.getElementById("birthday");
-  const ctx = canvas.getContext("2d");
-
-  let then = timestamp();
-
-  const birthday = new Birthday();
-  window.onresize = () => birthday.resize();
-  document.onclick = (evt) => birthday.onClick(evt);
-  document.ontouchstart = (evt) => birthday.onClick(evt);
-
-  (function loop() {
-    requestAnimationFrame(loop);
-
-    let now = timestamp();
-    let delta = now - then;
-
-    then = now;
-    birthday.update(delta / 1000);
-  })();
-</script> -->
+    <canvas id="birthday"></canvas>
+  </body>
 </html>

@@ -1,20 +1,51 @@
 import { Box, Button, Typography } from '@mui/material';
 
-export default function QuestionNavigation() {
+export default function QuestionNavigation({
+    answers,
+    questions,
+    infoQues,
+    setCurrentQuestion,
+}: any) {
     return (
-        <Box sx={{ padding: '16px', borderTop: '1px solid #ccc' }}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {Array.from({ length: 60 }).map((_, index) => (
-                    <Button
-                        key={index}
-                        variant="outlined"
-                        size="small"
-                        sx={{ width: '40px', height: '30px' }}
+        <Box sx={{ padding: '12px', borderTop: '1px solid #ccc' }}>
+            {questions.map((phan: any) => (
+                <Box key={phan.ID_Baithi_Phan} sx={{ mb: 2 }}>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{ fontWeight: 'bold', mb: 1 }}
                     >
-                        <Typography sx={{ fontSize: 10 }}> Câu {index + 1}</Typography>
-                    </Button>
-                ))}
-            </Box>
+                        {phan.Tenphan}
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {phan.ds_cauhoi.map((question: any, index: number) => {
+                            const isAnswered =
+                                answers[question.ID_NHCH] !== undefined &&
+                                answers[question.ID_NHCH] !== '';
+                            return (
+                                <Button
+                                    key={question.ID_NHCH}
+                                    variant={isAnswered ? 'contained' : 'outlined'}
+                                    size="small"
+                                    sx={{ width: '48px', height: '32px' }}
+                                    onClick={() =>
+                                        setCurrentQuestion({
+                                            question,
+                                            phan: {
+                                                ID_Baithi_Phan: phan.ID_Baithi_Phan,
+                                                Tenphan: phan.Tenphan,
+                                            },
+                                        })
+                                    }
+                                >
+                                    <Typography sx={{ fontSize: 12 }}>
+                                        Câu {index + 1}
+                                    </Typography>
+                                </Button>
+                            );
+                        })}
+                    </Box>
+                </Box>
+            ))}
         </Box>
     );
 }

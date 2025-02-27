@@ -12,7 +12,12 @@ import { dispatch } from '../store';
 const initialState: ICourseState = {
   isLoading: false,
   error: null,
+  course: null,
   dm_khoahoc: [],
+  user_courses: [],
+  class_courses: [],
+  dt_diemdanh: [],
+  await_courses: []
 };
 
 const slice = createSlice({
@@ -36,7 +41,29 @@ const slice = createSlice({
       state.dm_khoahoc = action.payload;
     },
 
+    getKhoaHocDetailSuccess(state, action){
+      state.isLoading = false;
+      state.course = action.payload;
+    },
+    getDiemDanhByKhoaHoc(state, action){
+      state.isLoading = false;
+      state.dt_diemdanh = action.payload;
+    },
+
+    getUsersCourseSuccess(state, action) {
+      state.isLoading = false;
+      state.user_courses = action.payload;
+    },
+    getClassCourseSuccess(state, action) {
+      state.isLoading = false;
+      state.class_courses = action.payload;
+    },
+    getClassCourseApprove(state, action) {
+      state.isLoading = false;
+      state.await_courses = action.payload;
+    },
   },
+ 
 });
 
 // Reducer
@@ -48,8 +75,94 @@ export function getKhoaHocs() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/v1/khoahoc');
+      const response = await axios.get('/api/v1/khoahoc/client');
       dispatch(slice.actions.getKhoaHocsSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getUsersCourse() {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/hocvien/regis-course', {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      dispatch(slice.actions.getUsersCourseSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getUsersAwaitCourse() {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/hocvien/await-course', {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      dispatch(slice.actions.getClassCourseApprove(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getClassCourse() {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/v1/lophoc', {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      dispatch(slice.actions.getClassCourseSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getDetailKhoaHoc(params: string) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/lophoc/detail/${params}`);
+
+      dispatch(slice.actions.getKhoaHocDetailSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getDiemDanhByKhoaHoc(name: string) {
+  const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
+
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/diemdanh/khoa-hoc/`, {
+        params: {SlugTenkhoahoc: name}, 
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          }
+        
+      })
+
+      dispatch(slice.actions.getDiemDanhByKhoaHoc(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

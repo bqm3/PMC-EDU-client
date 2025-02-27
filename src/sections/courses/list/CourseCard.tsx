@@ -16,17 +16,19 @@ import Iconify from '../../../components/iconify';
 import Label from '../../../components/label';
 import Image from '../../../components/image';
 import { ColorPreview } from '../../../components/color-utils';
-import { IDM_Khoahoc } from 'src/@types/course';
+import { IKhoahoc } from 'src/@types/course';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IDM_Khoahoc;
+  product: IKhoahoc;
 };
 
 export default function ShopProductCard({ product }: Props) {
-  const { ID_Khoahoc,
-    Nhomlv,
+  const {
+    ID_Khoahoc,
+
+    SlugTenkhoahoc,
     Tenkhoahoc,
     Gioithieuchung,
     Sotiethoc,
@@ -35,27 +37,7 @@ export default function ShopProductCard({ product }: Props) {
     isDelete, } = product;
 
 
-  const dispatch = useDispatch();
-
-  const linkTo = PATH_PAGE.courses.view(`${ID_Khoahoc}`);
-
-  // const handleAddCart = async () => {
-  //   const newProduct = {
-  //     id,
-  //     name,
-  //     cover,
-  //     available,
-  //     price,
-  //     colors: [colors[0]],
-  //     size: sizes[0],
-  //     quantity: 1,
-  //   };
-  //   try {
-  //     dispatch(addToCart(newProduct));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const linkTo = PATH_PAGE.courses.view(`${SlugTenkhoahoc}`);
 
   return (
     <Card
@@ -65,7 +47,7 @@ export default function ShopProductCard({ product }: Props) {
         },
       }}
     >
-      <Box sx={{ position: 'relative', p: 1 }}>
+      <Box sx={{ position: 'relative', px: 2, py: 1 }}>
         {/* {status && (
           <Label
             variant="filled"
@@ -106,21 +88,12 @@ export default function ShopProductCard({ product }: Props) {
         <Image alt={Hinhanh} src={Hinhanh} ratio="16/9" sx={{ borderRadius: 1.5 }} />
       </Box>
 
-      <Stack spacing={1} sx={{ p: 1 }}>
+      <Stack spacing={1} sx={{ px: 2, pb: 1 }}>
         <Link to={linkTo} component={RouterLink} color="inherit" variant="subtitle1" noWrap>
           {Tenkhoahoc}
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          {/* <ColorPreview colors={colors} /> */}
-
-          {/* <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
-            {Sotiethoc && (
-              <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-                {fCurrency(Sotiethoc)}
-              </Box>
-            )} */}
-
           <Box component="span" color="inherit" >
             <Typography color="inherit" variant="subtitle2">
               Số tiết: {Sotiethoc}
@@ -131,7 +104,6 @@ export default function ShopProductCard({ product }: Props) {
               Thời gian: {Tongthoigian}(h)
             </Typography>
           </Box>
-          {/* </Stack> */}
         </Stack>
       </Stack>
     </Card>

@@ -1,10 +1,7 @@
 // @mui
 import { Typography, Stack, Box } from '@mui/material';
+import { Outlet } from 'react-router-dom';
 // components
-import Logo from '../../components/logo';
-import Image from '../../components/image';
-//
-import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
 import Header from './Header';
 
 // ----------------------------------------------------------------------
@@ -15,12 +12,14 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function LessonLayout({ children, illustration, title }: Props) {
+export default function LessonLayout({ children }: any) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
       <Header />
 
-      <Stack sx={{ width: 1 }}> {children} </Stack>
+      <Stack sx={{ width: 1 }}>
+        <Outlet />
+      </Stack>
 
     </Box>
   );

@@ -97,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get('/api/v1/hosohv/my-account');
+        const response = await axios.post('/api/v1/hosohv/check-auth');
 
         const { user } = response.data;
 

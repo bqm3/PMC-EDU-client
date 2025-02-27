@@ -17,19 +17,22 @@ import Iconify from '../../../components/iconify';
 import Label from '../../../components/label';
 import Image from '../../../components/image';
 import { ColorPreview } from '../../../components/color-utils';
+import { IKhoahoc } from 'src/@types/course';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  course: any;
+  course: IKhoahoc;
 };
 
-export default function ShopProductCard({ course }: Props) {
-  const { ID_Khoahoc, Tenkhoahoc, Hinhanh, Tongthoigian, Sotiethoc } = course;
+export default function CourseCard({ course }: Props) {
+  const { ID_Khoahoc, Tenkhoahoc, Hinhanh, Tongthoigian, Sotiethoc, SlugTenkhoahoc } = course;
 
   const dispatch = useDispatch();
 
-  const linkTo = PATH_PAGE.courses.view(`${ID_Khoahoc}`);
+  const linkTo = PATH_PAGE.courses.view(`${SlugTenkhoahoc}`);
+
+
   return (
     <Card
       sx={{
@@ -39,21 +42,6 @@ export default function ShopProductCard({ course }: Props) {
       }}
     >
       <Box sx={{ position: 'relative', p: 1 }}>
-        {/* {status && (
-          <Label
-            variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
-            sx={{
-              top: 16,
-              right: 16,
-              zIndex: 9,
-              position: 'absolute',
-              textTransform: 'uppercase',
-            }}
-          >
-            {status}
-          </Label>
-        )} */}
         <Link to={linkTo} component={RouterLink} color="inherit" variant="subtitle1" noWrap>
 
           <Fab

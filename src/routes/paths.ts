@@ -25,17 +25,16 @@ export const PATH_AUTH = {
 export const PATH_LESSON = {
   root: ROOTS_LESSON,
   learning: {
-    view: (name: string) => path(ROOTS_LESSON, `/khoa-hoc/${name}`),
+    view: (name: string) => path(ROOTS_LESSON, `/${name}`),
   },
- 
-}
+};
 //exercise
 export const PATH_EXERCISE = {
   root: ROOTS_EXERCISE,
-  practice : {
-    view: (name: string) => path(ROOTS_EXERCISE, `/de-thi/${name}`),
-  }
-}
+  practice: {
+    view: (name: string) => `/thi-truc-tuyen/${name}`,
+  },
+};
 
 export const PATH_PAGE = {
   comingSoon: '/coming-soon',
@@ -49,20 +48,32 @@ export const PATH_PAGE = {
   page404: '/404',
   page500: '/500',
   components: '/components',
+  courstByMe: {
+    root: '/lop-hoc-cua-toi',
+    list: '/lop-hoc-cua-toi',
+    view: (name: string) => `/lop-hoc-cua-toi/${name}`,
+  },
+  courseOfCenter: {
+    root: '/lop-hoc-trung-tam',
+    list: '/lop-hoc-trung-tam',
+    view: (name: string) => `/lop-hoc-trung-tam/${name}`,
+  },
   courses: {
     root: '/danh-sach-khoa-hoc',
     list: '/danh-sach-khoa-hoc',
     view: (name: string) => `/danh-sach-khoa-hoc/${name}`,
+    id: (name: string, id: string) => `/danh-sach-khoa-hoc/${name}?id=${id}`,
   },
   user: {
-    root: ( '/user'),
-    new: ( '/user/new'),
-    list: ( '/user/list'),
-    cards: ( '/user/cards'),
-    profile: ( '/user/profile'),
-    account: ( '/user/account'),
-    edit: (name: string) => ( `/user/${name}/edit`),
-    demoEdit: ( `/user/reece-chung/edit`),
+    root: '/user',
+    new: '/user/new',
+    list: '/user/list',
+    cards: '/user/cards',
+    profile: '/user/profile',
+    historyLearning: '/user/history-learn',
+    account: '/user/account',
+    edit: (name: string) => `/user/${name}/edit`,
+    demoEdit: `/user/reece-chung/edit`,
   },
   eCommerce: {
     root: '/e-commerce',

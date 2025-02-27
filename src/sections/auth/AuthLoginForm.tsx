@@ -33,10 +33,11 @@ export default function AuthLoginForm() {
 
   const LoginSchema = Yup.object().shape({
     Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
-      .matches(
-        /^(03|05|07|08|09)\d{8}$/,
-        'Chưa đúng định dạng số điện thoại'
-      ),
+    // .matches(
+    //   /^(03|05|07|08|09)\d{8}$/,
+    //   'Chưa đúng định dạng số điện thoại'
+    // )
+    ,
     Matkhau: Yup.string().required('Mật khẩu là bắt buộc'),
   });
 

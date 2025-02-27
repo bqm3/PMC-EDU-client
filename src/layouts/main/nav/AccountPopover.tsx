@@ -18,8 +18,12 @@ import { IconButtonAnimate } from '../../../components/animate';
 const OPTIONS = [
 
   {
-    label: 'Trang cá nhân',
+    label: 'Thông tin cá nhân',
     linkTo: '/user/account',
+  },
+  {
+    label: 'Lịch sử học tập',
+    linkTo: '/user/history-learn',
   },
 ];
 

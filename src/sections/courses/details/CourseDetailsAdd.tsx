@@ -1,195 +1,262 @@
-import { useEffect } from 'react';
-import { sentenceCase } from 'change-case';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../../auth/useAuthContext';
 // form
 import { Controller, useForm } from 'react-hook-form';
 // @mui
 import { Box, Link, Stack, Button, Rating, Divider, Typography, IconButton } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+// api 
+import { IKhoahoc } from 'src/@types/course';
 // routes
 import { PATH_AUTH, PATH_DASHBOARD, PATH_EXERCISE, PATH_LESSON } from '../../../routes/paths';
-// utils
-import { fShortenNumber, fCurrency } from '../../../utils/formatNumber';
-// @types
-import { IProduct, ICheckoutCartItem } from '../../../@types/product';
 // _mock
 import { _socials } from '../../../_mock/arrays';
 // components
-import Label from '../../../components/label';
-import Iconify from '../../../components/iconify';
-import { IncrementerButton } from '../../../components/custom-input';
-import { ColorSinglePicker } from '../../../components/color-utils';
 import FormProvider, { RHFSelect } from '../../../components/hook-form';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
-
-interface FormValuesProps extends Omit<ICheckoutCartItem, 'colors'> {
-  colors: string;
-}
-
 type Props = {
-  product: IProduct;
-  cart: ICheckoutCartItem[];
-  onAddCart: (cartItem: ICheckoutCartItem) => void;
-  onGotoStep: (step: number) => void;
+  course: IKhoahoc;
+  checkCourse: any
 };
 
-export default function CourseDetailsAdd({
-  cart,
-  product,
-  onAddCart,
-  onGotoStep,
-  ...other
-}: Props) {
+const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
+
+export default function CourseDetailsAdd({ course, checkCourse, ...other }: Props) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
-  const {
-    id,
-    name,
-    sizes,
-    price,
-    cover,
-    status,
-    colors,
-    available,
-    priceSale,
-    totalRating,
-    totalReview,
-    inventoryType,
-  } = product;
+  const [disableCheck, setDisableCheck] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [openBaiThi, setOpenBaiThi] = useState(false);
+  const [errorSubmit, setErrorSubmit] = useState(false)
 
-  const alreadyProduct = cart.map((item) => item.id).includes(id);
-
-  const isMaxQuantity =
-    cart.filter((item) => item.id === id).map((item) => item.quantity)[0] >= available;
-
-  const defaultValues = {
-    id,
-    name,
-    cover,
-    available,
-    price,
-    colors: colors[0],
-    size: sizes[4],
-    quantity: available < 1 ? 0 : 1,
+  const handleClickOpen = () => {
+    setOpen(true);
   };
 
-  const methods = useForm<FormValuesProps>({
-    defaultValues,
+  const handleClose = () => {
+    setOpen(false);
+    setErrorSubmit(false)
+  };
+
+  const handleCloseBaiThi = () => {
+    setOpenBaiThi(false);
+  };
+
+  const {
+    ID_Khoahoc,
+    SlugTenkhoahoc,
+    Tenkhoahoc,
+    Gioithieuchung,
+    Sotiethoc,
+    Tongthoigian,
+    Hinhanh,
+    isDelete,
+    dm_linhvuc,
+  } = course;
+
+  const methods = useForm<any>({
+    // defaultValues,
   });
 
-  const { reset, watch, control, setValue, handleSubmit } = methods;
+  const { handleSubmit } = methods;
 
-  const values = watch();
 
-  useEffect(() => {
-    if (product) {
-      reset(defaultValues);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product]);
-
-  const onSubmit = async (data: FormValuesProps, event: any) => {
-
+  const onSubmit = async (data: any, event: any) => {
     const clickedButton = event.nativeEvent.submitter; // Lấy thông tin nút được nhấn
     const action = clickedButton?.name; // Lấy thuộc tính name hoặc value của nút
     try {
       if (action === 'register') {
         // Xử lý cho nút 'Đăng ký học'
         if (user) {
-          navigate(PATH_LESSON.root);
+          if (checkCourse?.check === "ERROR") {
+            setDisableCheck(true)
+            await axios.post('http://localhost:7676/api/v1/dangky/create/', {
+              ID_Loaidangky: 1,
+              Ngaydangky: new Date(),
+              ID_Lophoc: null,
+              ID_Khoahoc: ID_Khoahoc,
+              Email: user?.Email
+            }, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              }
+            })
+              .then((response) => {
+                setDisableCheck(false)
+                handleClickOpen()
+              })
+              .catch((error) => {
+                setDisableCheck(false)
+                setErrorSubmit(true)
+                handleClickOpen()
+              });
+          } else if (checkCourse?.check === "WARN") {
+            handleClickOpen()
+          } else if (checkCourse?.check === "SUCCESS") {
+            handleClickOpen()
+          } else {
+            navigate(PATH_LESSON.learning.view(`${SlugTenkhoahoc}`), {
+              state: {
+                Tenkhoahoc
+              }
+            });
+          }
         } else {
-          const currentPath = window.location.pathname; // Lấy URL hiện tại
-          navigate(PATH_AUTH.login, { state: { from: currentPath } }); // Lưu đường dẫn
+          const currentPath = window.location.pathname;
+          navigate(PATH_AUTH.login, { state: { from: currentPath } });
         }
       } else if (action === 'registerAdvanced') {
         // Xử lý cho nút 'Đăng ký học nâng cao'
-        console.log('Đăng ký học nâng cao với dữ liệu:', data);
-        navigate(PATH_EXERCISE.root);
-        // Điều hướng hoặc thực hiện hành động khác
+
+
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleAddCart = async () => {
-    try {
-      onAddCart({
-        ...values,
-        colors: [values.colors],
-        subtotal: values.price * values.quantity,
-      });
-    } catch (error) {
-      console.error(error);
+  const handleClickOpenBaiThi = () => {
+    if (checkCourse?.dataKhoaHoc) {
+      setOpenBaiThi(true)
     }
-  };
+  }
+
+  const handleSubmitBaiThi = () => {
+    // Xử lý cho nút 'Gửi bài thi'
+    setOpenBaiThi(false)
+    // Kiểm tra xem đã đăng nhập chưa
+    if (user) {
+      navigate(PATH_EXERCISE.practice.view(`${SlugTenkhoahoc}`), {
+        state: {
+          exam: checkCourse?.dataKhoaHoc,
+          hocvien: checkCourse?.data
+        }
+      });
+    } else {
+      const currentPath = window.location.pathname;
+      navigate(PATH_AUTH.login, { state: { from: currentPath } });
+    }
+  }
+
+  console.log('checkCourse', checkCourse)
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack sx={{ textAlign: 'center' }} spacing={1}>
         <Box
           component="img"
-          alt={name}
-          src={'http://pmck.edu.vn/pluginfile.php?file=%2F405%2Fcourse%2Foverviewfiles%2FAn%20to%C3%A0n%20An%20ninh.PNG'}
-          sx={{ borderRadius: 2 }}
+          alt={Hinhanh}
+          src={Hinhanh}
+          sx={{ borderRadius: 2, maxHeight: 400, objectFit: 'cover' }}
         />
-        <Typography
-          variant="subtitle2"
-          sx={{
-            fontSize: 24,
-            color: '#89b449'
-          }}
-        >
-          Tự đăng ký
-        </Typography>
-
-        {/* <Button
-            fullWidth
-            disabled={isMaxQuantity}
-            size="large"
-            color="warning"
-            variant="contained"
-            startIcon={<Iconify icon="ic:round-add-shopping-cart" />}
-            onClick={handleAddCart}
-            sx={{ whiteSpace: 'nowrap' }}
-          >
-            Đăng ký
-          </Button> */}
-
-        <Button fullWidth size="large" type="submit" name="register" variant="contained">
-          Đăng ký học
+        {/* Đăng ký học */}
+        <Button fullWidth size="large" type="submit" name="register" variant="contained" disabled={disableCheck}>
+          {!checkCourse && "Đăng ký"}
+          {checkCourse?.check === "ERROR" && "Đăng ký học"}
+          {checkCourse?.check === "WARN" && "Đợi duyệt"}
+          {(checkCourse?.check === "INFO" || checkCourse?.check === "PRIMARY") && "Vào học"}
+          {checkCourse?.check === "SUCCESS" && "Hoàn thành"}
         </Button>
-        <Button fullWidth size="large" type="submit" name="registerAdvanced" variant="contained">
-          Thi trực tuyến
-        </Button>
+
+
+
+        {checkCourse && checkCourse?.check === "INFO" &&
+          <Button fullWidth size="large" type="submit" onClick={() => handleClickOpenBaiThi()} color='info' variant="contained">
+            Thi trực tuyến
+          </Button>
+        }
+
       </Stack>
-      <Stack
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"PMC Knowledge"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {
+              checkCourse?.check === "ERROR" && " Hãy kiểm tra Email cá nhân của bạn để xác nhận đăng ký tham gia khóa học."
+            }
+            {
+              checkCourse?.check === "WARN" && " Đợi phòng ban dự án của bạn phê duyệt yêu cầu"
+            }
+            {
+              checkCourse?.check === "SUCCESS" && " Bạn đã hoàn thành khóa học"
+            }
+            {
+              errorSubmit === true && "Có lỗi xảy ra! Xin vui lòng reload lại trang hoặc đợi trong giây lát"
+            }
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={handleClose} autoFocus variant='contained'>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openBaiThi}
+        onClose={() => setOpenBaiThi(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth="sm" // Tăng độ rộng lên mức trung bình
+        fullWidth // Sử dụng toàn bộ chiều rộng có thể
         sx={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 1,
-          padding: 2,
+          '& .MuiDialog-paper': {
+            borderRadius: 12, // Bo góc hộp thoại
+            padding: 2, // Thêm padding
+          },
         }}
       >
-        <Typography variant="subtitle2" sx={{ textAlign: 'left', width: '100%', fontSize: 14 }}>
-          Trình độ cơ bản
-        </Typography>
-        <Typography variant="subtitle2" sx={{ textAlign: 'left', width: '100%', fontSize: 14 }}>
-          Tổng số 12 bài học
-        </Typography>
-        <Typography variant="subtitle2" sx={{ textAlign: 'left', width: '100%', fontSize: 14 }}>
-          Thời lượng 03 giờ 26 phút
-        </Typography>
-        <Typography variant="subtitle2" sx={{ textAlign: 'left', width: '100%', fontSize: 14 }}>
-          Học mọi lúc mọi nơi
-        </Typography>
-      </Stack>
+        {/* Tiêu đề Dialog */}
+        {/* <DialogTitle
+          id="alert-dialog-title"
+          sx={{
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}
+        >
+          PMC Knowledge
+        </DialogTitle> */}
 
-      {/* <Typography variant="h6">
-        Thời gian: 10 tiếng
-      </Typography> */}
-    </FormProvider >
+        {/* Nội dung Dialog */}
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold", mb: 1 }}>
+              {checkCourse?.dataKhoaHoc?.Tenbaikt}
+            </Typography>
+            <Typography variant="body1" sx={{ textAlign: "center", fontSize: "18px" }}>
+              ⏳ Thời gian thi: {checkCourse?.dataKhoaHoc?.Thoigianthi} phút
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+
+        {/* Nút hành động */}
+        <DialogActions sx={{ justifyContent: "center", paddingBottom: "16px" }}>
+          <Button onClick={handleCloseBaiThi} variant="outlined" sx={{ fontWeight: "bold", color: "#d32f2f", borderColor: "#d32f2f" }}>
+            Hủy
+          </Button>
+          <Button onClick={handleSubmitBaiThi} autoFocus variant="contained" sx={{ fontWeight: "bold", backgroundColor: "#388e3c", color: "#fff" }}>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+    </FormProvider>
   );
 }

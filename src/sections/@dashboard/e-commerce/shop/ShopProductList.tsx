@@ -29,7 +29,7 @@ export default function ShopProductList({ products, loading, ...other }: Props) 
     >
       {(loading ? [...Array(12)] : products).map((product, index) =>
         product ? (
-          <ShopProductCard key={product.id} product={product} />
+          <ShopProductCard key={product.id || index} product={product} />
         ) : (
           <SkeletonProductItem key={index} />
         )

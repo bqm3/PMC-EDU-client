@@ -26,6 +26,13 @@ export const LearningPage = Loadable(lazy(() => import('../pages/lesson/Learning
 // EXERCISE 
 export const ExercisePage = Loadable(lazy(() => import('../pages/exercise/ExercisePage')));
 
+// HOME
+export const CourseByUser = Loadable(lazy(() => import('../pages/CourseByUser')));
+export const CourseOfCenterPage = Loadable(lazy(() => import('../pages/CourseOfCenterPage')));
+export const CoursePage = Loadable(lazy(() => import('../pages/CoursePage')));
+export const CourseDetailsPage = Loadable(lazy(() => import('../pages/CourseDetailsPage')));
+export const CourseByUserDetailsPage = Loadable(lazy(() => import('../pages/CourseByUserDetailsPage')));
+
 // DASHBOARD: GENERAL
 export const GeneralAppPage = Loadable(lazy(() => import('../pages/dashboard/GeneralAppPage')));
 export const GeneralEcommercePage = Loadable(
@@ -108,11 +115,10 @@ export const Page403 = Loadable(lazy(() => import('../pages/Page403')));
 export const Page404 = Loadable(lazy(() => import('../pages/Page404')));
 export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
 export const UserPage = Loadable(lazy(() => import('../pages/UserAccountPage')));
+export const UserInfoPage = Loadable(lazy(() => import('../pages/UserInfoPage')));
 export const FaqsPage = Loadable(lazy(() => import('../pages/FaqsPage')));
 export const AboutPage = Loadable(lazy(() => import('../pages/AboutPage')));
 export const Contact = Loadable(lazy(() => import('../pages/ContactPage')));
-export const CoursePage = Loadable(lazy(() => import('../pages/CoursePage')));
-export const CourseDetailsPage = Loadable(lazy(() => import('../pages/CourseDetailsPage')));
 export const PricingPage = Loadable(lazy(() => import('../pages/PricingPage')));
 export const PaymentPage = Loadable(lazy(() => import('../pages/PaymentPage')));
 export const ComingSoonPage = Loadable(lazy(() => import('../pages/ComingSoonPage')));

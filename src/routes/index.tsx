@@ -71,11 +71,13 @@ import {
   Page403,
   Page404,
   UserPage,
+  UserInfoPage,
   HomePage,
   FaqsPage,
   AboutPage,
   Contact,
   CoursePage,
+  CourseByUser,
   CourseDetailsPage,
   PricingPage,
   PaymentPage,
@@ -137,6 +139,8 @@ import {
   DemoSnackbarPage,
   DemoTextMaxLinePage,
   DemoUploadPage,
+  CourseByUserDetailsPage,
+  CourseOfCenterPage,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -178,20 +182,32 @@ export default function Router() {
     // Học online
     {
       path: 'khoa-hoc',
-      element: (
-        <LessonLayout>
-          <LearningPage />
-        </LessonLayout>
-      ),
+      children: [
+        {
+          element: <LessonLayout />,
+          children: [
+            {
+              path: ':name',
+              element: <LearningPage />,
+            },
+          ]
+        }
+      ]
     },
-    // Thi thực
+    // Đề thi
     {
       path: 'thi-truc-tuyen',
-      element: (
-        <ExerciseLayout>
-          <ExercisePage />
-        </ExerciseLayout>
-      ),
+      children: [
+        {
+          element: <ExerciseLayout />,
+          children: [
+            {
+              path: ':name',
+              element: <ExercisePage />,
+            },
+          ],
+        },
+      ],
     },
 
     // Main Routes
@@ -203,13 +219,24 @@ export default function Router() {
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <FaqsPage /> },
         {
+          path: 'lop-hoc-cua-toi',
+          children: [
+            { element: <CourseByUser />, index: true },
+            { path: ':name', element: <CourseByUserDetailsPage /> },
+          ],
+        },
+        {
+          path: 'lop-hoc-trung-tam',
+          children: [
+            { element: <CourseOfCenterPage />, index: true },
+            { path: ':name', element: <CourseByUserDetailsPage /> },
+          ],
+        },
+        {
           path: 'danh-sach-khoa-hoc',
           children: [
             { element: <CoursePage />, index: true },
-            // { path: '', element: <CoursePage /> },
-            // { path: 'product/new', element: <EcommerceProductCreatePage /> },
             { path: ':name', element: <CourseDetailsPage /> },
-            // { path: 'checkout', element: <EcommerceCheckoutPage /> },
           ],
         },
         {
@@ -222,6 +249,7 @@ export default function Router() {
             { path: 'new', element: <UserCreatePage /> },
             { path: ':name/edit', element: <UserEditPage /> },
             { path: 'account', element: <UserPage /> },
+            { path: 'history-learn', element: <UserInfoPage /> },
           ],
         },
         {
@@ -418,7 +446,5 @@ export default function Router() {
     //     { path: 'blank', element: <BlankPage /> },
     //   ],
     // },
-
-
   ]);
 }

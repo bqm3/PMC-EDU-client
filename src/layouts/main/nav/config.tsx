@@ -9,20 +9,20 @@ import Iconify from '../../../components/iconify';
 
 const navConfig = [
   {
-    title: 'Danh sách khóa học',
+    title: 'Lớp học trung tâm',
     icon: <Iconify icon="ic:round-grain" />,
-    // path: PATH_PAGE.components,
-    path: '/danh-sach-khoa-hoc',
-    // children: [
-    //   {
-    //     subheader: '',
-    //     items: [
-    //       { title: 'Orientation', path: '/#', },
-    //       { title: 'Quản lý tài chính kế toán', path: '/#', },
-    //     ],
-    //   },
-    // ],
+    path: '/lop-hoc-trung-tam',
+    isAuthButton: false,
+    text: true,
   },
+  {
+    title: 'Lớp học của tôi',
+    icon: <Iconify icon="ic:round-grain" />,
+    isAuthButton: false,
+    text: true,
+    path: '/lop-hoc-cua-toi',
+  },
+
   {
     title: 'Cơ hội nghề nghiệp',
     icon: <Iconify icon="eva:home-fill" />,

@@ -79,11 +79,15 @@ export default function Header() {
   const isOffset = useOffSetTop(HEADER.H_MAIN_DESKTOP);
 
   const filteredNavConfig = navConfig.filter((link) => {
-    if (user && link.isAuthButton) {
-      return false; // Ẩn các nút đăng ký, đăng nhập nếu user tồn tại
+    if (!user) {
+      // Nếu chưa đăng nhập, ẩn "Khóa học của tôi" và "Khóa học trung tâm"
+      return link.path !== '/lop-hoc-cua-toi' && link.path !== '/lop-hoc-trung-tam';
     }
-    return true; // Hiển thị các mục khác
+
+    // Nếu đã đăng nhập, chỉ hiển thị các mục không phải isAuthButton
+    return !link.isAuthButton;
   });
+
 
   return (
     <AppBar ref={carouselRef} color="transparent" sx={{ boxShadow: 0 }}>
@@ -265,17 +269,8 @@ export default function Header() {
 
           {user && (
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: "16px" }}>
-              <Typography sx={{
-                fontSize: {
-                  xs: 14,
-                  md: 16,
-                },
-                cursor: "pointer",
-                // color: 'text.',
-                fontWeight: "medium"
-              }}>Khóa học của tôi</Typography>
 
-              {/* <Typography sx={{
+              <Typography sx={{
                 fontSize: {
                   xs: 14,
                   md: 16,
@@ -283,25 +278,6 @@ export default function Header() {
                 color: 'text.secondary',
                 fontWeight: "medium"
               }}>Hi, {user.Ten}!</Typography>
-              <Button
-                variant="outlined"
-                onClick={logout}
-                sx={{
-                  fontSize: {
-                    xs: '0.75rem',
-                    sm: '0.875rem',
-                    md: '1rem',
-                  },
-                  padding: {
-                    xs: '4px 8px',
-                    sm: '6px 12px',
-                    md: '8px 16px',
-                  },
-                }}
-              >
-                Đăng xuất
-              </Button> */}
-
               <AccountPopover />
 
             </Box>

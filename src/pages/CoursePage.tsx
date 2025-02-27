@@ -28,7 +28,7 @@ import {
 
 
 import CartWidget from '../sections/@dashboard/e-commerce/CartWidget';
-import { ICourseFilter, ICourseTableFilterValue, IDM_Khoahoc } from 'src/@types/course';
+import { ICourseFilter, ICourseTableFilterValue, IKhoahoc } from 'src/@types/course';
 
 // ----------------------------------------------------------------------
 const defaultValues = {
@@ -108,17 +108,7 @@ export default function CoursePage() {
 
       <FormProvider methods={methods}>
         <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-          {/* <CustomBreadcrumbs
-            heading="Shop"
-            links={[
-              { name: 'Dashboard', href: PATH_DASHBOARD.root },
-              {
-                name: 'E-Commerce',
-                href: PATH_DASHBOARD.eCommerce.root,
-              },
-              { name: 'Shop' },
-            ]}
-          /> */}
+
 
           <Stack
             spacing={2}
@@ -133,33 +123,9 @@ export default function CoursePage() {
             //
             />
 
-            {/* <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-              <CourseFilterDrawer
-                isDefault={isDefault}
-                open={openFilter}
-                onOpen={handleOpenFilter}
-                onClose={handleCloseFilter}
-                onResetFilter={handleResetFilter}
-              />
-
-              <CourseSort />
-            </Stack> */}
           </Stack>
 
-          {/* <Stack sx={{ mb: 3 }}>
-            {!isDefault && (
-              <>
-                <Typography variant="body2" gutterBottom>
-                  <strong>{dataFiltered.length}</strong>
-                  &nbsp;Products found
-                </Typography>
-
-                <CourseTagFiltered isFiltered={!isDefault} onResetFilter={handleResetFilter} />
-              </>
-            )}
-          </Stack> */}
-
-          <CourseList products={dataFiltered} loading={!dm_khoahoc.length && isDefault} />
+          <CourseList courses={dataFiltered} loading={!dm_khoahoc.length && isDefault} />
 
           {/* <CartWidget totalItems={checkout.totalItems} /> */}
         </Container>
@@ -170,14 +136,12 @@ export default function CoursePage() {
 
 // ----------------------------------------------------------------------
 
-function applyFilter(courses: IDM_Khoahoc[], filters: ICourseFilter) {
+function applyFilter(courses: IKhoahoc[], filters: ICourseFilter) {
   const { gender, category, colors, priceRange, rating, sortBy, name } = filters;
 
   const min = priceRange[0];
 
   const max = priceRange[1];
-
-  console.log('name', name)
 
   // NAME 
 

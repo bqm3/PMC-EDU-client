@@ -17,11 +17,11 @@ export default function ExercisePage() {
     const location = useLocation()
     const navigate = useNavigate();
 
-    // const questions = useMemo(() => listQuestions?.Danhsach, [name]);
     const [questions, setQuestions] = useState<any[]>([]);
     const infoQues = useMemo(() => location.state?.exam, [location.state.exam]);
     const infoHocvien = useMemo(() => location.state?.hocvien, [location.state.hocvien]);
 
+    console.log('infoQues', infoQues)
     useEffect(() => {
         if (!location.state || !location.state.exam || !location.state.hocvien) {
             alert("Không có dữ liệu hợp lệ, chuyển về trang chủ!");
@@ -38,6 +38,23 @@ export default function ExercisePage() {
     const [timeLeft, setTimeLeft] = useState(0);
     const [doneExam, setDoneExam] = useState<string>("")
 
+    useEffect(() => {
+        // Khi danh sách câu hỏi thay đổi, đặt câu hỏi đầu tiên làm mặc định
+        if (questions.length > 0 && !currentQuestion) {
+            const firstPhan = questions[0]; // Lấy phần đầu tiên
+            const firstQuestion = firstPhan.ds_cauhoi[0]; // Lấy câu hỏi đầu tiên trong phần đầu tiên
+
+            if (firstQuestion) {
+                setCurrentQuestion({
+                    question: firstQuestion,
+                    phan: {
+                        ID_Baithi_Phan: firstPhan.ID_Baithi_Phan,
+                        Tenphan: firstPhan.Tenphan,
+                    },
+                });
+            }
+        }
+    }, [questions]); // Chạy khi questions thay đổi
     // Hàm xử lý cập nhật câu trả lời
     const handleAnswerChange = useCallback(
         (questionId: number, answer: any, isChecked?: boolean, type?: string) => {
@@ -115,16 +132,18 @@ export default function ExercisePage() {
                     const { Thoigianconlai, isCheck, Thoigianthi, data } = responseData;
 
 
+
                     if (isCheck === "COUNTINUE") {
                         console.log("Tiếp tục bài thi...");
                         setCurrentExam(data)
                         setStartExercise(true);
-                        setTimeLeft(Thoigianconlai * 60 || 3600);
-
+                        setTimeLeft((Thoigianconlai || Thoigianthi * 60) || 3600);
                         // Lấy câu hỏi từ localStorage trước khi gọi API
                         const savedQuestions = getQuestionsFromLocalStorage();
+
                         if (savedQuestions.length > 0) {
                             setQuestions(savedQuestions);
+
                         } else {
                             await fetchExamQuestions(infoQues?.ID_Baithi);
                         }
@@ -140,7 +159,6 @@ export default function ExercisePage() {
                         setCurrentExam(data)
                         setStartExercise(true);
                         setTimeLeft(Thoigianthi * 60 || 3600);
-
                         // Gọi API lấy câu hỏi bài thi mới
                         await fetchExamQuestions(infoQues?.ID_Baithi);
 
@@ -170,7 +188,7 @@ export default function ExercisePage() {
 
     const fetchExamQuestions = async (examId: string) => {
         try {
-            const response = await axios.get(`http://localhost:7676/api/v1/baithi/${examId}`, {
+            const response = await axios.get(`http://localhost:7676/api/v1/baithi/detail/${examId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -221,7 +239,6 @@ export default function ExercisePage() {
             if (!savedQuestions) return []; // Trả về mảng rỗng nếu không có dữ liệu
             return JSON.parse(savedQuestions);
         } catch (error) {
-            console.error("Error parsing examQuestions from localStorage:", error);
             return []; // Trả về mảng rỗng nếu lỗi xảy ra
         }
     };
@@ -274,7 +291,7 @@ export default function ExercisePage() {
                 <title>{`PMC Knowledge | ${name}`} </title>
             </Helmet>
 
-            <Container maxWidth="lg" sx={{ mt: 3, display: "flex" }}>
+            <Container sx={{ mt: 3, display: "flex" }}>
                 <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                     {/* Sidebar - Cố định bên trái */}
                     <Grid

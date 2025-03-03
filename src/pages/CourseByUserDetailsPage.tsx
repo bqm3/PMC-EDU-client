@@ -2,13 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // @mui
-import {
-  Box,
-  Grid,
-  Container,
-  Typography,
-  Stack,
-} from '@mui/material';
+import { Box, Grid, Container, Typography, Stack } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { useSettingsContext } from '../components/settings';
@@ -55,40 +49,14 @@ export default function CourseByUserDetailsPage() {
     setLogs(course?.dt_lichhocs);
   }, [course]);
 
-  const handleCheckKhoaHoc = async (course: IKhoahoc) => {
-    if (!course) return;
-
-    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
-
-    await axios.put(
-      `http://localhost:7676/api/v1/hocvien/khoahoc/${course?.ID_Khoahoc}`,
-      {},
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        }
-      }
-    ).then((response) => {
-      setCheckCourse(response.data);
-    }).catch((error) => {
-      console.error(error);
-    });
-  };
-
-  useEffect(() => {
-    if (course) {
-      handleCheckKhoaHoc(course?.dm_khoahoc);
-    }
-  }, [course]);
-
-
   return (
     <>
       <Helmet>
         <title>{`${course?.Tenlop || ''}`}</title>
       </Helmet>
-      {isLoading ? <SkeletonProductDetails /> :
+      {isLoading ? (
+        <SkeletonProductDetails />
+      ) : (
         <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
           {course && (
             <Grid container>
@@ -104,9 +72,6 @@ export default function CourseByUserDetailsPage() {
                 }}
               >
                 <CourseDetailsSummary course={course} />
-
-
-
               </Grid>
 
               <Grid item xs={12} md={4} lg={4}>
@@ -153,7 +118,6 @@ export default function CourseByUserDetailsPage() {
                         </Typography>
                       </li>
                     </ul>
-
                   </Stack>
                 </Stack>
                 <CourseDetailsReview
@@ -164,11 +128,8 @@ export default function CourseByUserDetailsPage() {
               </Grid>
             </Grid>
           )}
-
-
         </Container>
-      }
-
+      )}
     </>
   );
 }

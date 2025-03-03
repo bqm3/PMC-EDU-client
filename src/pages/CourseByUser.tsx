@@ -1,10 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect, useCallback } from 'react';
-import orderBy from 'lodash/orderBy';
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack, Dialog, DialogTitle, DialogActions, DialogContent, Button } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Button,
+  Grid,
+} from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getUsersCourse } from '../redux/slices/course';
@@ -12,12 +22,10 @@ import { getUsersCourse } from '../redux/slices/course';
 import FormProvider from '../components/hook-form';
 import { useSettingsContext } from '../components/settings';
 // sections
-import {
-  CourseList,
-  CourseSearch
-} from '../sections/user_course/list';
+import { CourseList, CourseSearch } from '../sections/user_course/list';
 
 import { ICourseFilter, ICourseTableFilterValue, IHocvien, IKhoahoc } from 'src/@types/course';
+import { PATH_EXERCISE } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 const defaultValues = {
@@ -59,68 +67,61 @@ export default function CourseByUser() {
       !dirtyFields.rating) ||
     false;
 
-  const values = watch();
-
   const dataFiltered = applyFilter(user_courses, filters);
 
   useEffect(() => {
     dispatch(getUsersCourse());
   }, [dispatch]);
 
-  const handleFilters = useCallback(
-    (name: string, value: ICourseTableFilterValue) => {
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    []
-  );
+  const handleFilters = useCallback((name: string, value: ICourseTableFilterValue) => {
+    setFilters((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }, []);
 
-  const handleResetFilter = () => {
-    reset();
+  const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [examData, setExamData] = useState<any>(null);
+
+  const handleStartExam = () => {
+    navigate(PATH_EXERCISE.practice.view(`${examData?.dm_khoahoc?.SlugTenkhoahoc}`), {
+      state: {
+        exam: examData?.dt_baithi,
+        hocvien: examData,
+      },
+    });
+    setOpenDialog(false);
   };
-
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
-
-  const [openDialog, setOpenDialog] = useState(false)
-  const [examData, setExamData] = useState<any>(null)
 
   const handleOpenExamDialog = async (hocvien: IHocvien) => {
     try {
-      // const response = await axios.get(`/exam-schedule/${hocvien.ID_Hinhthucthi}`);
-
-      setExamData(hocvien.dt_baithi); // Lưu lịch thi vào state
-      setOpenDialog(true); // Mở dialog hiển thị lịch thi
+      setExamData(hocvien);
+      setOpenDialog(true);
     } catch (error) {
-      // enqueueSnackbar('Không thể lấy lịch thi!', { variant: 'error' });
     }
   };
+
   const now = new Date();
 
   // Lấy ngày thi và ngày kết thúc từ dữ liệu
-  const ngayThi = examData?.Ngaythi ? new Date(examData.Ngaythi) : null;
-  const ngayKetThuc = examData?.Ngayketthuc ? new Date(examData.Ngayketthuc) : null;
+  const ngayThi = examData?.dt_baithi?.Ngaythi ? new Date(examData.dt_baithi.Ngaythi) : null;
+  const ngayKetThuc = examData?.dt_baithi?.Ngayketthuc ? new Date(examData.dt_baithi.Ngayketthuc) : null;
 
   // Kiểm tra điều kiện vào thi
-  const coTheVaoThi = ngayThi && ((ngayKetThuc ? (ngayThi <= now && ngayKetThuc >= now) : ngayThi <= now));
+  const coTheVaoThi =
+    ngayThi &&
+    (ngayKetThuc ? ngayThi <= now && ngayKetThuc >= now : ngayThi <= now) &&
+    examData?.Hoanthanhhoc !== 0;
 
   return (
     <>
       <Helmet>
-        <title> PMC Knowledge - Khóa học</title>
+        <title> PMC Knowledge - Lớp học của tôi</title>
       </Helmet>
 
       <FormProvider methods={methods}>
         <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-
-
           <Stack
             spacing={2}
             direction={{ xs: 'column', sm: 'row' }}
@@ -133,10 +134,13 @@ export default function CourseByUser() {
               onFilters={handleFilters}
             //
             />
-
           </Stack>
 
-          <CourseList courses={dataFiltered} loading={!user_courses.length && isDefault} onOpenExamDialog={handleOpenExamDialog} />
+          <CourseList
+            courses={dataFiltered}
+            loading={!user_courses.length && isDefault}
+            onOpenExamDialog={handleOpenExamDialog}
+          />
 
           {/* <CartWidget totalItems={checkout.totalItems} /> */}
         </Container>
@@ -144,12 +148,51 @@ export default function CourseByUser() {
         <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
           <DialogTitle>Lịch thi</DialogTitle>
           <DialogContent>
-            {examData ? (
+            {examData?.dt_baithi ? (
               <Stack spacing={2}>
-                <Typography variant="body1">Môn: {examData?.Tenbaikt}</Typography>
-                <Typography variant="body1">Ngày thi: {examData?.Ngaythi}</Typography>
-                <Typography variant="body1">Thời gian: {examData?.Thoigianthi} (phút)</Typography>
-                <Typography variant="body1">Phòng thi: {examData?.dm_hinhthucthi?.Hinhthucthi}</Typography>
+                <Grid container spacing={2}>
+                  {/* Môn */}
+                  <Grid item xs={4}>
+                    <Typography variant="body1" fontWeight="bold">
+                      Môn:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography variant="body1">{examData?.dt_baithi?.Tenbaikt || 'Chưa cập nhật'}</Typography>
+                  </Grid>
+
+                  {/* Ngày thi */}
+                  <Grid item xs={4}>
+                    <Typography variant="body1" fontWeight="bold">
+                      Ngày thi:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography variant="body1">{examData?.dt_baithi?.Ngaythi || 'Chưa cập nhật'}</Typography>
+                  </Grid>
+
+                  {/* Thời gian thi */}
+                  <Grid item xs={4}>
+                    <Typography variant="body1" fontWeight="bold">
+                      Thời gian thi:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography variant="body1">{examData?.dt_baithi?.Thoigianthi} phút</Typography>
+                  </Grid>
+
+                  {/* Phòng thi */}
+                  <Grid item xs={4}>
+                    <Typography variant="body1" fontWeight="bold">
+                      Hình thức thi:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography variant="body1">
+                      {examData?.dt_baithi?.dm_hinhthucthi?.Hinhthucthi || 'Chưa cập nhật'}
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Stack>
             ) : (
               <Typography>Không có dữ liệu lịch thi</Typography>
@@ -160,14 +203,16 @@ export default function CourseByUser() {
               Đóng
             </Button>
 
-
-            <Button disabled={!coTheVaoThi || false} onClick={() => setOpenDialog(false)} color="success" variant='contained'>
-              {coTheVaoThi ? 'Vào thi' : 'Chưa đến giờ'}
+            <Button
+              disabled={!coTheVaoThi}
+              onClick={handleStartExam}
+              color="success"
+              variant="contained"
+            >
+              {examData?.Hoanthanhhoc === 0 ? "Không được thi" : coTheVaoThi ? "Vào thi" : "Chưa đến giờ"}
             </Button>
-
           </DialogActions>
         </Dialog>
-
       </FormProvider>
     </>
   );
@@ -182,7 +227,7 @@ function applyFilter(courses: IHocvien[], filters: ICourseFilter) {
 
   // const max = priceRange[1];
 
-  // // NAME 
+  // // NAME
 
   // if (name) {
   //   courses = courses?.filter(

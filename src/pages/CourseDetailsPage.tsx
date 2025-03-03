@@ -56,35 +56,6 @@ export default function CourseDetailsPage() {
     setLogs(course?.dt_lichhocs);
   }, [course]);
 
-  const handleCheckKhoaHoc = async (course: ILophoc) => {
-    if (!course) return;
-
-    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
-
-    await axios.put(
-      `http://localhost:7676/api/v1/hocvien/khoahoc/${course?.ID_Khoahoc}`,
-      {},
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        }
-      }
-    ).then((response) => {
-      setCheckCourse(response.data);
-    }).catch((error) => {
-      console.error(error);
-    });
-  };
-
-  useEffect(() => {
-    if (course) {
-      handleCheckKhoaHoc(course);
-    }
-  }, [course]);
-
-
-
 
   const expandAll = () => {
     const newArray: any = [];

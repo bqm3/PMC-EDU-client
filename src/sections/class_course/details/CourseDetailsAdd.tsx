@@ -79,7 +79,7 @@ export default function CourseDetailsAdd({ course, checkCourse, ...other }: Prop
         if (user) {
           if (checkCourse?.check === "ERROR") {
             setDisableCheck(true)
-            await axios.post('http://localhost:7676/api/v1/dangky/create/', {
+            await axios.post('https://api.edu.pmcweb.vn/api/v1/dangky/create/', {
               ID_Loaidangky: 1,
               Ngaydangky: new Date(),
               ID_Lophoc: null,

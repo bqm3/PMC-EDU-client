@@ -80,7 +80,7 @@ export default function ExercisePage() {
 
     const handleSubmitExam = async () => {
         try {
-            await axios.post(`http://localhost:7676/api/v1/baithi/submit/${currentExam?.ID_Baithi_HV}`, {
+            await axios.post(`https://api.edu.pmcweb.vn/api/v1/baithi/submit/${currentExam?.ID_Baithi_HV}`, {
                 answers: answers
             }, {
                 headers: {
@@ -113,7 +113,7 @@ export default function ExercisePage() {
                 const location = `${ipResponse.data.city}, ${ipResponse.data.country}`;
 
                 // Gửi request bắt đầu bài thi
-                const response = await axios.post('http://localhost:7676/api/v1/baithi/start', {
+                const response = await axios.post('https://api.edu.pmcweb.vn/api/v1/baithi/start', {
                     ID_Baithi: infoQues?.ID_Baithi,
                     Thoigianbd: new Date(),
                     ID_Hocvien: infoHocvien?.ID_Hocvien,
@@ -188,7 +188,7 @@ export default function ExercisePage() {
 
     const fetchExamQuestions = async (examId: string) => {
         try {
-            const response = await axios.get(`http://localhost:7676/api/v1/baithi/detail/${examId}`, {
+            const response = await axios.get(`https://api.edu.pmcweb.vn/api/v1/baithi/detail/${examId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

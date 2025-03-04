@@ -105,7 +105,7 @@ export default function AccountGeneral() {
 
     try {
       axios
-        .put(`http://localhost:7676/api/v1/hosohv/update-profile`, formData, {
+        .put(`https://api.edu.pmcweb.vn/api/v1/hosohv/update-profile`, formData, {
           headers: {
             // Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

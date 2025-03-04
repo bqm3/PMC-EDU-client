@@ -30,7 +30,7 @@ export default function LearningPage() {
 
         try {
             const response = await axios.post(
-                `http://localhost:7676/api/v1/diemdanh/khoa-hoc`,
+                `https://api.edu.pmcweb.vn/api/v1/diemdanh/khoa-hoc`,
                 { SlugTenkhoahoc: name },
                 {
                     headers: {
@@ -52,7 +52,7 @@ export default function LearningPage() {
         const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
 
         try {
-            const response = await axios.get(`http://localhost:7676/api/v1/khoahoc/detail/${name}`, {
+            const response = await axios.get(`https://api.edu.pmcweb.vn/api/v1/khoahoc/detail/${name}`, {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${accessToken}`,

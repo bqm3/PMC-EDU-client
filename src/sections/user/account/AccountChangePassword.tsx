@@ -50,7 +50,7 @@ export default function AccountChangePassword() {
   const onSubmit = async (data: FormValuesProps) => {
     try {
       axios
-        .put(`/api/v1/hosohv/change-password`, data, {
+        .put(`/api/v1/hosons/change-password`, data, {
           headers: {
             Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

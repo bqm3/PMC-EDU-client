@@ -2,7 +2,7 @@ import { Box, Stack, Typography, Grid } from '@mui/material';
 import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 import VideoPlayer from './VideoPlayer';
-import axios from 'axios';
+import axios from '../../utils/axios';
 import { IKhoahoc } from 'src/@types/course';
 
 type Props = {
@@ -20,7 +20,7 @@ export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurr
 
         if (!currentVideo?.isWatch) {
             try {
-                await axios.post(`https://api.edu.pmcweb.vn/api/v1/diemdanh/${videoId}`, {
+                await axios.post(`/api/v1/diemdanh/${videoId}`, {
                     startTime: startTime,
                     endTime: endTime,
                     ID_Khoahoc: currentKhoaHoc?.ID_Khoahoc,
@@ -65,7 +65,7 @@ export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurr
     // ✅ Gửi API khi hoàn thành tất cả video
     const handleCourseCompleted = async () => {
         try {
-            await axios.post(`https://api.edu.pmcweb.vn/api/v1/hocvien/completed`, {
+            await axios.post(`/api/v1/hocvien/completed`, {
                 ID_Khoahoc: currentKhoaHoc?.ID_Khoahoc
             }, {
                 headers: {

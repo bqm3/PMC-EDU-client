@@ -46,7 +46,7 @@ export default function AuthResetPasswordForm() {
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      await axios.post("http://localhost:8386/api/v1/hosohv/forget-password", data)
+      await axios.post("http://localhost:8386/api/v1/hosons/forget-password", data)
         .then((res) => {
           enqueueSnackbar('Vui lòng kiểm tra email để nhận mã xác nhận', {
             variant: 'success',

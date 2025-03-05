@@ -92,7 +92,7 @@ export default function AuthRegisterForm() {
         await register(data.Email, data.Matkhau, data.Hodem, data.Ten, data.Tendangnhap, data.Dctamtru);
       }
       navigate(PATH_AUTH.login)
-      enqueueSnackbar('Vui lòng kiểm tra email để nhận mã xác nhận', {
+      enqueueSnackbar('Vui lòng đợi quản lý đào tạo xác nhận tài khoản', {
         variant: 'success',
         autoHideDuration: 5000,
       });
@@ -124,7 +124,7 @@ export default function AuthRegisterForm() {
         <RHFTextField size='small'
           name="Matkhau"
           label="Mật khẩu"
-          type={showPassword ? 'text' : 'passwpord'}
+          type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -140,7 +140,7 @@ export default function AuthRegisterForm() {
           size='small'
           name="Nhaplaimatkhau"
           label="Nhập lại mật khẩu"
-          type={showPasswordAgain ? 'text' : 'passwpord'}
+          type={showPasswordAgain ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

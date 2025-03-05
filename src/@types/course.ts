@@ -106,6 +106,7 @@ export type ICourseState = {
   dm_khoahoc: IKhoahoc[];
   user_courses: IHocvien[];
   class_courses: ILophoc[];
+  detai_class_courses: IKhoahoc | null;
   dt_diemdanh: DT_Diemdanh[]
   await_courses: IDangKy[]
 };
@@ -124,6 +125,7 @@ export type IKhoahoc = {
   dm_linhvuc: ILinhvuc;
   dt_videoonlines: IVideoOnline[];
   dt_nhchs: INHCH[] | any[];
+  dt_lophocs: ILophoc[];
   dangky_list: IDangKy[] | any[]
 };
 

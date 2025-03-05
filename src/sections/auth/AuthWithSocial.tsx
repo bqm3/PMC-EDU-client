@@ -55,7 +55,7 @@ export default function AuthWithSocial() {
           },
         }}
       >
-        OR
+        hoặc
       </Divider>
 
       <Stack direction="row" justifyContent="center" spacing={2}>

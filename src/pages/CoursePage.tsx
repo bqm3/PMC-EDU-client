@@ -8,13 +8,8 @@ import { Container, Typography, Stack } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getKhoaHocs } from '../redux/slices/course';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
-// @types
-import { IProduct, IProductFilter } from '../@types/product';
 // components
 import FormProvider from '../components/hook-form';
-import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
 // sections
 import {
@@ -24,10 +19,8 @@ import {
   CourseCard,
   CourseTagFiltered,
   CourseSearch
-} from '../sections/courses/list';
+} from '../sections/courses/listall';
 
-
-import CartWidget from '../sections/@dashboard/e-commerce/CartWidget';
 import { ICourseFilter, ICourseTableFilterValue, IKhoahoc } from 'src/@types/course';
 
 // ----------------------------------------------------------------------
@@ -117,11 +110,11 @@ export default function CoursePage() {
             justifyContent="space-between"
             sx={{ mb: 2 }}
           >
-            <CourseSearch
+            {/* <CourseSearch
               filters={filters}
               onFilters={handleFilters}
             //
-            />
+            /> */}
 
           </Stack>
 

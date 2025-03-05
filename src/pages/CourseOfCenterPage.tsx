@@ -77,18 +77,6 @@ export default function CourseByUser() {
     []
   );
 
-  const handleResetFilter = () => {
-    reset();
-  };
-
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
-
   return (
     <>
       <Helmet>

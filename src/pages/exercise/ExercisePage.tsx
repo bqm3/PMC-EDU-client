@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Box, Grid, Container, FormControlLabel, Button, Checkbox, Typography, CircularProgress } from '@mui/material';
 import { Sidebar, QuestionPanel, QuestionNavigation, QuestionHeader } from 'src/sections/exercises';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import axios from 'axios';
+import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +21,6 @@ export default function ExercisePage() {
     const infoQues = useMemo(() => location.state?.exam, [location.state.exam]);
     const infoHocvien = useMemo(() => location.state?.hocvien, [location.state.hocvien]);
 
-    console.log('infoQues', infoQues)
     useEffect(() => {
         if (!location.state || !location.state.exam || !location.state.hocvien) {
             alert("Không có dữ liệu hợp lệ, chuyển về trang chủ!");
@@ -30,8 +29,10 @@ export default function ExercisePage() {
     }, [location, navigate]);
 
     const [currentQuestion, setCurrentQuestion] = useState<any>();
+    const [typeExam, setTypeExam] = useState<any>();
     const [currentExam, setCurrentExam] = useState<any>();
-    const [answers, setAnswers] = useState({});
+    const [answers, setAnswers] = useState<Record<string, string | { fileData: string; fileName: string; isFile: boolean }>>({});
+
 
     const [loadingPage, setLoadingPage] = useState(true);
     const [startExercise, setStartExercise] = useState(false);
@@ -77,30 +78,59 @@ export default function ExercisePage() {
         },
         []
     );
+    const [files, setFiles] = useState<Record<string, { fileData: string; fileName: string }>>({});
+
+    // Hàm nhận files từ Question
+    const handleFileUpdate = (questionId: string, fileData: { fileData: string; fileName: string }) => {
+        setFiles(prevFiles => ({ ...prevFiles, [questionId]: fileData }));
+    };
 
     const handleSubmitExam = async () => {
         try {
-            await axios.post(`https://api.edu.pmcweb.vn/api/v1/baithi/submit/${currentExam?.ID_Baithi_HV}`, {
-                answers: answers
+            const encodedAnswers: Record<string, any> = { ...answers };
+
+            if (typeExam === 3) {
+                for (const questionId in answers) {
+                    const answerValue = answers[questionId];
+
+                    if (typeof answerValue === "string" && answerValue.startsWith("data:")) {
+                        encodedAnswers[questionId] = {
+                            fileData: answerValue,
+                            fileName: files[questionId]?.fileName || `file_${questionId}.pdf`,
+                            isFile: true,
+                        };
+                    } else if (typeof answerValue === "object" && answerValue !== null && "fileData" in answerValue) {
+                        encodedAnswers[questionId] = answerValue;
+                    }
+                }
+            }
+
+            await axios.post(`/api/v1/baithi/submit/${currentExam?.ID_Baithi_HV}`, {
+                typeExam,
+                answers: encodedAnswers
             }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
-            })
-                .then((res) => {
-                    setDoneExam("Bạn đã nộp bài thi thành công!");
-                    setStartExercise(false); // Không cho phép thực hiện thi tiếp
-                    localStorage.removeItem('examStartTime');
-                    localStorage.removeItem('examAnswers');
-                    localStorage.removeItem('examQuestions');
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
+            });
+
+            setDoneExam("Bạn đã nộp bài thi thành công!");
+            setStartExercise(false);
+
+            // 🛠 Chờ xoá hoàn tất
+            await Promise.all([
+                localStorage.removeItem('examStartTime'),
+                localStorage.removeItem('examAnswers'),
+                localStorage.removeItem('examQuestions')
+            ]);
+
         } catch (err) {
             console.error('Error submitting exam:', err);
         }
-    }
+    };
+
+
+
 
     useEffect(() => {
         const initiateExam = async () => {
@@ -108,18 +138,18 @@ export default function ExercisePage() {
                 setLoadingPage(true); // Bắt đầu loading
 
                 // Lấy địa chỉ IP + vị trí
-                const ipResponse = await axios.get("https://ipinfo.io/json");
-                const ipAddress = ipResponse.data.ip;
-                const location = `${ipResponse.data.city}, ${ipResponse.data.country}`;
+                // const ipResponse = await axios.get("https://ipinfo.io/json");
+                // const ipAddress = ipResponse.data.ip;
+                // const location = `${ipResponse.data.city}, ${ipResponse.data.country}`;
 
                 // Gửi request bắt đầu bài thi
-                const response = await axios.post('https://api.edu.pmcweb.vn/api/v1/baithi/start', {
+                const response = await axios.post('api/v1/baithi/start', {
                     ID_Baithi: infoQues?.ID_Baithi,
                     Thoigianbd: new Date(),
                     ID_Hocvien: infoHocvien?.ID_Hocvien,
                     Thoigianthi: infoQues?.Thoigianthi,
-                    DiachiIP: ipAddress,
-                    Vitri: location
+                    // DiachiIP: ipAddress,
+                    // Vitri: location
                 }, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
@@ -131,13 +161,11 @@ export default function ExercisePage() {
                 if (responseData) {
                     const { Thoigianconlai, isCheck, Thoigianthi, data } = responseData;
 
-
-
                     if (isCheck === "COUNTINUE") {
                         console.log("Tiếp tục bài thi...");
                         setCurrentExam(data)
                         setStartExercise(true);
-                        setTimeLeft((Thoigianconlai || Thoigianthi * 60) || 3600);
+                        setTimeLeft(((Thoigianconlai || Thoigianthi) * 60) || 3600);
                         // Lấy câu hỏi từ localStorage trước khi gọi API
                         const savedQuestions = getQuestionsFromLocalStorage();
 
@@ -158,7 +186,7 @@ export default function ExercisePage() {
                         console.log("Bắt đầu bài thi mới...");
                         setCurrentExam(data)
                         setStartExercise(true);
-                        setTimeLeft(Thoigianthi * 60 || 3600);
+                        setTimeLeft(((Thoigianconlai || Thoigianthi) * 60) || 3600);
                         // Gọi API lấy câu hỏi bài thi mới
                         await fetchExamQuestions(infoQues?.ID_Baithi);
 
@@ -188,13 +216,14 @@ export default function ExercisePage() {
 
     const fetchExamQuestions = async (examId: string) => {
         try {
-            const response = await axios.get(`https://api.edu.pmcweb.vn/api/v1/baithi/detail/${examId}`, {
+            const response = await axios.get(`/api/v1/baithi/detail/${examId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             if (response.data?.data?.baithiphan_list) {
                 setQuestions(response.data.data?.baithiphan_list);
+                setTypeExam(response.data.data?.dm_hinhthucthi?.ID_Hinhthucthi)
 
                 // Lưu câu hỏi vào localStorage
                 localStorage.setItem('examQuestions', JSON.stringify(response.data.questions));
@@ -226,7 +255,6 @@ export default function ExercisePage() {
         try {
             return JSON.parse(savedAnswers);
         } catch (error) {
-            console.error("Error parsing examAnswers from localStorage:", error);
             return null;
         }
     };
@@ -348,6 +376,8 @@ export default function ExercisePage() {
                                     answers={answers}
                                     setAnswers={setAnswers}
                                     currentQuestion={currentQuestion}
+                                    typeExam={typeExam}
+                                    onFileChange={handleFileUpdate}
                                 />
 
                                 <QuestionNavigation

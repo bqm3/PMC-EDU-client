@@ -9,6 +9,8 @@ export default function QuestionPanel({
     answers,
     setAnswers,
     currentQuestion,
+    typeExam,
+    onFileChange
 }: // setCurrentQuestion,
     any) {
     const formattedData = currentQuestion?.question?.nhchda_list?.map((item: any, index: number) => {
@@ -31,6 +33,7 @@ export default function QuestionPanel({
                 }}
             >
                 <Question
+                    typeExam={typeExam}
                     number={currentQuestion?.question?.Thutu}
                     type={currentQuestion?.question?.dm_loaich?.Maloaich}
                     question={currentQuestion?.question?.NoidungCH}
@@ -39,6 +42,7 @@ export default function QuestionPanel({
                     questionId={currentQuestion?.question?.ID_NHCH}
                     answer={answers[currentQuestion?.question?.ID_NHCH] || ""}
                     onChange={handleAnswerChange}
+                    onFileChange={onFileChange}
                 />
 
             </Box>

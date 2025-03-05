@@ -113,7 +113,7 @@ export default function HomePage() {
 
           <Button
             variant="contained"
-            to="khoa-hoc/danh-sach/"
+            to="danh-sach-khoa-hoc"
             component={RouterLink}
             sx={{
               mt: 4,

@@ -97,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.post('/api/v1/hosohv/check-auth');
+        const response = await axios.post('/api/v1/hosons/check-auth');
 
         const { user } = response.data;
 
@@ -134,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // LOGIN
   const login = async (Tendangnhap: string, Matkhau: string) => {
-    const response = await axios.post('/api/v1/hosohv/login', {
+    const response = await axios.post('/api/v1/hosons/login', {
       Tendangnhap,
       Matkhau
     });
@@ -151,7 +151,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // REGISTER
   const register = async (Email: string, Matkhau: string, Hodem: string, Ten: string, Tendangnhap: string, Dctamtru?: string) => {
-    const response = await axios.post('/api/v1/hosohv/register', {
+    const response = await axios.post('/api/v1/hosons/register', {
       Email,
       Matkhau,
       Hodem,

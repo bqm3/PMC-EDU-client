@@ -22,7 +22,7 @@ import FormProvider, {
   RHFRadioGroup,
   RHFUploadAvatar,
 } from '../../../../components/hook-form';
-import axios from 'axios';
+import axios from '../../../../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ export default function AccountGeneral() {
 
     try {
       axios
-        .put(`https://api.edu.pmcweb.vn/api/v1/hosohv/update-profile`, formData, {
+        .put(`/api/v1/hosons/update-profile`, formData, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'multipart/form-data', // Set correct Content-Type

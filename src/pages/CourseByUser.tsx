@@ -45,7 +45,6 @@ export default function CourseByUser() {
 
   const { user_courses } = useSelector((state) => state.course);
 
-  const [openFilter, setOpenFilter] = useState(false);
   const [filters, setFilters] = useState(defaultValues);
 
   const methods = useForm<ICourseFilter>({

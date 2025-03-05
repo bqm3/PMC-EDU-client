@@ -29,8 +29,6 @@ export default function CourseByUserDetailsPage() {
 
   const { course, isLoading } = useSelector((state) => state.course);
 
-  const [checkCourse, setCheckCourse] = useState();
-
   useEffect(() => {
     if (name) {
       dispatch(getDetailKhoaHoc(name as string));

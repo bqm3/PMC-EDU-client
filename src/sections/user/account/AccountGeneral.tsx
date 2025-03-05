@@ -24,13 +24,13 @@ import FormProvider, {
   RHFRadioGroup,
   RHFUploadAvatar,
 } from '../../../components/hook-form';
-import axios from 'axios';
+import axios from '../../../utils/axios';
 
 // ----------------------------------------------------------------------
 
 const GENDER_OPTION = [
-  { label: 'Nam', value: '1' },
-  { label: 'Nữ', value: '0' },
+  { label: 'Nam', value: 'Nam' },
+  { label: 'Nữ', value: 'Nữ' },
 ];
 
 type FormValuesProps = {
@@ -105,7 +105,7 @@ export default function AccountGeneral() {
 
     try {
       axios
-        .put(`https://api.edu.pmcweb.vn/api/v1/hosohv/update-profile`, formData, {
+        .put(`/api/v1/hosons/update-profile`, formData, {
           headers: {
             // Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,

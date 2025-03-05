@@ -9,7 +9,14 @@ import Iconify from '../../../components/iconify';
 
 const navConfig = [
   {
-    title: 'Lớp học trung tâm',
+    title: 'Khóa học',
+    icon: <Iconify icon="ic:round-grain" />,
+    path: '/danh-sach-khoa-hoc',
+    isAuthButton: false,
+    text: true,
+  },
+  {
+    title: 'Lớp học',
     icon: <Iconify icon="ic:round-grain" />,
     path: '/lop-hoc-trung-tam',
     isAuthButton: false,

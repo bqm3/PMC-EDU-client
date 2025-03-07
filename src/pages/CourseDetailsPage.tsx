@@ -43,16 +43,23 @@ export default function CourseDetailsPage() {
       <Helmet>
         <title>{`PMC Knowledge - ${detai_class_courses?.Tenkhoahoc || ''}`}</title>
       </Helmet>
-
-      <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-        <CourseList
-          classes={detai_class_courses?.dt_lophocs || []}
-          user_courses={user_courses}
-          await_courses={await_courses}
-          loading={!detai_class_courses?.dt_lophocs.length}
-        />
-        {isLoading && <SkeletonProductDetails />}
-      </Container>
+      <Box
+        sx={{
+          overflow: 'hidden',
+          position: 'relative',
+          bgcolor: 'background.default',
+        }}
+      >
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <CourseList
+            classes={detai_class_courses?.dt_lophocs || []}
+            user_courses={user_courses}
+            await_courses={await_courses}
+            loading={!detai_class_courses?.dt_lophocs.length}
+          />
+          {isLoading && <SkeletonProductDetails />}
+        </Container>
+      </Box>
     </>
   );
 }

@@ -101,7 +101,7 @@ export default function AccountGeneral() {
     formData.append('Email', data?.Email);
     formData.append('DcTamtru', data?.DcTamtru);
     formData.append('DcThuongtru', data?.DcThuongtru);
-    formData.append('Avatar', data?.Avatar);
+    formData.append('file', data?.Avatar);
 
     try {
       axios

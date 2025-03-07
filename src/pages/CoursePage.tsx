@@ -4,7 +4,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack } from '@mui/material';
+import { Container, Typography, Stack, Box } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getKhoaHocs } from '../redux/slices/course';
@@ -98,10 +98,19 @@ export default function CoursePage() {
       <Helmet>
         <title> PMC Knowledge - Khóa học</title>
       </Helmet>
+      <Box
+        sx={{
+          overflow: 'hidden',
+          position: 'relative',
+          bgcolor: 'background.default',
+        }}
+      >
 
-      <FormProvider methods={methods}>
-        <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-
+        <Container maxWidth={themeStretch ? false : 'lg'} sx={{
+          justifyItems: 'center',
+          alignItems: 'center',
+          my: { xs: 5, md: 10 },
+        }}>
 
           <Stack
             spacing={2}
@@ -122,7 +131,7 @@ export default function CoursePage() {
 
           {/* <CartWidget totalItems={checkout.totalItems} /> */}
         </Container>
-      </FormProvider>
+      </Box>
     </>
   );
 }

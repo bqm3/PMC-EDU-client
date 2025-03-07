@@ -14,7 +14,13 @@ type Props = {
 
 export default function LessonLayout({ children }: any) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
+    <Box
+      sx={{
+        overflow: 'hidden',
+        position: 'relative',
+        bgcolor: 'background.default',
+      }}
+    >
       <Header />
 
       <Stack sx={{ width: 1 }}>

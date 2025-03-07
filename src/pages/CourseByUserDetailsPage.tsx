@@ -55,78 +55,86 @@ export default function CourseByUserDetailsPage() {
       {isLoading ? (
         <SkeletonProductDetails />
       ) : (
-        <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-          {course && (
-            <Grid container>
-              <Grid
-                item
-                xs={12}
-                md={8}
-                lg={8}
-                sx={{
-                  p: (theme) => ({
-                    md: theme.spacing(2, 5, 0, 2),
-                  }),
-                }}
-              >
-                <CourseDetailsSummary course={course} />
-              </Grid>
-
-              <Grid item xs={12} md={4} lg={4}>
-                <Stack
+        <Box
+          sx={{
+            overflow: 'hidden',
+            position: 'relative',
+            bgcolor: 'background.default',
+          }}
+        >
+          <Container maxWidth={themeStretch ? false : 'lg'}>
+            {course && (
+              <Grid container>
+                <Grid
+                  item
+                  xs={12}
+                  md={8}
+                  lg={8}
                   sx={{
-                    gap: 1,
-                    pb: 2,
+                    p: (theme) => ({
+                      md: theme.spacing(2, 5, 0, 2),
+                    }),
                   }}
                 >
-                  <Typography variant="h5">Danh sách lịch học</Typography>
-                  <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <ul
-                      style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        listStyleType: 'none',
-                        padding: 0,
-                        margin: 0,
-                        alignItems: 'center',
-                      }}
-                    >
-                      <li
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                        }}
-                      >
-                        <Typography variant="subtitle1">{course?.dt_lichhocs?.length}</Typography>
-                        <Typography>Tiết học</Typography>
-                        <span style={{ marginLeft: '0.5rem' }}>•</span>
-                      </li>
+                  <CourseDetailsSummary course={course} />
+                </Grid>
 
-                      <li
+                <Grid item xs={12} md={4} lg={4}>
+                  <Stack
+                    sx={{
+                      gap: 1,
+                      pb: 2,
+                    }}
+                  >
+                    <Typography variant="h5">Danh sách lịch học</Typography>
+                    <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <ul
                         style={{
                           display: 'flex',
+                          gap: '1rem',
+                          listStyleType: 'none',
+                          padding: 0,
+                          margin: 0,
                           alignItems: 'center',
-                          gap: '0.5rem',
                         }}
                       >
-                        <Typography>Thời lượng</Typography>
-                        <Typography variant="subtitle1">
-                          {convertToTime(Number(course?.dm_khoahoc?.Tongthoigian))}
-                        </Typography>
-                      </li>
-                    </ul>
+                        <li
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                          }}
+                        >
+                          <Typography variant="subtitle1">{course?.dt_lichhocs?.length}</Typography>
+                          <Typography>Tiết học</Typography>
+                          <span style={{ marginLeft: '0.5rem' }}>•</span>
+                        </li>
+
+                        <li
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                          }}
+                        >
+                          <Typography>Thời lượng</Typography>
+                          <Typography variant="subtitle1">
+                            {convertToTime(Number(course?.dm_khoahoc?.Tongthoigian))}
+                          </Typography>
+                        </li>
+                      </ul>
+                    </Stack>
                   </Stack>
-                </Stack>
-                <CourseDetailsReview
-                  course={logs}
-                // accordionClicked={accordionClicked}
-                // expandedAccordions={expandedAccordions}
-                />
+                  <CourseDetailsReview
+                    course={logs}
+                  // accordionClicked={accordionClicked}
+                  // expandedAccordions={expandedAccordions}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-        </Container>
+            )}
+          </Container>
+        </Box>
       )}
     </>
   );

@@ -19,6 +19,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  TableHead,
 } from '@mui/material';
 import { useSettingsContext } from '../components/settings';
 import axios from '../utils/axios';
@@ -39,7 +40,7 @@ export default function UserAccountPage() {
   return (
     <>
       <Helmet>
-        <title>PMC Knowledge - Lịch sử học tập</title>
+        <title>Lịch sử học tập</title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'lg'} sx={{ my: 10 }}>
         <LearningHistory courses={user_courses} />
@@ -52,16 +53,15 @@ function LearningHistory({ courses }: any) {
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  // Hàm gọi API để lấy chi tiết của khóa học theo ID
   const handleSelectCourse = async (courseID: any) => {
     setLoading(true);
     try {
-      // Giả sử API trả về dữ liệu chi tiết của khóa học ở response.data.data
       const response = await axios.get(`/api/v1/hocvien/his-course/${courseID}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
+
       setSelectedCourse(response.data.data);
     } catch (error) {
       console.error('Lỗi khi lấy chi tiết khóa học:', error);
@@ -72,9 +72,10 @@ function LearningHistory({ courses }: any) {
   // Khi danh sách khóa học thay đổi, nếu chưa có khóa học nào được chọn thì tự động chọn khóa học đầu tiên
   useEffect(() => {
     if (courses && courses.length > 0 && !selectedCourse) {
-      handleSelectCourse(courses[0].ID_Khoahoc);
+      handleSelectCourse(courses[0]?.ID_Lophoc);
     }
   }, [courses, selectedCourse]);
+
 
   return (
     <Grid container spacing={2}>
@@ -84,18 +85,18 @@ function LearningHistory({ courses }: any) {
           Danh sách khóa học
         </Typography>
         <List component="nav">
-          {courses.map((course: any) => (
+          {courses?.map((course: any) => (
             <ListItem
               button
-              key={course.ID_Khoahoc}
+              key={course?.ID_Lophoc}
               selected={
-                selectedCourse && selectedCourse.ID_Khoahoc === course.ID_Khoahoc
+                selectedCourse && selectedCourse?.ID_Lophoc === course?.ID_Lophoc
               }
-              onClick={() => handleSelectCourse(course.ID_Khoahoc)}
+              onClick={() => handleSelectCourse(course.ID_Lophoc)}
             >
               <ListItemText
                 primary={
-                  course?.dm_khoahoc?.Tenkhoahoc || 'Khóa học chưa có tên'
+                  course?.dt_lophoc?.Tenlop || 'Chưa có tên lớp'
                 }
               />
             </ListItem>
@@ -135,35 +136,57 @@ function CourseDetails({ course }: any) {
   const handleTabChange = (e: any, newValue: number) => {
     setTabIndex(newValue);
   };
+  console.log('course', course)
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        {course?.dm_khoahoc?.Tenkhoahoc}
-      </Typography>
       <Tabs value={tabIndex} onChange={handleTabChange} sx={{ mb: 2 }}>
         <Tab label="Điểm danh" />
         <Tab label="Kết quả kiểm tra" />
         <Tab label="VBCC" />
       </Tabs>
-      {tabIndex === 0 && <AttendanceSection attendanceData={course.diemDanh} />}
-      {tabIndex === 1 && <ExamResultsSection examResults={course.ketQuaKtra} />}
-      {tabIndex === 2 && <VBCCSection vbccData={course.vbcc} />}
+      {tabIndex === 0 && <AttendanceSection attendanceData={course?.diemDanh} />}
+      {tabIndex === 1 && <ExamResultsSection examResults={course?.baiThi} />}
+      {tabIndex === 2 && <VBCCSection vbccData={course?.vbcc} />}
     </Box>
   );
 }
 
 function AttendanceSection({ attendanceData }: any) {
+
+  // Merge 2 mảng và thêm trạng thái điểm danh
+  const mergedAttendance = [
+    ...(attendanceData?.watchedDiemdanh?.map((item: any) => ({
+      ...item,
+      status: "✅" // Đã điểm danh
+    })) || []),
+    ...(attendanceData?.missingDiemdanh?.map((item: any) => ({
+      ...item,
+      status: "❌" // Chưa điểm danh
+    })) || [])
+  ];
+
   return (
     <Box>
-      <Typography variant="subtitle1" sx={{ mb: 1 }}>
-        Chi tiết điểm danh:
-      </Typography>
       <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Ngày</TableCell>
+            <TableCell>Giờ bắt đầu</TableCell>
+            <TableCell>Giờ kết thúc</TableCell>
+            <TableCell>Nội dung</TableCell>
+            <TableCell>Địa điểm</TableCell>
+            <TableCell>Điểm danh</TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody>
-          {attendanceData?.map((item: any, index: number) => (
+          {mergedAttendance.map((item: any, index: number) => (
             <TableRow key={index}>
-              <TableCell>{item?.date}</TableCell>
+              <TableCell>{item?.Ngay}</TableCell>
+              <TableCell>{item?.Giobatdau}</TableCell>
+              <TableCell>{item?.Gioketthuc}</TableCell>
+              <TableCell dangerouslySetInnerHTML={{ __html: item?.Noidung }} />
+              <TableCell>{item?.Noihoc}</TableCell>
               <TableCell>{item?.status}</TableCell>
             </TableRow>
           ))}
@@ -173,6 +196,8 @@ function AttendanceSection({ attendanceData }: any) {
   );
 }
 
+
+
 function ExamResultsSection({ examResults }: any) {
   const [openModal, setOpenModal] = useState(false);
 
@@ -180,7 +205,13 @@ function ExamResultsSection({ examResults }: any) {
     <Box>
       <Typography variant="subtitle1">Kết quả kiểm tra:</Typography>
       <Typography variant="body1">
-        Điểm tổng: {examResults?.totalScore}
+        Kết quả: {examResults?.Tongdiem} đ
+      </Typography>
+      <Typography variant="body2">
+        Thời gian thi: {examResults?.Thoigianbd}
+      </Typography>
+      <Typography variant="body2">
+        Thời gian nộp: {examResults?.Thoigiannb}
       </Typography>
       <Button
         variant="outlined"

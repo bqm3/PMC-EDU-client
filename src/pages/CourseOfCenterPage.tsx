@@ -4,7 +4,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack } from '@mui/material';
+import { Container, Typography, Stack, Box } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getClassCourse, getUsersCourse, getUsersAwaitCourse } from '../redux/slices/course';
@@ -82,27 +82,38 @@ export default function CourseByUser() {
       <Helmet>
         <title> PMC Knowledge - Lớp học</title>
       </Helmet>
+      <Box
+        sx={{
+          overflow: 'hidden',
+          position: 'relative',
+          bgcolor: 'background.default',
+        }}
+      >
+        <Container maxWidth={themeStretch ? false : 'lg'} sx={{
+          // justifyItems: 'center',
+          // alignItems: 'center',
+          my: { xs: 5, md: 10 },
+        }}>
+          <Stack
+            spacing={2}
+            direction={{ xs: 'column', sm: 'row' }}
+            alignItems={{ sm: 'center' }}
+            justifyContent="space-between"
+            sx={{ mb: 2 }}
+          >
+            <CourseSearch
+              filters={filters}
+              onFilters={handleFilters}
+            //
+            />
 
-      <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-        <Stack
-          spacing={2}
-          direction={{ xs: 'column', sm: 'row' }}
-          alignItems={{ sm: 'center' }}
-          justifyContent="space-between"
-          sx={{ mb: 2 }}
-        >
-          <CourseSearch
-            filters={filters}
-            onFilters={handleFilters}
-          //
-          />
+          </Stack>
 
-        </Stack>
+          <CourseList classes={dataFiltered} loading={!class_courses.length && isDefault} user_courses={user_courses} await_courses={await_courses} />
 
-        <CourseList classes={dataFiltered} loading={!class_courses.length && isDefault} user_courses={user_courses} await_courses={await_courses} />
-
-        {/* <CartWidget totalItems={checkout.totalItems} /> */}
-      </Container>
+          {/* <CartWidget totalItems={checkout.totalItems} /> */}
+        </Container>
+      </Box>
     </>
   );
 }

@@ -7,7 +7,8 @@ export default function Sidebar({
     setStartExercise,
     infoQues,
     handleSubmitExam,
-    timeLeft
+    timeLeft,
+    submit
 }: any) {
     const navigate = useNavigate();
     const [remainingTime, setRemainingTime] = useState(timeLeft);
@@ -27,6 +28,11 @@ export default function Sidebar({
 
                         // Dừng bài thi
                         setStartExercise(false);
+                        Promise.all([
+                            localStorage.removeItem('examStartTime'),
+                            localStorage.removeItem('examAnswers'),
+                            localStorage.removeItem('examQuestions')
+                        ]);
                         return 0;
                     }
                     return prevTime - 1;
@@ -63,7 +69,7 @@ export default function Sidebar({
 
             <Box sx={{ marginTop: '16px' }}>
                 {startExercise && (
-                    <Button sx={{ marginTop: '8px' }} variant="contained" color="primary" fullWidth onClick={() => handleSubmitExam()}>
+                    <Button disabled={submit} sx={{ marginTop: '8px' }} variant="contained" color="primary" fullWidth onClick={() => handleSubmitExam()}>
                         Nộp bài
                     </Button>
                 )}

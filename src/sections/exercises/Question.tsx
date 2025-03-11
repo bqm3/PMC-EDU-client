@@ -43,15 +43,16 @@ const Question = ({ number, type, question, phan, options, questionId, answer, o
                 [questionId]: { file: selectedFile, fileName: selectedFile.name }
             }));
             onFileChange(questionId, { fileData: base64File, fileName: selectedFile.name }); // Gửi lên component cha
-            onChange(questionId, base64File, false, "TL1");
+            onChange(questionId, base64File, false, "TL1"); // Chỉ gọi khi là file
         }
     };
 
-
-    const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
-        setFileUrls(prevUrls => ({ ...prevUrls, [id]: event.target.value }));
-        onChange(id, event.target.value, false, "TL1");
+    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: string) => {
+        const textValue = event.target.value;
+        setFileUrls(prevUrls => ({ ...prevUrls, [questionId]: textValue }));
+        onChange(questionId, textValue, false, "TL1"); // Chỉ gửi giá trị text, không encode
     };
+
     // Render từng loại câu hỏi
     const renderQuestionType = () => {
         switch (type) {
@@ -140,11 +141,13 @@ const Question = ({ number, type, question, phan, options, questionId, answer, o
                         <TextField
                             fullWidth
                             variant="outlined"
-                            placeholder="Hoặc nhập đường dẫn Google Drive..."
-                            value={fileUrls[questionId] || ""}
-                            onChange={(e: any) => handleUrlChange(e, questionId)}
-                            sx={{ marginTop: 2 }}
+                            placeholder="Nhập câu trả lời..."
+                            multiline
+                            rows={4}
+                            value={answer || ""}
+                            onChange={(e: any) => handleTextChange(e, questionId)} // Gọi handleTextChange thay vì trực tiếp gọi onChange
                         />
+
                     </Paper>
                 ) : (
                     <TextField

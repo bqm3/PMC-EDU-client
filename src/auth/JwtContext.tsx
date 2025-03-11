@@ -139,7 +139,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       Matkhau
     });
     const { accessToken, user } = response.data;
-
+    // const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+    // if (redirectAfterLogin) {
+    //   localStorage.removeItem("redirectAfterLogin"); // Xóa đường dẫn đã lưu
+    //   navigate(redirectAfterLogin); // Chuyển hướng về trang cũ
+    // } else {
+    //   navigate("/"); // Nếu không có trang trước đó, về trang chủ
+    // }
     setSession(accessToken);
     dispatch({
       type: Types.LOGIN,

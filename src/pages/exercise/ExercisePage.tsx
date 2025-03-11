@@ -18,6 +18,7 @@ export default function ExercisePage() {
     const navigate = useNavigate();
 
     const [questions, setQuestions] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false)
     const infoQues = useMemo(() => location.state?.exam, [location.state.exam]);
     const infoHocvien = useMemo(() => location.state?.hocvien, [location.state.hocvien]);
 
@@ -86,10 +87,11 @@ export default function ExercisePage() {
     };
 
     const handleSubmitExam = async () => {
+        setLoading(false)
         try {
             const encodedAnswers: Record<string, any> = { ...answers };
 
-            if (typeExam === 3) {
+            if (`${typeExam}` === '3') {
                 for (const questionId in answers) {
                     const answerValue = answers[questionId];
 
@@ -123,9 +125,10 @@ export default function ExercisePage() {
                 localStorage.removeItem('examAnswers'),
                 localStorage.removeItem('examQuestions')
             ]);
-
+            setLoading(false)
         } catch (err) {
             console.error('Error submitting exam:', err);
+            setLoading(false)
         }
     };
 
@@ -337,6 +340,7 @@ export default function ExercisePage() {
                         }}
                     >
                         <Sidebar
+                            submit={loading}
                             loading={loadingPage}
                             startExercise={startExercise}
                             setStartExercise={setStartExercise}

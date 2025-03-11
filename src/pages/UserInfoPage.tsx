@@ -27,6 +27,7 @@ import axios from '../utils/axios';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getUsersCourse } from '../redux/slices/course';
+import Iconify from 'src/components/iconify';
 
 export default function UserAccountPage() {
   const { themeStretch } = useSettingsContext();
@@ -151,18 +152,17 @@ function CourseDetails({ course }: any) {
     </Box>
   );
 }
-
 function AttendanceSection({ attendanceData }: any) {
 
   // Merge 2 mảng và thêm trạng thái điểm danh
   const mergedAttendance = [
     ...(attendanceData?.watchedDiemdanh?.map((item: any) => ({
       ...item,
-      status: "✅" // Đã điểm danh
+      status: <Iconify icon="mdi:check-circle" width={24} height={24} color="success.main" /> // Đã điểm danh
     })) || []),
     ...(attendanceData?.missingDiemdanh?.map((item: any) => ({
       ...item,
-      status: "❌" // Chưa điểm danh
+      status: <Iconify icon="mdi:close-circle" width={24} height={24} color="error.main" /> // Chưa điểm danh
     })) || [])
   ];
 
@@ -187,7 +187,7 @@ function AttendanceSection({ attendanceData }: any) {
               <TableCell>{item?.Gioketthuc}</TableCell>
               <TableCell dangerouslySetInnerHTML={{ __html: item?.Noidung }} />
               <TableCell>{item?.Noihoc}</TableCell>
-              <TableCell>{item?.status}</TableCell>
+              <TableCell sx={{ textAlign: 'center' }}>{item?.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>

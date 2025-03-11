@@ -48,7 +48,7 @@ export default function CourseSearch({ filters, onFilters }: Props) {
       <TextField
         value={filters.name}
         onChange={handleFilterName}
-        placeholder="Tìm kiếm theo tên khóa học"
+        placeholder="Tìm kiếm theo tên lớp học"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

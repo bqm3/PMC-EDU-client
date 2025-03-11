@@ -14,7 +14,7 @@ import {
   CourseDetailsReview,
   CourseDetailsAdd,
 } from '../sections/courses/details';
-import { getDetailKhoaHoc } from 'src/redux/slices/course';
+import { getDetailLopHoc } from 'src/redux/slices/course';
 import { IKhoahoc } from 'src/@types/course';
 import axios from 'axios';
 
@@ -31,7 +31,7 @@ export default function CourseByUserDetailsPage() {
 
   useEffect(() => {
     if (name) {
-      dispatch(getDetailKhoaHoc(name as string));
+      dispatch(getDetailLopHoc(name as string));
     }
   }, [dispatch, name]);
 
@@ -62,7 +62,7 @@ export default function CourseByUserDetailsPage() {
             bgcolor: 'background.default',
           }}
         >
-          <Container maxWidth={themeStretch ? false : 'lg'}>
+          <Container maxWidth={themeStretch ? false : 'lg'} sx={{ py: { md: 10, xs: 5 } }}>
             {course && (
               <Grid container>
                 <Grid

@@ -46,6 +46,11 @@ const slice = createSlice({
       state.isLoading = false;
       state.detai_class_courses = action.payload;
     },
+
+    getLopHocDetailSuccess(state, action){
+      state.isLoading = false;
+      state.course = action.payload;
+    },
     getDiemDanhByKhoaHoc(state, action){
       state.isLoading = false;
       state.dt_diemdanh = action.payload;
@@ -139,9 +144,22 @@ export function getDetailKhoaHoc(params: string) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/khoahoc/lophoc/${params}`);
+      const response = await axios.get(`/api/v1/khoahoc/detail/${params}`);
 
       dispatch(slice.actions.getKhoaHocDetailSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getDetailLopHoc(params: string) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/khoahoc/lophoc/${params}`);
+
+      dispatch(slice.actions.getLopHocDetailSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

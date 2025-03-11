@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import axios from '../../../utils/axios';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import { Card, Stack, Typography, Button, CircularProgress } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IconButton } from '@mui/material';
 import { useSnackbar } from 'src/components/snackbar';
 import Label from '../../../components/label';
 import { IDangKy, IHocvien, ILophoc } from 'src/@types/course';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 type Props = {
   data: ILophoc;
@@ -31,7 +33,9 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
     dm_khoahoc
   } = data;
 
+  const { user } = useAuthContext()
   const theme = useTheme();
+  const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempTinhtrang, setTempTinhtrang] = useState(iTinhtrang);
@@ -48,6 +52,13 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
   const awaitingApproval = await_courses?.some((course: IDangKy) => course.ID_Lophoc === ID_Lophoc && `${course.iTinhtrang}` === '1') || tempTinhtrang === "1";
 
   const handleRegisterCourse = async () => {
+
+    if (!user) {
+      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+
+      navigate('/auth/login')
+    }
+
     setIsSubmitting(true);
     await axios.post('/api/v1/dangky/create', {
       ID_Loainhom,

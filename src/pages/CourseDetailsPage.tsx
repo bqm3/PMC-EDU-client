@@ -50,7 +50,7 @@ export default function CourseDetailsPage() {
           bgcolor: 'background.default',
         }}
       >
-        <Container maxWidth={themeStretch ? false : 'lg'}>
+        <Container maxWidth={themeStretch ? false : 'lg'} sx={{ my: 10 }}>
           <CourseList
             classes={detai_class_courses?.dt_lophocs || []}
             user_courses={user_courses}

@@ -107,8 +107,8 @@ export default function CoursePage() {
       >
 
         <Container maxWidth={themeStretch ? false : 'lg'} sx={{
-          justifyItems: 'center',
-          alignItems: 'center',
+          // justifyItems: 'center',
+          // alignItems: 'center',
           my: { xs: 5, md: 10 },
         }}>
 
@@ -119,17 +119,15 @@ export default function CoursePage() {
             justifyContent="space-between"
             sx={{ mb: 2 }}
           >
-            {/* <CourseSearch
+            <CourseSearch
               filters={filters}
               onFilters={handleFilters}
             //
-            /> */}
+            />
 
           </Stack>
 
           <CourseList courses={dataFiltered} loading={!dm_khoahoc.length && isDefault} />
-
-          {/* <CartWidget totalItems={checkout.totalItems} /> */}
         </Container>
       </Box>
     </>

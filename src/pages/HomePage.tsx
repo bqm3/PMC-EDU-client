@@ -132,6 +132,10 @@ export default function HomePage() {
             !user && <AboutTeam />
           }
 
+
+
+          <HomeNews />
+
           <Box
             gap={10}
             display="grid"
@@ -143,8 +147,6 @@ export default function HomePage() {
             <ContactForm />
             <ContactMap />
           </Box>
-
-          <HomeNews />
         </Container>
 
         {/* <HomeMinimal />

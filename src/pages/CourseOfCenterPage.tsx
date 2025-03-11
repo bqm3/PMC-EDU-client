@@ -121,7 +121,7 @@ export default function CourseByUser() {
 // ----------------------------------------------------------------------
 
 function applyFilter(courses: ILophoc[], filters: ICourseFilter) {
-  // const { gender, category, colors, priceRange, rating, sortBy, name } = filters;
+  const { name } = filters;
 
   // const min = priceRange[0];
 
@@ -129,15 +129,15 @@ function applyFilter(courses: ILophoc[], filters: ICourseFilter) {
 
   // // NAME 
 
-  // if (name) {
-  //   courses = courses?.filter(
-  //     (item) =>
-  //       `${item.Tenkhoahoc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-  //       `${item.Sotiethoc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-  //       `${item.Tongthoigian}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
+  if (name) {
+    courses = courses?.filter(
+      (item) =>
+        `${item.Tenlop}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${item.dm_khoahoc?.Tenkhoahoc}`.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        `${item.Malop}`.toLowerCase().indexOf(name.toLowerCase()) !== -1
 
-  //   );
-  // }
+    );
+  }
 
   // SORT BY
   // if (sortBy === 'featured') {

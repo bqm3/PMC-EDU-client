@@ -157,7 +157,7 @@ export function getDetailLopHoc(params: string) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/khoahoc/lophoc/${params}`);
+      const response = await axios.get(`/api/v1/lophoc/detail/${params}`);
 
       dispatch(slice.actions.getLopHocDetailSuccess(response.data.data));
     } catch (error) {

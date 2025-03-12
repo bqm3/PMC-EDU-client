@@ -107,9 +107,8 @@ export default function AccountGeneral() {
       axios
         .put(`/api/v1/hosons/update-profile`, formData, {
           headers: {
-            // Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data', // Set correct Content-Type
+            'Content-Type': 'multipart/form-data',
           },
         })
         .then((res) => {

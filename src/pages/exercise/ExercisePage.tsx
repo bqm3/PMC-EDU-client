@@ -87,7 +87,7 @@ export default function ExercisePage() {
     };
 
     const handleSubmitExam = async () => {
-        setLoading(false)
+        setLoading(true);
         try {
             const encodedAnswers: Record<string, any> = { ...answers };
 
@@ -125,14 +125,18 @@ export default function ExercisePage() {
                 localStorage.removeItem('examAnswers'),
                 localStorage.removeItem('examQuestions')
             ]);
-            setLoading(false)
+
+            setLoading(false);
+
+            // Hiển thị thông báo và quay lại trang trước đó
+            alert("Bạn đã nộp bài thi thành công!");
+            window.history.back();
+
         } catch (err) {
             console.error('Error submitting exam:', err);
-            setLoading(false)
+            setLoading(false);
         }
     };
-
-
 
 
     useEffect(() => {

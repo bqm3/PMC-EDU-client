@@ -4,7 +4,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack, Box } from '@mui/material';
+import { Container, Typography, Stack, Box, Pagination } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getKhoaHocs } from '../redux/slices/course';
@@ -33,6 +33,7 @@ const defaultValues = {
   rating: '',
   sortBy: 'featured',
 };
+const ITEMS_PER_PAGE = 12;
 
 export default function CoursePage() {
   const { themeStretch } = useSettingsContext();
@@ -43,6 +44,8 @@ export default function CoursePage() {
 
   const [openFilter, setOpenFilter] = useState(false);
   const [filters, setFilters] = useState(defaultValues);
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const methods = useForm<ICourseFilter>({
     defaultValues,
@@ -70,6 +73,20 @@ export default function CoursePage() {
   useEffect(() => {
     dispatch(getKhoaHocs());
   }, [dispatch]);
+
+  // Tính tổng số trang
+  const totalPages = Math.ceil(dataFiltered.length / ITEMS_PER_PAGE);
+
+  // Cắt dữ liệu theo trang hiện tại
+  const dataPaginated = dataFiltered.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // Hàm thay đổi trang
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
 
   const handleFilters = useCallback(
     (name: string, value: ICourseTableFilterValue) => {
@@ -127,7 +144,19 @@ export default function CoursePage() {
 
           </Stack>
 
-          <CourseList courses={dataFiltered} loading={!dm_khoahoc.length && isDefault} />
+          <CourseList courses={dataPaginated} loading={!dm_khoahoc.length && isDefault} />
+          <Stack spacing={2} sx={{
+            justifyItems: 'center',
+            alignItems: 'center',
+            mt: { xs: 2, md: 5 },
+          }}>
+            <Pagination
+              count={totalPages}
+              shape="rounded"
+              page={currentPage}
+              onChange={handlePageChange}
+            />
+          </Stack>
         </Container>
       </Box>
     </>

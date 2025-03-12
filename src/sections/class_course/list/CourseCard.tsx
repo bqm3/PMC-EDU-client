@@ -54,6 +54,8 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
       iShow,
       ID_Lophoc,
       ID_Khoahoc,
+      Malop,
+      Tenlop,
       ID_Loaidangky: 2,
       Ngaydangky: new Date(),
     }, {

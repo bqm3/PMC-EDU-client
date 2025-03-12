@@ -15,8 +15,6 @@ import {
   CourseDetailsAdd,
 } from '../sections/courses/details';
 import { getDetailLopHoc } from 'src/redux/slices/course';
-import { IKhoahoc } from 'src/@types/course';
-import axios from 'axios';
 
 // ----------------------------------------------------------------------
 

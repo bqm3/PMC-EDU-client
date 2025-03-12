@@ -83,6 +83,7 @@ export default function CourseDetailsAdd({ course, checkCourse, ...other }: Prop
               ID_Loaidangky: 1,
               Ngaydangky: new Date(),
               ID_Lophoc: null,
+
               ID_Khoahoc: ID_Khoahoc,
               Email: user?.Email
             }, {

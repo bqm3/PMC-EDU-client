@@ -26,12 +26,11 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
     Soluongdangky,
     Tenlop,
     iHinhthucdt,
-    Noiycdt,
     iTinhtrang,
     Ngaybt,
     Ngaykt,
-    dm_khoahoc
   } = data;
+
 
   const { user } = useAuthContext()
   const theme = useTheme();
@@ -59,12 +58,16 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
       navigate('/auth/login')
     }
 
+    console.log(Malop,
+      Tenlop,)
     setIsSubmitting(true);
     await axios.post('/api/v1/dangky/create', {
       ID_Loainhom,
       iShow,
       ID_Lophoc,
       ID_Khoahoc,
+      Malop,
+      Tenlop,
       ID_Loaidangky: 2,
       Ngaydangky: new Date(),
     }, {
@@ -142,11 +145,7 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
                 </IconButton>
               </Stack>
             </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography color="text.primary" variant="body2">Khóa học</Typography>
 
-              <Typography variant="subtitle2" fontWeight="bold"> {dm_khoahoc?.Tenkhoahoc}</Typography>
-            </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <Typography color="text.primary" variant="body2">Số lượng tham gia:</Typography>
 

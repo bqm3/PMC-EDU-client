@@ -146,7 +146,6 @@ export default function CourseDetailsAdd({ course, checkCourse, ...other }: Prop
     }
   }
 
-  console.log('checkCourse', checkCourse)
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

@@ -18,7 +18,7 @@ import { PATH_AUTH, PATH_DASHBOARD, PATH_EXERCISE, PATH_LESSON } from '../../../
 import { _socials } from '../../../_mock/arrays';
 // components
 import FormProvider, { RHFSelect } from '../../../components/hook-form';
-import axios from 'axios';
+import axios from '../../../utils/axios';
 
 // ----------------------------------------------------------------------
 type Props = {
@@ -78,7 +78,7 @@ export default function CourseDetailsAdd({ course, checkCourse, ...other }: Prop
         if (user) {
           if (checkCourse?.check === "ERROR") {
             setDisableCheck(true)
-            await axios.post('http://localhost:7676/api/v1/dangky/create/', {
+            await axios.post('/api/v1/dangky/create/', {
               ID_Loaidangky: 1,
               Ngaydangky: new Date(),
               ID_Lophoc: null,
@@ -146,7 +146,6 @@ export default function CourseDetailsAdd({ course, checkCourse, ...other }: Prop
     }
   }
 
-  console.log('checkCourse', checkCourse)
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

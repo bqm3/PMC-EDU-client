@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from '../../redux/store';
 import { Box, Grid, Typography } from '@mui/material';
 // sections
 import { LessonVideo, LessonList } from 'src/sections/lesson';
-import axios from 'axios';
+import axios from '../../utils/axios';
 
 export default function LearningPage() {
     const { user } = useAuthContext();
@@ -30,7 +30,7 @@ export default function LearningPage() {
 
         try {
             const response = await axios.post(
-                `http://localhost:7676/api/v1/diemdanh/khoa-hoc`,
+                `/api/v1/diemdanh/khoa-hoc`,
                 { SlugTenkhoahoc: name },
                 {
                     headers: {
@@ -52,7 +52,7 @@ export default function LearningPage() {
         const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
 
         try {
-            const response = await axios.get(`http://localhost:7676/api/v1/khoahoc/detail/${name}`, {
+            const response = await axios.get(`/api/v1/khoahoc/detail/${name}`, {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${accessToken}`,

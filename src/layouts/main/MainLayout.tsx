@@ -23,7 +23,7 @@ export default function MainLayout() {
           ...(!isHome && {
             pt: { xs: 8, md: 11 },
           }),
-          background: '#ffffff'
+          // background: '#ffffff'
         }}
       >
         <Outlet />

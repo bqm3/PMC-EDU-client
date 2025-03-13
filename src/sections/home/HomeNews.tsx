@@ -58,32 +58,32 @@ export default function HomeNews() {
         setOpen(false);
     };
 
-    if (!isDesktop) {
-        return (
-            <>
-                <AppBar position="absolute" color="transparent" sx={{ boxShadow: 0 }}>
-                    <Toolbar sx={{ justifyContent: 'flex-end' }}>
-                        <Button
-                            variant="soft"
-                            startIcon={<Iconify icon="eva:menu-2-fill" />}
-                            onClick={handleOpen}
-                        >
-                            Categories
-                        </Button>
-                    </Toolbar>
-                    <Divider />
-                </AppBar>
+    // if (!isDesktop) {
+    //     return (
+    //         <>
+    //             <AppBar position="absolute" color="transparent" sx={{ boxShadow: 0 }}>
+    //                 <Toolbar sx={{ justifyContent: 'flex-end' }}>
+    //                     <Button
+    //                         variant="soft"
+    //                         startIcon={<Iconify icon="eva:menu-2-fill" />}
+    //                         onClick={handleOpen}
+    //                     >
+    //                         Categories
+    //                     </Button>
+    //                 </Toolbar>
+    //                 <Divider />
+    //             </AppBar>
 
-                <Drawer open={open} onClose={handleClose}>
-                    <Box gap={1} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 1 }}>
-                        {CATEGORIES.map((category) => (
-                            <CardMobile key={category.label} category={category} />
-                        ))}
-                    </Box>
-                </Drawer>
-            </>
-        );
-    }
+    //             <Drawer open={open} onClose={handleClose}>
+    //                 <Box gap={1} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 1 }}>
+    //                     {CATEGORIES.map((category) => (
+    //                         <CardMobile key={category.label} category={category} />
+    //                     ))}
+    //                 </Box>
+    //             </Drawer>
+    //         </>
+    //     );
+    // }
 
     return (
         <Container component={MotionViewport} sx={{ pb: 10, }}>

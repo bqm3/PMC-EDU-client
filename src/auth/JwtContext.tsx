@@ -97,7 +97,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.post('/api/v1/hosohv/check-auth');
+        const response = await axios.post('/api/v1/hosons/check-auth');
 
         const { user } = response.data;
 
@@ -134,12 +134,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // LOGIN
   const login = async (Tendangnhap: string, Matkhau: string) => {
-    const response = await axios.post('/api/v1/hosohv/login', {
+    const response = await axios.post('/api/v1/hosons/login', {
       Tendangnhap,
       Matkhau
     });
     const { accessToken, user } = response.data;
-
+    // const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+    // if (redirectAfterLogin) {
+    //   localStorage.removeItem("redirectAfterLogin"); // Xóa đường dẫn đã lưu
+    //   navigate(redirectAfterLogin); // Chuyển hướng về trang cũ
+    // } else {
+    //   navigate("/"); // Nếu không có trang trước đó, về trang chủ
+    // }
     setSession(accessToken);
     dispatch({
       type: Types.LOGIN,
@@ -151,7 +157,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // REGISTER
   const register = async (Email: string, Matkhau: string, Hodem: string, Ten: string, Tendangnhap: string, Dctamtru?: string) => {
-    const response = await axios.post('/api/v1/hosohv/register', {
+    const response = await axios.post('/api/v1/hosons/register', {
       Email,
       Matkhau,
       Hodem,

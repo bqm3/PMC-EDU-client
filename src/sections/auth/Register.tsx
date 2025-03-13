@@ -32,13 +32,13 @@ export default function Register() {
         component="div"
         sx={{ color: 'text.secondary', mt: 3, typography: 'caption', textAlign: 'center' }}
       >
-        {'By signing up, I agree to '}
+        {'Bằng cách đăng ký, tôi chấp nhận '}
         <Link underline="always" color="text.primary">
-          Terms of Service
+          Điều khoản
         </Link>
-        {' and '}
+        {' và '}
         <Link underline="always" color="text.primary">
-          Privacy Policy
+          Điều kiện
         </Link>
         .
       </Typography>

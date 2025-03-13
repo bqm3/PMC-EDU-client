@@ -16,6 +16,7 @@ const initialState: ICourseState = {
   dm_khoahoc: [],
   user_courses: [],
   class_courses: [],
+  detai_class_courses: null,
   dt_diemdanh: [],
   await_courses: []
 };
@@ -42,6 +43,11 @@ const slice = createSlice({
     },
 
     getKhoaHocDetailSuccess(state, action){
+      state.isLoading = false;
+      state.detai_class_courses = action.payload;
+    },
+
+    getLopHocDetailSuccess(state, action){
       state.isLoading = false;
       state.course = action.payload;
     },
@@ -138,9 +144,22 @@ export function getDetailKhoaHoc(params: string) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/v1/lophoc/detail/${params}`);
+      const response = await axios.get(`/api/v1/khoahoc/detail/${params}`);
 
       dispatch(slice.actions.getKhoaHocDetailSuccess(response.data.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getDetailLopHoc(params: string) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/v1/lophoc/detail/${params}`);
+
+      dispatch(slice.actions.getLopHocDetailSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

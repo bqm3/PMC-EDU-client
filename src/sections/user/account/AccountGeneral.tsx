@@ -24,13 +24,13 @@ import FormProvider, {
   RHFRadioGroup,
   RHFUploadAvatar,
 } from '../../../components/hook-form';
-import axios from 'axios';
+import axios from '../../../utils/axios';
 
 // ----------------------------------------------------------------------
 
 const GENDER_OPTION = [
-  { label: 'Nam', value: '1' },
-  { label: 'Nữ', value: '0' },
+  { label: 'Nam', value: 'Nam' },
+  { label: 'Nữ', value: 'Nữ' },
 ];
 
 type FormValuesProps = {
@@ -101,15 +101,14 @@ export default function AccountGeneral() {
     formData.append('Email', data?.Email);
     formData.append('DcTamtru', data?.DcTamtru);
     formData.append('DcThuongtru', data?.DcThuongtru);
-    formData.append('Avatar', data?.Avatar);
+    formData.append('file', data?.Avatar);
 
     try {
       axios
-        .put(`http://localhost:7676/api/v1/hosohv/update-profile`, formData, {
+        .put(`/api/v1/hosons/update-profile`, formData, {
           headers: {
-            // Accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data', // Set correct Content-Type
+            'Content-Type': 'multipart/form-data',
           },
         })
         .then((res) => {

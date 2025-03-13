@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Box, Grid, Container, FormControlLabel, Button, Checkbox, Typography, CircularProgress } from '@mui/material';
 import { Sidebar, QuestionPanel, QuestionNavigation, QuestionHeader } from 'src/sections/exercises';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import axios from 'axios';
+import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -17,8 +17,8 @@ export default function ExercisePage() {
     const location = useLocation()
     const navigate = useNavigate();
 
-    // const questions = useMemo(() => listQuestions?.Danhsach, [name]);
     const [questions, setQuestions] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false)
     const infoQues = useMemo(() => location.state?.exam, [location.state.exam]);
     const infoHocvien = useMemo(() => location.state?.hocvien, [location.state.hocvien]);
 
@@ -30,14 +30,33 @@ export default function ExercisePage() {
     }, [location, navigate]);
 
     const [currentQuestion, setCurrentQuestion] = useState<any>();
+    const [typeExam, setTypeExam] = useState<any>();
     const [currentExam, setCurrentExam] = useState<any>();
-    const [answers, setAnswers] = useState({});
+    const [answers, setAnswers] = useState<Record<string, string | { fileData: string; fileName: string; isFile: boolean }>>({});
+
 
     const [loadingPage, setLoadingPage] = useState(true);
     const [startExercise, setStartExercise] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
     const [doneExam, setDoneExam] = useState<string>("")
 
+    useEffect(() => {
+        // Khi danh sách câu hỏi thay đổi, đặt câu hỏi đầu tiên làm mặc định
+        if (questions.length > 0 && !currentQuestion) {
+            const firstPhan = questions[0]; // Lấy phần đầu tiên
+            const firstQuestion = firstPhan.ds_cauhoi[0]; // Lấy câu hỏi đầu tiên trong phần đầu tiên
+
+            if (firstQuestion) {
+                setCurrentQuestion({
+                    question: firstQuestion,
+                    phan: {
+                        ID_Baithi_Phan: firstPhan.ID_Baithi_Phan,
+                        Tenphan: firstPhan.Tenphan,
+                    },
+                });
+            }
+        }
+    }, [questions]); // Chạy khi questions thay đổi
     // Hàm xử lý cập nhật câu trả lời
     const handleAnswerChange = useCallback(
         (questionId: number, answer: any, isChecked?: boolean, type?: string) => {
@@ -60,30 +79,65 @@ export default function ExercisePage() {
         },
         []
     );
+    const [files, setFiles] = useState<Record<string, { fileData: string; fileName: string }>>({});
+
+    // Hàm nhận files từ Question
+    const handleFileUpdate = (questionId: string, fileData: { fileData: string; fileName: string }) => {
+        setFiles(prevFiles => ({ ...prevFiles, [questionId]: fileData }));
+    };
 
     const handleSubmitExam = async () => {
+        setLoading(true);
         try {
-            await axios.post(`http://localhost:7676/api/v1/baithi/submit/${currentExam?.ID_Baithi_HV}`, {
-                answers: answers
+            const encodedAnswers: Record<string, any> = { ...answers };
+
+            if (`${typeExam}` === '3') {
+                for (const questionId in answers) {
+                    const answerValue = answers[questionId];
+
+                    if (typeof answerValue === "string" && answerValue.startsWith("data:")) {
+                        encodedAnswers[questionId] = {
+                            fileData: answerValue,
+                            fileName: files[questionId]?.fileName || `file_${questionId}.pdf`,
+                            isFile: true,
+                        };
+                    } else if (typeof answerValue === "object" && answerValue !== null && "fileData" in answerValue) {
+                        encodedAnswers[questionId] = answerValue;
+                    }
+                }
+            }
+
+            await axios.post(`/api/v1/baithi/submit/${currentExam?.ID_Baithi_HV}`, {
+                typeExam,
+                answers: encodedAnswers
             }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
-            })
-                .then((res) => {
-                    setDoneExam("Bạn đã nộp bài thi thành công!");
-                    setStartExercise(false); // Không cho phép thực hiện thi tiếp
-                    localStorage.removeItem('examStartTime');
-                    localStorage.removeItem('examAnswers');
-                    localStorage.removeItem('examQuestions');
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
+            });
+
+            setDoneExam("Bạn đã nộp bài thi thành công!");
+            setStartExercise(false);
+
+            // 🛠 Chờ xoá hoàn tất
+            await Promise.all([
+                localStorage.removeItem('examStartTime'),
+                localStorage.removeItem('examAnswers'),
+                localStorage.removeItem('examQuestions')
+            ]);
+
+            setLoading(false);
+
+            // Hiển thị thông báo và quay lại trang trước đó
+            alert("Bạn đã nộp bài thi thành công!");
+            window.history.back();
+
         } catch (err) {
             console.error('Error submitting exam:', err);
+            setLoading(false);
         }
-    }
+    };
+
 
     useEffect(() => {
         const initiateExam = async () => {
@@ -91,18 +145,18 @@ export default function ExercisePage() {
                 setLoadingPage(true); // Bắt đầu loading
 
                 // Lấy địa chỉ IP + vị trí
-                const ipResponse = await axios.get("https://ipinfo.io/json");
-                const ipAddress = ipResponse.data.ip;
-                const location = `${ipResponse.data.city}, ${ipResponse.data.country}`;
+                // const ipResponse = await axios.get("https://ipinfo.io/json");
+                // const ipAddress = ipResponse.data.ip;
+                // const location = `${ipResponse.data.city}, ${ipResponse.data.country}`;
 
                 // Gửi request bắt đầu bài thi
-                const response = await axios.post('http://localhost:7676/api/v1/baithi/start', {
+                const response = await axios.post('api/v1/baithi/start', {
                     ID_Baithi: infoQues?.ID_Baithi,
                     Thoigianbd: new Date(),
                     ID_Hocvien: infoHocvien?.ID_Hocvien,
                     Thoigianthi: infoQues?.Thoigianthi,
-                    DiachiIP: ipAddress,
-                    Vitri: location
+                    // DiachiIP: ipAddress,
+                    // Vitri: location
                 }, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
@@ -114,17 +168,17 @@ export default function ExercisePage() {
                 if (responseData) {
                     const { Thoigianconlai, isCheck, Thoigianthi, data } = responseData;
 
-
                     if (isCheck === "COUNTINUE") {
                         console.log("Tiếp tục bài thi...");
                         setCurrentExam(data)
                         setStartExercise(true);
-                        setTimeLeft(Thoigianconlai * 60 || 3600);
-
+                        setTimeLeft(((Thoigianconlai || Thoigianthi) * 60) || 3600);
                         // Lấy câu hỏi từ localStorage trước khi gọi API
                         const savedQuestions = getQuestionsFromLocalStorage();
+
                         if (savedQuestions.length > 0) {
                             setQuestions(savedQuestions);
+
                         } else {
                             await fetchExamQuestions(infoQues?.ID_Baithi);
                         }
@@ -139,8 +193,7 @@ export default function ExercisePage() {
                         console.log("Bắt đầu bài thi mới...");
                         setCurrentExam(data)
                         setStartExercise(true);
-                        setTimeLeft(Thoigianthi * 60 || 3600);
-
+                        setTimeLeft(((Thoigianconlai || Thoigianthi) * 60) || 3600);
                         // Gọi API lấy câu hỏi bài thi mới
                         await fetchExamQuestions(infoQues?.ID_Baithi);
 
@@ -170,13 +223,14 @@ export default function ExercisePage() {
 
     const fetchExamQuestions = async (examId: string) => {
         try {
-            const response = await axios.get(`http://localhost:7676/api/v1/baithi/${examId}`, {
+            const response = await axios.get(`/api/v1/baithi/detail/${examId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             if (response.data?.data?.baithiphan_list) {
                 setQuestions(response.data.data?.baithiphan_list);
+                setTypeExam(response.data.data?.dm_hinhthucthi?.ID_Hinhthucthi)
 
                 // Lưu câu hỏi vào localStorage
                 localStorage.setItem('examQuestions', JSON.stringify(response.data.questions));
@@ -208,7 +262,6 @@ export default function ExercisePage() {
         try {
             return JSON.parse(savedAnswers);
         } catch (error) {
-            console.error("Error parsing examAnswers from localStorage:", error);
             return null;
         }
     };
@@ -221,7 +274,6 @@ export default function ExercisePage() {
             if (!savedQuestions) return []; // Trả về mảng rỗng nếu không có dữ liệu
             return JSON.parse(savedQuestions);
         } catch (error) {
-            console.error("Error parsing examQuestions from localStorage:", error);
             return []; // Trả về mảng rỗng nếu lỗi xảy ra
         }
     };
@@ -274,7 +326,7 @@ export default function ExercisePage() {
                 <title>{`PMC Knowledge | ${name}`} </title>
             </Helmet>
 
-            <Container maxWidth="lg" sx={{ mt: 3, display: "flex" }}>
+            <Container sx={{ mt: 3, display: "flex" }}>
                 <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                     {/* Sidebar - Cố định bên trái */}
                     <Grid
@@ -292,6 +344,7 @@ export default function ExercisePage() {
                         }}
                     >
                         <Sidebar
+                            submit={loading}
                             loading={loadingPage}
                             startExercise={startExercise}
                             setStartExercise={setStartExercise}
@@ -331,6 +384,8 @@ export default function ExercisePage() {
                                     answers={answers}
                                     setAnswers={setAnswers}
                                     currentQuestion={currentQuestion}
+                                    typeExam={typeExam}
+                                    onFileChange={handleFileUpdate}
                                 />
 
                                 <QuestionNavigation

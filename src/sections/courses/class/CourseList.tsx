@@ -29,7 +29,7 @@ export default function CourseList({ classes, loading, user_courses, await_cours
       }}
       {...other}
     >
-      {(loading ? [...Array(4)] : classes).map((item, index) =>
+      {(loading ? [...Array(12)] : classes).map((item, index) =>
         item ? (
           <CourseCard key={item?.ID_Lophoc || index} data={item} user_courses={user_courses} await_courses={await_courses} />
         ) : (

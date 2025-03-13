@@ -33,10 +33,10 @@ export default function AuthLoginForm() {
 
   const LoginSchema = Yup.object().shape({
     Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
-    // .matches(
-    //   /^(03|05|07|08|09)\d{8}$/,
-    //   'Chưa đúng định dạng số điện thoại'
-    // )
+      .matches(
+        /^(03|05|07|08|09)\d{8}$|^PMC\d+$/i,
+        'Chưa đúng định dạng số điện thoại hoặc mã PMC'
+      )
     ,
     Matkhau: Yup.string().required('Mật khẩu là bắt buộc'),
   });
@@ -60,20 +60,24 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      await login(data.Tendangnhap, data.Matkhau);
-      const redirectTo = location.state?.from || '/'; // Nếu không có, chuyển về trang chủ
-      navigate(redirectTo, { replace: true });
+      await login(data.Tendangnhap, data.Matkhau); // ✅ Chờ đăng nhập hoàn tất
+
+      // 🛠 Kiểm tra nếu có trang trước đó, chuyển hướng đến đó
+      const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+      if (redirectAfterLogin) {
+        localStorage.removeItem("redirectAfterLogin");
+        navigate(redirectAfterLogin, { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+
     } catch (error) {
       console.error(error);
-
       reset();
-
-      setError('afterSubmit', {
-        ...error,
-        message: error.message,
-      });
+      setError("afterSubmit", { message: error.message });
     }
   };
+
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,8 @@ export default function Sidebar({
     setStartExercise,
     infoQues,
     handleSubmitExam,
-    timeLeft
+    timeLeft,
+    submit
 }: any) {
     const navigate = useNavigate();
     const [remainingTime, setRemainingTime] = useState(timeLeft);
@@ -20,13 +22,16 @@ export default function Sidebar({
                         clearInterval(timer);
                         alert("Hết thời gian làm bài!");
                         handleSubmitExam()
-                        // Xóa dữ liệu khi hết thời gian
-                        // localStorage.removeItem('examStartTime');
-                        // localStorage.removeItem('examAnswers');
-                        // localStorage.removeItem('examQuestions');
 
                         // Dừng bài thi
                         setStartExercise(false);
+
+                        // Xóa dữ liệu khi hết thời gian
+                        Promise.all([
+                            localStorage.removeItem('examStartTime'),
+                            localStorage.removeItem('examAnswers'),
+                            localStorage.removeItem('examQuestions')
+                        ]);
                         return 0;
                     }
                     return prevTime - 1;
@@ -63,9 +68,9 @@ export default function Sidebar({
 
             <Box sx={{ marginTop: '16px' }}>
                 {startExercise && (
-                    <Button sx={{ marginTop: '8px' }} variant="contained" color="primary" fullWidth onClick={() => handleSubmitExam()}>
+                    <LoadingButton loading={submit} sx={{ marginTop: '8px' }} variant="contained" color="primary" fullWidth onClick={() => handleSubmitExam()}>
                         Nộp bài
-                    </Button>
+                    </LoadingButton>
                 )}
 
                 {!startExercise && (

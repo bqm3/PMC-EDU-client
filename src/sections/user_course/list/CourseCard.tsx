@@ -71,7 +71,7 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
 
       <Stack spacing={1} sx={{ px: 2, pb: 1 }}>
         <Link to={linkTo} component={RouterLink} color="inherit" variant="subtitle1" noWrap>
-          {dt_lophoc?.Tenlop} ({dt_lophoc?.Malop})
+          {dt_lophoc?.Tenlop}
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -80,6 +80,14 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
           </Typography>
           <Typography variant="subtitle2" fontWeight="bold">
             {dm_khoahoc?.Tenkhoahoc}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography color="text.primary" variant="body2">
+            Mã lớp:
+          </Typography>
+          <Typography variant="subtitle2" fontWeight="bold">
+            ({dt_lophoc?.Malop})
           </Typography>
         </Stack>
 

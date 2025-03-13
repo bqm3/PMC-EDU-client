@@ -2,13 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // @mui
-import {
-  Box,
-  Grid,
-  Container,
-  Typography,
-  Stack,
-} from '@mui/material';
+import { Box, Grid, Container, Typography, Stack } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { useSettingsContext } from '../components/settings';
@@ -20,9 +14,7 @@ import {
   CourseDetailsReview,
   CourseDetailsAdd,
 } from '../sections/courses/details';
-import { getDetailKhoaHoc } from 'src/redux/slices/course';
-import { IKhoahoc } from 'src/@types/course';
-import axios from 'axios';
+import { getDetailLopHoc } from 'src/redux/slices/course';
 
 // ----------------------------------------------------------------------
 
@@ -35,11 +27,9 @@ export default function CourseByUserDetailsPage() {
 
   const { course, isLoading } = useSelector((state) => state.course);
 
-  const [checkCourse, setCheckCourse] = useState();
-
   useEffect(() => {
     if (name) {
-      dispatch(getDetailKhoaHoc(name as string));
+      dispatch(getDetailLopHoc(name as string));
     }
   }, [dispatch, name]);
 
@@ -55,120 +45,95 @@ export default function CourseByUserDetailsPage() {
     setLogs(course?.dt_lichhocs);
   }, [course]);
 
-  const handleCheckKhoaHoc = async (course: IKhoahoc) => {
-    if (!course) return;
-
-    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
-
-    await axios.put(
-      `http://localhost:7676/api/v1/hocvien/khoahoc/${course?.ID_Khoahoc}`,
-      {},
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        }
-      }
-    ).then((response) => {
-      setCheckCourse(response.data);
-    }).catch((error) => {
-      console.error(error);
-    });
-  };
-
-  useEffect(() => {
-    if (course) {
-      handleCheckKhoaHoc(course?.dm_khoahoc);
-    }
-  }, [course]);
-
-
   return (
     <>
       <Helmet>
         <title>{`${course?.Tenlop || ''}`}</title>
       </Helmet>
-      {isLoading ? <SkeletonProductDetails /> :
-        <Container maxWidth={themeStretch ? false : 'lg'} sx={{ marginY: 10 }}>
-          {course && (
-            <Grid container>
-              <Grid
-                item
-                xs={12}
-                md={8}
-                lg={8}
-                sx={{
-                  p: (theme) => ({
-                    md: theme.spacing(2, 5, 0, 2),
-                  }),
-                }}
-              >
-                <CourseDetailsSummary course={course} />
-
-
-
-              </Grid>
-
-              <Grid item xs={12} md={4} lg={4}>
-                <Stack
+      {isLoading ? (
+        <SkeletonProductDetails />
+      ) : (
+        <Box
+          sx={{
+            overflow: 'hidden',
+            position: 'relative',
+            bgcolor: 'background.default',
+          }}
+        >
+          <Container maxWidth={themeStretch ? false : 'lg'} sx={{ py: { md: 10, xs: 5 } }}>
+            {course && (
+              <Grid container>
+                <Grid
+                  item
+                  xs={12}
+                  md={8}
+                  lg={8}
                   sx={{
-                    gap: 1,
-                    pb: 2,
+                    p: (theme) => ({
+                      md: theme.spacing(2, 5, 0, 2),
+                    }),
                   }}
                 >
-                  <Typography variant="h5">Danh sách lịch học</Typography>
-                  <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <ul
-                      style={{
-                        display: 'flex',
-                        gap: '1rem',
-                        listStyleType: 'none',
-                        padding: 0,
-                        margin: 0,
-                        alignItems: 'center',
-                      }}
-                    >
-                      <li
+                  <CourseDetailsSummary course={course} />
+                </Grid>
+
+                <Grid item xs={12} md={4} lg={4}>
+                  <Stack
+                    sx={{
+                      gap: 1,
+                      pb: 2,
+                    }}
+                  >
+                    <Typography variant="h5">Danh sách lịch học</Typography>
+                    <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <ul
                         style={{
                           display: 'flex',
+                          gap: '1rem',
+                          listStyleType: 'none',
+                          padding: 0,
+                          margin: 0,
                           alignItems: 'center',
-                          gap: '0.5rem',
                         }}
                       >
-                        <Typography variant="subtitle1">{course?.dt_lichhocs?.length}</Typography>
-                        <Typography>Tiết học</Typography>
-                        <span style={{ marginLeft: '0.5rem' }}>•</span>
-                      </li>
+                        <li
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                          }}
+                        >
+                          <Typography variant="subtitle1">{course?.dt_lichhocs?.length}</Typography>
+                          <Typography>Tiết học</Typography>
+                          <span style={{ marginLeft: '0.5rem' }}>•</span>
+                        </li>
 
-                      <li
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                        }}
-                      >
-                        <Typography>Thời lượng</Typography>
-                        <Typography variant="subtitle1">
-                          {convertToTime(Number(course?.dm_khoahoc?.Tongthoigian))}
-                        </Typography>
-                      </li>
-                    </ul>
-
+                        <li
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                          }}
+                        >
+                          <Typography>Thời lượng</Typography>
+                          <Typography variant="subtitle1">
+                            {convertToTime(Number(course?.dm_khoahoc?.Tongthoigian))}
+                          </Typography>
+                        </li>
+                      </ul>
+                    </Stack>
                   </Stack>
-                </Stack>
-                <CourseDetailsReview
-                  course={logs}
-                // accordionClicked={accordionClicked}
-                // expandedAccordions={expandedAccordions}
-                />
+                  <CourseDetailsReview
+                    course={logs}
+                  // accordionClicked={accordionClicked}
+                  // expandedAccordions={expandedAccordions}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-
-
-        </Container>
-      }
-
+            )}
+          </Container>
+        </Box>
+      )}
     </>
   );
 }

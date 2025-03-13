@@ -27,3 +27,5 @@ serve.js
 package-lock.json
 
 .eslintcache
+
+.env

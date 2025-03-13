@@ -107,39 +107,34 @@ export default function AccountGeneral() {
           },
         })
         .then((res) => {
-          enqueueSnackbar({
+          enqueueSnackbar('Tạo mới thành công!', {
             variant: 'success',
             autoHideDuration: 4000,
-            message: 'Tạo mới thành công!',
-          });
+          })
         })
         .catch((error) => {
           if (error.response) {
-            enqueueSnackbar({
+            enqueueSnackbar(`${error.response.data.message}`, {
               variant: 'error',
               autoHideDuration: 4000,
-              message: `${error.response.data.message}`,
-            });
+            })
           } else if (error.request) {
-            enqueueSnackbar({
+            enqueueSnackbar(`Không nhận được phản hồi từ máy chủ`, {
               variant: 'error',
               autoHideDuration: 4000,
-              message: `Không nhận được phản hồi từ máy chủ`,
-            });
+            })
           } else {
-            enqueueSnackbar({
+            enqueueSnackbar(`Lỗi gửi yêu cầu`, {
               variant: 'error',
               autoHideDuration: 4000,
-              message: `Lỗi gửi yêu cầu`,
-            });
+            })
           }
         });
     } catch (error) {
-      enqueueSnackbar({
+      enqueueSnackbar(`Lỗi gửi yêu cầu`, {
         variant: 'error',
         autoHideDuration: 4000,
-        message: `Lỗi gửi yêu cầu`,
-      });
+      })
     }
   };
 

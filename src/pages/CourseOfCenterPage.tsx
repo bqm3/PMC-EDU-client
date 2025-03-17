@@ -29,7 +29,7 @@ const defaultValues = {
   sortBy: 'featured',
 };
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 6;
 
 export default function CourseByUser() {
   const { themeStretch } = useSettingsContext();

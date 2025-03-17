@@ -1,13 +1,19 @@
 import { List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ILophoc } from 'src/@types/course';
+import { PATH_PAGE } from 'src/routes/paths';
 
 type Props = {
-  course?: any;
+  class_period?: any;
+  course: ILophoc;
 };
 
-export default function LessonList({ course }: Props) {
+export default function LessonList({ class_period, course }: Props) {
+
+  const navigate = useNavigate();
+
   // Kiểm tra nếu bài học có thể mở khóa
   const isLessonUnlocked = (lesson: any) => {
     if (!lesson?.Ngay) return false;
@@ -34,12 +40,9 @@ export default function LessonList({ course }: Props) {
     return `${startTime} - ${endTime} ${day}/${month}/${year}`;
   };
 
-
-
-
   return (
     <List sx={{ backgroundColor: "#f9f9f9", display: 'flex', flexDirection: 'column', borderRadius: "4px", padding: "4px", gap: "4px", boxShadow: "0px 4px 6px rgba(0,0,0,0.1)" }}>
-      {course?.map((lesson: any, index: number) => {
+      {class_period?.map((lesson: any, index: number) => {
         const unlocked = isLessonUnlocked(lesson);
 
         return (
@@ -69,12 +72,26 @@ export default function LessonList({ course }: Props) {
               </Typography>
             </ListItemText>
 
-            {/* Nút xem video nếu mở khóa */}
-            {unlocked && lesson?.urlVideo && (
-              <IconButton component="a" href={lesson.urlVideo} target="_blank">
-                🔗
+            {`${course?.ID_Hinhthucdt}` === "2" ? (
+              <IconButton
+                color="primary"
+                onClick={() =>
+                  navigate(PATH_PAGE.courstByMe.learning(`${course?.Malop}`), {
+                    state: { lophoc: course?.Tenlop }
+                  })
+                }
+
+              >
+                📖
               </IconButton>
+            ) : (
+              unlocked && lesson?.urlVideo && (
+                <IconButton component="a" href={lesson.urlVideo} target="_blank">
+                  🔗
+                </IconButton>
+              )
             )}
+
           </ListItem>
         );
       })}

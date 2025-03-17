@@ -63,11 +63,11 @@ const Question = ({ number, type, question, phan, options, questionId, answer, o
                             {options?.map((option: any, index: number) => (
                                 <Grid item xs={6} key={index}>
                                     <FormControlLabel
-                                        value={option.value}
-                                        control={<Radio checked={`${answer}` === `${option.value}`} />}
+                                        value={option?.value}
+                                        control={<Radio checked={`${answer}` === `${option?.value}`} />}
                                         label={
                                             <Typography>
-                                                <strong>{option.label}</strong> {option.text}
+                                                <strong>{option?.label}</strong> {option?.text}
                                             </Typography>
                                         }
                                     />
@@ -85,14 +85,14 @@ const Question = ({ number, type, question, phan, options, questionId, answer, o
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            value={option.value}
+                                            value={option?.value}
                                             checked={answer?.includes(option?.value)}
-                                            onChange={(e) => onChange(questionId, option.value, e.target.checked, "TN2")}
+                                            onChange={(e) => onChange(questionId, option?.value, e.target.checked, "TN2")}
                                         />
                                     }
                                     label={
                                         <Typography>
-                                            <strong>{option.label}</strong> {option.text}
+                                            <strong>{option?.label}</strong> {option?.text}
                                         </Typography>
                                     }
                                 />
@@ -182,17 +182,18 @@ const Question = ({ number, type, question, phan, options, questionId, answer, o
                 );
 
             case "CHGN": // Câu hỏi ghép nối
+                console.log('run')
                 return (
                     <Grid container spacing={2}>
                         {options?.map((option: any, index: number) => (
                             <Grid item xs={6} key={index}>
-                                <Typography>{option.left}</Typography>
+                                <Typography>{option?.left}</Typography>
                                 <Select
                                     fullWidth
-                                    value={answer?.[option.left] || ""}
-                                    onChange={(e) => onChange(questionId, { ...answer, [option.left]: e.target.value }, false, "CHGN")}
+                                    value={answer?.[option?.left] || ""}
+                                    onChange={(e) => onChange(questionId, { ...answer, [option?.left]: e.target.value }, false, "CHGN")}
                                 >
-                                    {option.right.map((match: any, i: number) => (
+                                    {option?.right?.map((match: any, i: number) => (
                                         <MenuItem value={match} key={i}>
                                             {match}
                                         </MenuItem>

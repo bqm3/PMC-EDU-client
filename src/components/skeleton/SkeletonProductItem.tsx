@@ -3,9 +3,9 @@ import { Card, Skeleton, Stack } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function SkeletonProductItem() {
+export default function SkeletonProductItem({ sx, ...other }: any) {
   return (
-    <Card>
+    <Card sx={{ ...sx }}>
       <Skeleton variant="rectangular" sx={{ paddingTop: '100%' }} />
       <Stack spacing={2} sx={{ p: 3 }}>
         <Skeleton variant="text" sx={{ width: 0.5 }} />

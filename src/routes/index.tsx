@@ -181,13 +181,13 @@ export default function Router() {
     },
     // Học online
     {
-      path: 'khoa-hoc',
+      path: 'lop-hoc-cua-toi',
       children: [
         {
           element: <LessonLayout />,
           children: [
             {
-              path: ':name',
+              path: 'learning/:name',
               element: <LearningPage />,
             },
           ]
@@ -223,6 +223,10 @@ export default function Router() {
           children: [
             { element: <CourseByUser />, index: true },
             { path: ':name', element: <CourseByUserDetailsPage /> },
+            // {
+            //   path: 'learning/:name',
+            //   element: <LearningPage />,
+            // },
           ],
         },
         {

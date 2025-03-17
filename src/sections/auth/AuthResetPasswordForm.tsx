@@ -11,7 +11,7 @@ import { PATH_AUTH } from '../../routes/paths';
 // components
 import FormProvider, { RHFTextField } from '../../components/hook-form';
 import { useSnackbar } from '../../components/snackbar';
-import axios from 'axios';
+import axios from '../../utils/axios';
 
 
 // ----------------------------------------------------------------------
@@ -46,7 +46,7 @@ export default function AuthResetPasswordForm() {
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      await axios.post("http://localhost:8386/api/v1/hosons/forget-password", data)
+      await axios.post("/hosons/forget-password", data)
         .then((res) => {
           enqueueSnackbar('Vui lòng kiểm tra email để nhận mã xác nhận', {
             variant: 'success',

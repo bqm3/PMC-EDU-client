@@ -25,7 +25,7 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
     Malop,
     Soluongdangky,
     Tenlop,
-    iHinhthucdt,
+    ID_Hinhthucdt,
     iTinhtrang,
     Ngaybt,
     Ngaykt,
@@ -82,7 +82,7 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
         setTempTinhtrang("1"); // Cập nhật trạng thái tạm thời thành 1 (Đang đợi xét duyệt)
       })
       .catch((err) => {
-        enqueueSnackbar(err.message, { variant: 'error', autoHideDuration: 4000 });
+        enqueueSnackbar(err.response.data.message, { variant: 'error', autoHideDuration: 4000 });
       })
       .finally(() => {
         setIsSubmitting(false); // Tắt loading sau khi hoàn tất
@@ -127,12 +127,11 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
               <Typography color="text.primary" variant="body2">Hình thức đào tạo:</Typography>
               <Label
                 variant="soft"
-                color={Number(iHinhthucdt) === 0 ? 'error' : Number(iHinhthucdt) === 1 ? 'info' : 'secondary'}
+                color={Number(ID_Hinhthucdt) === 1 ? 'error' : Number(ID_Hinhthucdt) === 2 ? 'info' : 'secondary'}
                 sx={{ fontWeight: "bold", borderRadius: "8px", px: 2, py: 0.5 }}
               >
-                {Number(iHinhthucdt) === 0 && ' Online'}
-                {Number(iHinhthucdt) === 1 && ' Offline'}
-                {Number(iHinhthucdt) === 2 && ' Online và Offline'}
+                {Number(ID_Hinhthucdt) === 1 && ' Online'}
+                {Number(ID_Hinhthucdt) === 2 && ' E.Learning'}
               </Label>
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between">

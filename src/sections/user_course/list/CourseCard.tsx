@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
-  const { dm_khoahoc, dt_lophoc } = hocvien;
+  const { dm_khoahoc, dt_lophoc, dt_baithi } = hocvien;
 
   const linkTo = PATH_PAGE.courstByMe.view(`${dt_lophoc?.Malop}`);
 
@@ -43,14 +43,15 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
   }
 
   // Xác định trạng thái và text của button
-  const getButtonLabel = (status: number) => {
+  const getButtonLabel = (status: number, iExam: any) => {
     if (status === 0 || status === 1) return { text: 'Vào học', disabled: false, action: 'study' };
-    if (status === 2) return { text: 'Vào thi', disabled: false, action: 'exam' };
+    if (status === 2 && !iExam) return { text: 'Vào thi', disabled: false, action: 'exam' };
+    if (status === 2 && iExam) return { text: 'Đã thi xong', disabled: true, action: 'closed' };
     if (status === 3) return { text: 'Đóng lớp', disabled: true, action: 'closed' };
     return { text: 'Không xác định', disabled: true, action: 'unknown' };
   };
 
-  const buttonState = getButtonLabel(Number(dt_lophoc?.iTinhtrang));
+  const buttonState = getButtonLabel(Number(dt_lophoc?.iTinhtrang), dt_baithi?.dt_baithi_hv);
 
   return (
     <Card
@@ -73,7 +74,19 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
         <Link to={linkTo} component={RouterLink} color="inherit" variant="subtitle1" noWrap>
           {dt_lophoc?.Tenlop}
         </Link>
-
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography color="text.primary" variant="body2">
+            Hình thức đào tạo:
+          </Typography>
+          <Label
+            variant="soft"
+            color={Number(dt_lophoc?.ID_Hinhthucdt) === 1 ? 'error' : Number(dt_lophoc?.ID_Hinhthucdt) === 2 ? 'info' : 'secondary'}
+            sx={{ fontWeight: "bold", borderRadius: "8px", px: 2, py: 0.5 }}
+          >
+            {Number(dt_lophoc?.ID_Hinhthucdt) === 1 && ' Online'}
+            {Number(dt_lophoc?.ID_Hinhthucdt) === 2 && ' E.Learning'}
+          </Label>
+        </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography color="text.primary" variant="body2">
             Khóa học:

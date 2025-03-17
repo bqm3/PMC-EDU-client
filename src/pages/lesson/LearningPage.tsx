@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { IKhoahoc, IVideoOnline } from 'src/@types/course';
+import { IKhoahoc, ILichhoc, IVideoOnline } from 'src/@types/course';
 import { useAuthContext } from '../../auth/useAuthContext';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
@@ -17,21 +17,21 @@ export default function LearningPage() {
     const { name } = useParams();
     const location = useLocation();
 
-    const tenkhoahoc = location.state?.Tenkhoahoc;
+    const lophoc = location.state?.lophoc;
 
     const [firstCurrent, setFirstCurrent] = useState(false)
     const [diemDanhCheck, setDiemDanhCheck] = useState([]);
     const [videoKhoaHoc, setVideoKhoaHoc] = useState([]);
-    const [currentVideo, setCurrentVideo] = useState<IVideoOnline>();
+    const [currentVideo, setCurrentVideo] = useState<ILichhoc | null>();
     const [currentKhoaHoc, setCurrentKhoaHoc] = useState<IKhoahoc>();
 
     const handleCheckKhoaHoc = async (name: string) => {
         const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
 
         try {
-            const response = await axios.post(
-                `/api/v1/diemdanh/khoa-hoc`,
-                { SlugTenkhoahoc: name },
+            const response = await axios.get(
+                `/api/v1/lophoc/hoc-vien/diem-danh/${name}`,
+                // { SlugTenkhoahoc: name },
                 {
                     headers: {
                         Accept: 'application/json',
@@ -52,7 +52,7 @@ export default function LearningPage() {
         const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
 
         try {
-            const response = await axios.get(`/api/v1/khoahoc/detail/${name}`, {
+            const response = await axios.get(`/api/v1/lophoc/detail/${name}`, {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${accessToken}`,
@@ -60,7 +60,7 @@ export default function LearningPage() {
             });
 
             if (response.data) {
-                setVideoKhoaHoc(response.data.data?.dt_videoonlines);
+                setVideoKhoaHoc(response.data.data?.dt_lichhocs);
                 setCurrentKhoaHoc(response.data.data)
             }
         } catch (error) {
@@ -75,46 +75,52 @@ export default function LearningPage() {
         }
     }, [name]);
 
-    const handleVideoClick = async (item: any) => {
-        setCurrentVideo(item);
+    const handleVideoClick = (selectedVideo: any) => {
+        setCurrentVideo(null); // Đặt currentVideo thành null để reset trạng thái
+        setTimeout(() => {
+            setCurrentVideo(selectedVideo);
+        }, 100); // Đợi một chút để React cập nhật lại component
     };
 
-    const watchedVideos = new Set(diemDanhCheck?.map((dd: any) => dd.ID_Video));
+
+
 
     const [listVideo, setListVideo] = useState<any[]>([]);
 
     useEffect(() => {
-        if (videoKhoaHoc) {
+
+        const watchedVideos = new Set(
+            diemDanhCheck.map((dd: any) => dd.ID_Lichhoc).filter((id) => id !== null && id !== undefined)
+        );
+
+        if (Array.isArray(videoKhoaHoc)) {
             const newList = videoKhoaHoc.map((item: any) => ({
                 ...item,
-                videos: item.videos
-                    .map((it: any) => ({
-                        ...it,
-                        isWatch: watchedVideos.has(it.ID_Video),
-                    }))
-                    .sort((a: any, b: any) => a.Thutu - b.Thutu),
-            }));
-            setListVideo(newList); // Cập nhật danh sách video
-        }
-    }, [videoKhoaHoc, diemDanhCheck]);
+                isWatch: watchedVideos.has(item.ID_Lichhoc)
 
-    // Tìm video đầu tiên chưa xem
+            })).sort((a: any, b: any) => a.ID_Tiethoc - b.ID_Tiethoc);
+
+            setListVideo(newList);
+        }
+    }, [diemDanhCheck, videoKhoaHoc]);
+
     useEffect(() => {
         if (!currentVideo && listVideo.length > 0) {
             const remainingVideos = listVideo
-                .flatMap((item) => item.videos)
-                .filter((video) => !video.isWatch)
-                .sort((a, b) => b.Thutu - a.Thutu)[0];
+                .filter((video) => !video.isWatch) // Chỉ lấy video chưa xem
+                .sort((a, b) => a.ID_Tiethoc - b.ID_Tiethoc)[0];
+
             if (remainingVideos) {
                 setCurrentVideo(remainingVideos);
             }
         }
-    }, [listVideo, currentVideo]);
+    }, [listVideo]); // Xóa `currentVideo` khỏi dependency để tránh mất trạng thái
+
 
     return (
         <>
             <Helmet>
-                <title>{currentVideo?.Tenvideo || `${tenkhoahoc}`}</title>
+                <title>{currentVideo?.Tieude || `${lophoc}`}</title>
             </Helmet>
 
             <Grid container spacing={2} my={3.5} sx={{ alignItems: 'stretch' }}>
@@ -152,7 +158,7 @@ export default function LearningPage() {
 
                 <Grid item xs={12} md={4} lg={3} sx={{ minHeight: { md: '100vh' }, mb: 2 }}>
                     <Typography variant="subtitle1" sx={{ mb: 2, mt: { xs: 0, md: 2 }, fontWeight: 'bold' }}>
-                        Danh sách video khóa học
+                        Danh sách video lớp học
                     </Typography>
                     <LessonList
                         mergeListVideo={listVideo}

@@ -103,7 +103,7 @@ export default function HomePage() {
           sx={{
             justifyItems: 'center',
             alignItems: 'center',
-            my: { xs: 5, md: 10 },
+            my: { xs: 2, md: 5 },
           }}
         >
           {

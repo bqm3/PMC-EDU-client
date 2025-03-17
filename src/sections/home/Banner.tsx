@@ -18,7 +18,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     height: 560,
     padding: 0,
-    marginTop: MINI_HEADER.H_MAIN_DESKTOP + HEADER.H_MAIN_DESKTOP
+    marginTop: HEADER.H_MAIN_DESKTOP
   },
 }));
 

@@ -56,7 +56,8 @@ export default function ExercisePage() {
                 });
             }
         }
-    }, [questions]); // Chạy khi questions thay đổi
+    }, [questions, currentQuestion]); // Chạy khi questions thay đổi
+
     // Hàm xử lý cập nhật câu trả lời
     const handleAnswerChange = useCallback(
         (questionId: number, answer: any, isChecked?: boolean, type?: string) => {

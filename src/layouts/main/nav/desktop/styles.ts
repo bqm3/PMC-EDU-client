@@ -18,7 +18,7 @@ export const ListItem = styled(ListItemButton, {
     position: 'absolute',
     width: 6,
     height: 6,
-    left: -14,
+    left: -10,
     opacity: 0.48,
     backgroundColor: 'currentColor',
   };

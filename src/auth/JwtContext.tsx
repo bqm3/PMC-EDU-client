@@ -20,6 +20,7 @@ enum Types {
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',
   LOGOUT = 'LOGOUT',
+  VERIFY = "VERIFY"
 }
 
 type Payload = {
@@ -32,6 +33,7 @@ type Payload = {
   };
   [Types.REGISTER]: undefined;
   [Types.LOGOUT]: undefined;
+  [Types.VERIFY]: undefined;
 };
 
 type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
@@ -138,14 +140,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       Tendangnhap,
       Matkhau
     });
-    const { accessToken, user } = response.data;
-    // const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
-    // if (redirectAfterLogin) {
-    //   localStorage.removeItem("redirectAfterLogin"); // Xóa đường dẫn đã lưu
-    //   navigate(redirectAfterLogin); // Chuyển hướng về trang cũ
-    // } else {
-    //   navigate("/"); // Nếu không có trang trước đó, về trang chủ
-    // }
+
+    const { accessToken, refreshToken, user } = response.data;
+
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
     setSession(accessToken);
     dispatch({
       type: Types.LOGIN,
@@ -165,7 +164,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
       Tendangnhap,
       Dctamtru
     });
-    const { user } = response.data;
+    // if (response.data) {
+    //   await axios.post('/api/v1/otp/send', {
+    //     purpose_code: "REGISTER_ACCOUNT",
+    //     Tendangnhap: Tendangnhap,
+    //     Email: Email,
+    //   })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
 
     // localStorage.setItem('accessToken', accessToken);
 
@@ -177,6 +188,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     });
   };
 
+  const verify = async (otp_code: string, purpose_code: string) => {
+    const response = await axios.put('/api/v1/hosons/verify', {
+      otp_code,
+      purpose_code,
+
+    });
+
+
+    // localStorage.setItem('accessToken', accessToken);
+
+    dispatch({
+      type: Types.VERIFY,
+
+    });
+
+  }
   // LOGOUT
   const logout = async () => {
     setSession(null);
@@ -191,6 +218,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...state,
         method: 'jwt',
         login,
+        verify,
         loginWithGoogle: () => { },
         loginWithGithub: () => { },
         loginWithTwitter: () => { },

@@ -91,8 +91,8 @@ export default function AuthRegisterForm() {
       if (register) {
         await register(data.Email, data.Matkhau, data.Hodem, data.Ten, data.Tendangnhap, data.Dctamtru);
       }
-      navigate(PATH_AUTH.login)
-      enqueueSnackbar('Vui lòng đợi quản lý đào tạo xác nhận tài khoản', {
+      navigate(PATH_AUTH.verify)
+      enqueueSnackbar('Vui lòng nhập mã OTP để xác nhận tài khoản', {
         variant: 'success',
         autoHideDuration: 5000,
       });

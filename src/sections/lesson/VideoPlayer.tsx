@@ -8,6 +8,8 @@ const VideoPlayer = ({ video, onVideoWatched }: any) => {
     const [startTime, setStartTime] = useState(""); // Thời gian bắt đầu
     const [endTime, setEndTime] = useState(""); // Thời gian kết thúc
     const [elapsedTime, setElapsedTime] = useState(0); // Tổng thời gian xem
+    const [lastPlayed, setLastPlayed] = useState(0); // Kiểm tra tua
+    const [isPlaying, setIsPlaying] = useState(false); // Kiểm soát trạng thái phát video
 
     // Reset state khi video thay đổi
     useEffect(() => {
@@ -15,23 +17,39 @@ const VideoPlayer = ({ video, onVideoWatched }: any) => {
         setStartTime("");
         setEndTime("");
         setElapsedTime(0);
+        setLastPlayed(0);
+        setIsPlaying(false);
+
+        if (playerRef.current) {
+            setTimeout(() => {
+                playerRef.current?.seekTo(0, "seconds"); // Reset về 0s
+            }, 100);
+        }
     }, [video]);
 
-    const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    };
+    // Hàm format thời gian
+    const formatDate = (date: Date) => date.toISOString().replace("T", " ").split(".")[0];
 
+    // Xử lý khi video chạy
     const handleProgress = ({ playedSeconds }: any) => {
         if (playerRef.current) {
             const duration = playerRef.current.getDuration();
-            const watchThreshold = duration * (video?.Time / 100 || 10 / 100); // Phần trăm thời gian cần xem
+            const watchThreshold = duration * (Number(video.Time) / 100);
+            // Nếu học viên tua video, cảnh báo và reset trạng thái
+            if (playedSeconds < lastPlayed) {
+                alert("Không được tua video! Vui lòng reload lại trang để tiếp tục học.");
+                setWatched(false);
+                setElapsedTime(0);
+                setLastPlayed(0);
+                playerRef.current.seekTo(0, "seconds"); // Đưa video về lại 0s
+                setIsPlaying(false);
+                return;
+            }
 
+            // Cập nhật vị trí xem cuối cùng
+            setLastPlayed(playedSeconds);
+
+            // Nếu học viên xem đủ thời gian yêu cầu
             if (!watched && playedSeconds >= watchThreshold) {
                 const now = new Date();
                 const endTimeStr = formatDate(now);
@@ -41,31 +59,64 @@ const VideoPlayer = ({ video, onVideoWatched }: any) => {
                 setEndTime(endTimeStr);
                 setElapsedTime(elapsed);
 
-                onVideoWatched(video.ID_Video, startTime, endTimeStr, elapsed);
+                // Gửi dữ liệu điểm danh
+                onVideoWatched(video.ID_Lophoc, video.ID_Lichhoc, startTime || endTimeStr, endTimeStr, elapsed);
             }
         }
     };
 
+    // Khi video bắt đầu chơi
     const handlePlay = () => {
-        const now = new Date();
-        setStartTime(formatDate(now));
+        if (!startTime) {
+            const now = new Date();
+            setStartTime(formatDate(now));
+        }
+        setIsPlaying(true);
     };
+
+    // Khi video tạm dừng
+    const handlePause = () => {
+        setIsPlaying(false);
+    };
+
+    // Tạm dừng video khi rời khỏi trang
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                setIsPlaying(false); // Dừng video khi rời tab
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, []);
 
     return (
         <Box
             sx={{
-                width: '95%',
+                width: "95%",
                 height: { xs: 200, sm: 400, md: 600 },
             }}
         >
             <ReactPlayer
+                key={video?.ID_Lichhoc} // Reset ReactPlayer khi đổi video
                 width="100%"
                 height="100%"
                 ref={playerRef}
                 url={video?.urlVideo}
                 controls
-                playing={false}
+                playing={isPlaying}
+                config={{
+                    file: {
+                        attributes: {
+                            disableRemotePlayback: true, // Tắt lưu cache trình duyệt
+                        },
+                    },
+                }}
                 onPlay={handlePlay}
+                onPause={handlePause}
                 onProgress={handleProgress}
             />
         </Box>

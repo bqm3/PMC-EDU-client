@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Link, Typography } from '@mui/material';
 // routes
-import { PATH_AUTH } from '../../routes/paths';
+import { PATH_AUTH } from 'src/routes/paths';
 // components
 import Iconify from '../../components/iconify';
 // sections
@@ -17,25 +17,24 @@ export default function VerifyCodePage() {
   return (
     <>
       <Helmet>
-        <title> Verify Code | Minimal UI</title>
+        <title>Xác thực tài khoản</title>
       </Helmet>
 
       <EmailInboxIcon sx={{ mb: 5, height: 96 }} />
 
       <Typography variant="h3" paragraph>
-        Please check your email!
+        Kiểm tra mail của bạn
       </Typography>
 
       <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-        We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
-        box to verify your email.
+        Chúng tôi đã gửi email mã xác nhận 6 chữ số, vui lòng nhập mã vào bên dưới để xác minh email của bạn.
       </Typography>
 
       <AuthVerifyCodeForm />
 
       <Typography variant="body2" sx={{ my: 3 }}>
-        Don’t have a code? &nbsp;
-        <Link variant="subtitle2">Resend code</Link>
+        Không nhận được code? &nbsp;
+        <Link variant="subtitle2">Gửi lại</Link>
       </Typography>
 
       <Link
@@ -50,7 +49,7 @@ export default function VerifyCodePage() {
         }}
       >
         <Iconify icon="eva:chevron-left-fill" width={16} />
-        Return to sign in
+        Quay trở lại đăng nhập
       </Link>
     </>
   );

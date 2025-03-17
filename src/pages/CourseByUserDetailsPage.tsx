@@ -12,7 +12,6 @@ import { SkeletonProductDetails } from '../components/skeleton';
 import {
   CourseDetailsSummary,
   CourseDetailsReview,
-  CourseDetailsAdd,
 } from '../sections/courses/details';
 import { getDetailLopHoc } from 'src/redux/slices/course';
 
@@ -27,6 +26,8 @@ export default function CourseByUserDetailsPage() {
 
   const { course, isLoading } = useSelector((state) => state.course);
 
+  const [logs, setLogs] = useState<any>(course?.dt_lichhocs);
+
   useEffect(() => {
     if (name) {
       dispatch(getDetailLopHoc(name as string));
@@ -39,7 +40,6 @@ export default function CourseByUserDetailsPage() {
     return `${hours} tiếng ${remainingMinutes} phút`;
   }
 
-  const [logs, setLogs] = useState<any>(course?.dt_lichhocs);
 
   useEffect(() => {
     setLogs(course?.dt_lichhocs);
@@ -124,7 +124,9 @@ export default function CourseByUserDetailsPage() {
                     </Stack>
                   </Stack>
                   <CourseDetailsReview
-                    course={logs}
+                    class_period={logs}
+                    course={course}
+
                   // accordionClicked={accordionClicked}
                   // expandedAccordions={expandedAccordions}
                   />

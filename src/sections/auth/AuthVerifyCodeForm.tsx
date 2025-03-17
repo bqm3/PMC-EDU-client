@@ -8,9 +8,11 @@ import { Stack, FormHelperText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_AUTH } from 'src/routes/paths';
 // components
 import { useSnackbar } from '../../components/snackbar';
 import FormProvider, { RHFCodes } from '../../components/hook-form';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -25,16 +27,16 @@ type FormValuesProps = {
 
 export default function AuthVerifyCodeForm() {
   const navigate = useNavigate();
-
+  const { verify } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
 
   const VerifyCodeSchema = Yup.object().shape({
-    code1: Yup.string().required('Code is required'),
-    code2: Yup.string().required('Code is required'),
-    code3: Yup.string().required('Code is required'),
-    code4: Yup.string().required('Code is required'),
-    code5: Yup.string().required('Code is required'),
-    code6: Yup.string().required('Code is required'),
+    code1: Yup.string().required('Mã là bắt buộc'),
+    code2: Yup.string().required('Mã là bắt buộc'),
+    code3: Yup.string().required('Mã là bắt buộc'),
+    code4: Yup.string().required('Mã là bắt buộc'),
+    code5: Yup.string().required('Mã là bắt buộc'),
+    code6: Yup.string().required('Mã là bắt buộc'),
   });
 
   const defaultValues = {
@@ -58,15 +60,24 @@ export default function AuthVerifyCodeForm() {
   } = methods;
 
   const onSubmit = async (data: FormValuesProps) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log('DATA', Object.values(data).join(''));
+    const verificationCode = `${data.code1}${data.code2}${data.code3}${data.code4}${data.code5}${data.code6}`;
 
-      enqueueSnackbar('Verify success!');
+    try {
+      if (verify) {
+        await verify(verificationCode, 'REGISTER_ACCOUNT');
+      }
+      navigate(PATH_AUTH.login)
+      enqueueSnackbar('Tài khoản đã xác thực thành công! Vui lòng đăng nhập', {
+        variant: 'success',
+        autoHideDuration: 5000,
+      });
 
       navigate(PATH_DASHBOARD.root);
     } catch (error) {
-      console.error(error);
+      enqueueSnackbar('Tài khoản xác thực không thành công! Vui lòng thử lại', {
+        variant: 'error',
+        autoHideDuration: 5000,
+      });
     }
   };
 
@@ -81,10 +92,10 @@ export default function AuthVerifyCodeForm() {
           !!errors.code4 ||
           !!errors.code5 ||
           !!errors.code6) && (
-          <FormHelperText error sx={{ px: 2 }}>
-            Code is required
-          </FormHelperText>
-        )}
+            <FormHelperText error sx={{ px: 2 }}>
+              Mã là bắt buộc
+            </FormHelperText>
+          )}
 
         <LoadingButton
           fullWidth
@@ -94,7 +105,7 @@ export default function AuthVerifyCodeForm() {
           loading={isSubmitting}
           sx={{ mt: 3 }}
         >
-          Verify
+          Xác thực
         </LoadingButton>
       </Stack>
     </FormProvider>

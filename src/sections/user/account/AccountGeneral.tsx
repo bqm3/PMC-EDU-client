@@ -90,59 +90,63 @@ export default function AccountGeneral() {
 
   const onSubmit = async (data: FormValuesProps) => {
     const formData = new FormData();
-    formData.append('Hodem', data?.Hodem);
-    formData.append('Ten', data?.Ten);
-    formData.append('iGioitinh', data?.iGioitinh);
-    formData.append('Diachilienhe', data?.Diachilienhe);
-    formData.append('CCCD', data?.CCCD);
-    formData.append('NgaycapCCCD', data?.NgaycapCCCD);
-    formData.append('Hochieu', `${data?.Hochieu}`);
-    formData.append('NgaycapHochieu', data?.NgaycapHochieu);
-    formData.append('Email', data?.Email);
-    formData.append('DcTamtru', data?.DcTamtru);
-    formData.append('DcThuongtru', data?.DcThuongtru);
-    formData.append('file', data?.Avatar);
+
+    formData.append('Hodem', data?.Hodem || '');
+    formData.append('Ten', data?.Ten || '');
+    formData.append('iGioitinh', data?.iGioitinh || '');
+    formData.append('Diachilienhe', data?.Diachilienhe || '');
+    formData.append('CCCD', data?.CCCD || '');
+
+    // Kiểm tra NgaycapCCCD có hợp lệ không
+    if (data?.NgaycapCCCD && data.NgaycapCCCD !== 'Invalid date') {
+      formData.append('NgaycapCCCD', data.NgaycapCCCD);
+    }
+
+    formData.append('Hochieu', `${data?.Hochieu || ''}`);
+
+    // Kiểm tra NgaycapHochieu có hợp lệ không
+    if (data?.NgaycapHochieu && data.NgaycapHochieu !== 'Invalid date') {
+      formData.append('NgaycapHochieu', data.NgaycapHochieu);
+    }
+
+    formData.append('Email', data?.Email || '');
+    formData.append('DcTamtru', data?.DcTamtru || '');
+    formData.append('DcThuongtru', data?.DcThuongtru || '');
+
+    // Kiểm tra Avatar có tồn tại không trước khi append
+    if (data?.Avatar) {
+      formData.append('file', data.Avatar);
+    }
 
     try {
-      axios
-        .put(`/api/v1/hosons/update-profile`, formData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((res) => {
-          enqueueSnackbar('Cập nhật thành công!', { variant: 'success', autoHideDuration: 4000 });
-
-        })
-        .catch((error) => {
-          if (error.response) {
-
-            enqueueSnackbar(`${error.response.data.message}`, {
-              variant: 'error',
-              autoHideDuration: 4000,
-            });
-          } else if (error.request) {
-            enqueueSnackbar(
-              `Không nhận được phản hồi từ máy chủ`, {
-              variant: 'error',
-              autoHideDuration: 4000
-            });
-          } else {
-            enqueueSnackbar(`Lỗi gửi yêu cầu`, {
-              variant: 'error',
-              autoHideDuration: 4000,
-            });
-          }
-        });
-    } catch (error) {
-      enqueueSnackbar(
-        `Lỗi gửi yêu cầu`, {
-        variant: 'error',
-        autoHideDuration: 4000,
+      await axios.put(`/api/v1/hosons/update-profile`, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
       });
+
+      enqueueSnackbar('Cập nhật thành công!', { variant: 'success', autoHideDuration: 4000 });
+    } catch (error) {
+      if (error.response) {
+        enqueueSnackbar(`${error.response.data.message}`, {
+          variant: 'error',
+          autoHideDuration: 4000,
+        });
+      } else if (error.request) {
+        enqueueSnackbar(`Không nhận được phản hồi từ máy chủ`, {
+          variant: 'error',
+          autoHideDuration: 4000,
+        });
+      } else {
+        enqueueSnackbar(`Lỗi gửi yêu cầu`, {
+          variant: 'error',
+          autoHideDuration: 4000,
+        });
+      }
     }
   };
+
 
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {

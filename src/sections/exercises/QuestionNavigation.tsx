@@ -20,7 +20,10 @@ export default function QuestionNavigation({
                         {phan.ds_cauhoi.map((question: any, index: number) => {
                             const isAnswered =
                                 answers[question.ID_NHCH] !== undefined &&
+                                answers[question.ID_NHCH] !== null &&
+                                !(Array.isArray(answers[question.ID_NHCH]) && answers[question.ID_NHCH].length === 0) &&
                                 answers[question.ID_NHCH] !== '';
+
                             return (
                                 <Button
                                     key={question.ID_NHCH}

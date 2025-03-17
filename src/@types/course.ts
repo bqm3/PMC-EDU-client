@@ -37,6 +37,11 @@ export interface ILoaidangky {
   Nguoixoa: string;
 }
 
+export interface IHinhthucdt {
+  IHinhthucdt: string;
+  Hinhthucdt: string;
+}
+
 export interface ILoainhom {
   ID_Loainhom: string;
   Loainhom: string;
@@ -146,8 +151,22 @@ Nguoitao: string;
 Nguoixoa: string;
 dm_khoahoc: IKhoahoc;
 dm_hinhthucthi: IHinhthucthi;
+dt_baithi_hv: IBaiThiHV;
 dt_baithi_cauhois: IBaithiCauhoi[];
 dt_baithi_phans: IBaithiPhan[];
+}
+
+export type IBaiThiHV = {
+  ID_Baithi:string;
+  ID_Baithi_HV:string;
+  ID_Hocvien: string;
+  MaHV: string;
+  Ngaythi: string;
+  Thoigianbd: string;
+  Thoigiancham: string;
+  Thoigiannb: string;
+  Tongdiem: string;
+  isMark: string;
 }
 
 export type IBaithiPhan = {
@@ -228,7 +247,7 @@ Soluongdangky: string;
 Malop: string;
 Tenlop: string;
 Noiycdt: string;
-iHinhthucdt: string;
+ID_Hinhthucdt: string;
 Cacgtlq: string | null;
 Nguoitd: string;
 ID_Giangvien: string;
@@ -241,6 +260,7 @@ dm_khoahoc: IKhoahoc;
 dm_giangvien: IGiangvien;
 dm_loainhom: ILoainhom;
 dm_loaidangky: ILoaidangky;
+dm_hinhthucdt: IHinhthucdt;
 dt_lichhocs: ILichhoc[]
 dt_hocviens: IHocvien[];
 };
@@ -287,6 +307,8 @@ Ngay?: string;
 Giobatdau?: string; 
 Gioketthuc?: string;
 Noidung?: string;
+Tieude?: string;
+Time?: string;
 Noihoc?: string;
 Ghichu?: string;
 urlVideo?: string;
@@ -312,7 +334,7 @@ Noidungdanhgia: string;
 isDelete:  string;
 dt_hosons: IHosoHV;
 dm_loaidangky: ILoaidangky;
-dt_baithi?: IDiemdanh;
+dt_baithi?: IBaiThi;
 dm_hinhthucthi: IHinhthucthi;
 dt_lophoc ?: ILophoc
 dm_khoahoc ?: IKhoahoc;

@@ -42,7 +42,6 @@ export default function CoursePage() {
 
   const { dm_khoahoc } = useSelector((state) => state.course);
 
-  const [openFilter, setOpenFilter] = useState(false);
   const [filters, setFilters] = useState(defaultValues);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,20 +52,10 @@ export default function CoursePage() {
 
   const {
     reset,
-    watch,
     formState: { dirtyFields },
   } = methods;
 
-  const isDefault =
-    (!dirtyFields.gender &&
-      !dirtyFields.name &&
-      !dirtyFields.category &&
-      !dirtyFields.colors &&
-      !dirtyFields.priceRange &&
-      !dirtyFields.rating) ||
-    false;
-
-  const values = watch();
+  const isDefault = !dirtyFields.name && false;
 
   const dataFiltered = applyFilter(dm_khoahoc, filters);
 
@@ -74,16 +63,13 @@ export default function CoursePage() {
     dispatch(getKhoaHocs());
   }, [dispatch]);
 
-  // Tính tổng số trang
   const totalPages = Math.ceil(dataFiltered.length / ITEMS_PER_PAGE);
 
-  // Cắt dữ liệu theo trang hiện tại
   const dataPaginated = dataFiltered.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
-  // Hàm thay đổi trang
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
@@ -97,18 +83,6 @@ export default function CoursePage() {
     },
     []
   );
-
-  const handleResetFilter = () => {
-    reset();
-  };
-
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
 
   return (
     <>
@@ -166,11 +140,7 @@ export default function CoursePage() {
 // ----------------------------------------------------------------------
 
 function applyFilter(courses: IKhoahoc[], filters: ICourseFilter) {
-  const { gender, category, colors, priceRange, rating, sortBy, name } = filters;
-
-  const min = priceRange[0];
-
-  const max = priceRange[1];
+  const { name } = filters;
 
   // NAME 
 
@@ -183,52 +153,6 @@ function applyFilter(courses: IKhoahoc[], filters: ICourseFilter) {
 
     );
   }
-
-  // SORT BY
-  if (sortBy === 'featured') {
-    courses = orderBy(courses, ['sold'], ['desc']);
-  }
-
-  if (sortBy === 'newest') {
-    courses = orderBy(courses, ['createdAt'], ['desc']);
-  }
-
-  if (sortBy === 'priceDesc') {
-    courses = orderBy(courses, ['price'], ['desc']);
-  }
-
-  if (sortBy === 'priceAsc') {
-    courses = orderBy(courses, ['price'], ['asc']);
-  }
-
-  // FILTER courses
-  // if (gender.length) {
-  //   courses = courses.filter((product) => gender.includes(product.gender));
-  // }
-
-  // if (category !== 'All') {
-  //   products = products.filter((product) => product.category === category);
-  // }
-
-  // if (colors.length) {
-  //   products = products.filter((product) => product.colors.some((color) => colors.includes(color)));
-  // }
-
-  // if (min !== 0 || max !== 200) {
-  //   products = products.filter((product) => product.price >= min && product.price <= max);
-  // }
-
-  // if (rating) {
-  //   products = products.filter((product) => {
-  //     const convertRating = (value: string) => {
-  //       if (value === 'up4Star') return 4;
-  //       if (value === 'up3Star') return 3;
-  //       if (value === 'up2Star') return 2;
-  //       return 1;
-  //     };
-  //     return product.totalRating > convertRating(rating);
-  //   });
-  // }
 
   return courses;
 }

@@ -25,7 +25,7 @@ export const NavItem = forwardRef<HTMLDivElement, NavItemDesktopProps>(
         active={active}
         open={open}
         {...other}
-        sx={{ fontSize: 16 }}
+        sx={{ fontSize: 16, pl: 0.5 }}
       >
         {title}
 

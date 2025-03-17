@@ -16,15 +16,13 @@ const accessToken = typeof window !== 'undefined' ? localStorage.getItem('access
 
 export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurrent, setListVideo }: Props) {
 
-    const handleVideoWatched = async (videoId: any, startTime: string, endTime: string, currentTimeStr: string) => {
+    const handleVideoWatched = async (ID_Lophoc: any, ID_Lichhoc: any, startTime: string, endTime: string, currentTimeStr: string) => {
 
         if (!currentVideo?.isWatch) {
             try {
-                await axios.post(`/api/v1/diemdanh/${videoId}`, {
-                    startTime: startTime,
-                    endTime: endTime,
-                    ID_Khoahoc: currentKhoaHoc?.ID_Khoahoc,
-                    MaKh: currentKhoaHoc?.SlugTenkhoahoc,
+                await axios.post(`/api/v1/lophoc/watch-diem-danh/${ID_Lophoc}/${ID_Lichhoc}`, {
+                    Giora: startTime,
+                    Giovao: endTime,
                     iXacnhan: 1
                 }, {
                     headers: {
@@ -36,20 +34,15 @@ export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurr
                 setListVideo((prevList: any) => {
                     const updatedList = prevList.map((item: any) => ({
                         ...item,
-                        videos: item.videos.map((video: any) =>
-                            video.ID_Video === currentVideo.ID_Video
-                                ? { ...video, isWatch: true }
-                                : video
-                        ),
+                        isWatch: item.ID_Lichhoc === ID_Lichhoc ? true : item.isWatch
                     }));
 
                     // Kiểm tra xem còn video nào chưa xem không
-                    const allVideosWatched = updatedList.every((item: any) =>
-                        item.videos.every((video: any) => video.isWatch)
-                    );
+                    const allVideosWatched = updatedList.every((item: any) => item.isWatch)
+
 
                     if (allVideosWatched) {
-                        handleCourseCompleted();
+                        handleCourseCompleted(ID_Lophoc);
                     }
 
                     return updatedList;
@@ -63,15 +56,21 @@ export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurr
     };
 
     // ✅ Gửi API khi hoàn thành tất cả video
-    const handleCourseCompleted = async () => {
+    const handleCourseCompleted = async (ID_Lophoc: string) => {
         try {
             await axios.post(`/api/v1/hocvien/completed`, {
-                ID_Khoahoc: currentKhoaHoc?.ID_Khoahoc
+                ID_Lophoc: ID_Lophoc
             }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
-            });
+            })
+                .then((res) => {
+                    console.log('Hoàn thành khóa học', res);
+                })
+                .catch((error) => {
+                    console.error('Lỗi khi xác nhận hoàn thành khóa học', error);
+                });
 
         } catch (error) {
             console.error('Lỗi khi xác nhận hoàn thành khóa học', error);
@@ -91,7 +90,6 @@ export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurr
             </Box>
             <Box
                 sx={{
-                    // justifyItems: 'center',
                     m: {
                         xs: 2,
                         md: 4,
@@ -99,8 +97,8 @@ export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurr
                 }}
             >
                 <Stack >
-                    <Typography variant="h4">{currentVideo?.Tenvideo}</Typography>
-                    <Typography variant="body1" component="div" dangerouslySetInnerHTML={{ __html: currentVideo?.Noidungtt }} />
+                    <Typography variant="h4">{currentVideo?.Tieude}</Typography>
+                    <Typography variant="body1" component="div" dangerouslySetInnerHTML={{ __html: currentVideo?.Noidung }} />
                 </Stack>
             </Box>
         </>

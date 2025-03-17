@@ -28,6 +28,7 @@ export type JWTContextType = {
   isAuthenticated: boolean;
   isInitialized: boolean;
   user: AuthUserType;
+  verify: (otp_code: string, purpose_code: string) => Promise<void>;
   login: (Tendangnhap: string, Matkhau: string) => Promise<void>;
   register: (Email: string, Matkhau: string, Hodem: string, Ten: string, Tendangnhap: string, Dctamtru?:string) => Promise<void>;
   logout: () => Promise<void>;

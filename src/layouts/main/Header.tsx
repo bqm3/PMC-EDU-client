@@ -91,7 +91,7 @@ export default function Header() {
 
   return (
     <AppBar ref={carouselRef} color="transparent" sx={{ boxShadow: 0 }}>
-      <Box
+      {/* <Box
         sx={{
           display: {
             md: 'flex',
@@ -240,7 +240,7 @@ export default function Header() {
             ))}
           </div>
         </div>
-      </Box>
+      </Box> */}
 
       <Toolbar
         disableGutters

@@ -31,7 +31,7 @@ const VideoPlayer = ({ video, onVideoWatched }: any) => {
     const formatDate = (date: Date) => date.toISOString().replace("T", " ").split(".")[0];
 
     // Xử lý khi video chạy
-    const handleProgress = ({ playedSeconds }: any) => {
+    const handleProgress = ({ playedSeconds }: { playedSeconds: number }) => {
         if (playerRef.current) {
             const duration = playerRef.current.getDuration();
             const watchThreshold = duration * (Number(video.Time) / 100);

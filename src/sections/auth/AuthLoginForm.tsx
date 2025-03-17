@@ -74,7 +74,7 @@ export default function AuthLoginForm() {
     } catch (error) {
       console.error(error);
       reset();
-      setError("afterSubmit", { message: error.message });
+      setError("afterSubmit", { message: error.response.data.message });
     }
   };
 

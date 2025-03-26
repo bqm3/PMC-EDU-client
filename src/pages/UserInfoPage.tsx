@@ -20,7 +20,10 @@ import {
   CardContent,
   CircularProgress,
   TableHead,
+  IconButton,
+  Alert,
 } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
 import { useSettingsContext } from '../components/settings';
 import axios from '../utils/axios';
 
@@ -28,6 +31,7 @@ import axios from '../utils/axios';
 import { useDispatch, useSelector } from '../redux/store';
 import { getUsersCourse } from '../redux/slices/course';
 import Iconify from 'src/components/iconify';
+import QuestionManager from 'src/sections/history_user';
 
 export default function UserAccountPage() {
   const { themeStretch } = useSettingsContext();
@@ -137,7 +141,6 @@ function CourseDetails({ course }: any) {
   const handleTabChange = (e: any, newValue: number) => {
     setTabIndex(newValue);
   };
-  console.log('course', course)
 
   return (
     <Box>
@@ -200,6 +203,31 @@ function AttendanceSection({ attendanceData }: any) {
 
 function ExamResultsSection({ examResults }: any) {
   const [openModal, setOpenModal] = useState(false);
+  const [baiThiHocVien, setBaiThiHocVien] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleOpenModal = async () => {
+    setLoading(true);
+    setError(""); // Reset lỗi trước khi gọi API
+
+    try {
+      const response = await axios.get(`/api/v1/baithi/hocvien/${examResults?.ID_Baithi_HV}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      setBaiThiHocVien(response.data.data);
+      setOpenModal(true);
+    } catch (error) {
+      setError("Lỗi khi lấy bài thi! Vui lòng thử lại.");
+      console.error("Lỗi khi lấy bài thi:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  console.log('examResults', examResults)
 
   return (
     <Box>
@@ -213,21 +241,54 @@ function ExamResultsSection({ examResults }: any) {
       <Typography variant="body2">
         Thời gian nộp: {examResults?.Thoigiannb}
       </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => setOpenModal(true)}
-        sx={{ mt: 2 }}
+      {
+        examResults !== null && <Button variant="outlined" onClick={handleOpenModal} sx={{ mt: 2 }} disabled={loading}>
+          {loading ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : "Xem chi tiết bài làm"}
+        </Button>
+      }
+
+      {error !== "" && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
+      <Dialog
+        fullScreen
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "#f5f5f5", // Màu nền xám nhạt
+            padding: "20px",
+            position: "relative",
+          },
+        }}
       >
-        Xem chi tiết bài làm
-      </Button>
-      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6">Chi tiết bài làm</Typography>
-            <Typography variant="body2">{examResults?.detail}</Typography>
-            <Button onClick={() => setOpenModal(false)}>Đóng</Button>
-          </CardContent>
-        </Card>
+        {/* Nút đóng */}
+        <IconButton
+          onClick={() => setOpenModal(false)}
+          sx={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            backgroundColor: "#ffffff",
+            "&:hover": {
+              backgroundColor: "#ddd",
+            },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+
+        <div style={{ padding: "20px" }}>
+          {baiThiHocVien ? (
+            <QuestionManager currentBaiThiHocVien={baiThiHocVien} />
+          ) : (
+            <p style={{ textAlign: "center", fontSize: "18px", fontWeight: "bold" }}>
+              Đang tải dữ liệu...
+            </p>
+          )}
+        </div>
       </Dialog>
     </Box>
   );

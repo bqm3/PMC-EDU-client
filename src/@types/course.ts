@@ -11,7 +11,18 @@ export type IProductReview = {
   postedAt: Date | string | number;
 };
 
-
+export type IBaithiHocVienChiTiet = {
+  Diem: string;
+  ID_Baithi_HV: string;
+  ID_Baithi_HV_CT: string;
+  ID_NHCH: string;
+  ID_NHCHDA: string;
+  Noidungtl:  string;
+  dt_nhch: INHCH;
+  dt_nhchda: INHCHDA,
+  iDung: string;
+  iPhanhoi: string
+}
 export type IDT_Hocvien = {
   ID_Hocvien: string;
   ID_Khoahoc: string;
@@ -152,6 +163,8 @@ Nguoixoa: string;
 dm_khoahoc: IKhoahoc;
 dm_hinhthucthi: IHinhthucthi;
 dt_baithi_hv: IBaiThiHV;
+
+baithihocvien_list: IBaiThiHV[];
 dt_baithi_cauhois: IBaithiCauhoi[];
 dt_baithi_phans: IBaithiPhan[];
 }

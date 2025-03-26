@@ -46,12 +46,13 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
   const getButtonLabel = (status: number, iExam: any) => {
     if (status === 0 || status === 1) return { text: 'Vào học', disabled: false, action: 'study' };
     if (status === 2 && !iExam) return { text: 'Vào thi', disabled: false, action: 'exam' };
-    if (status === 2 && iExam) return { text: 'Đã thi xong', disabled: true, action: 'closed' };
+    if (status === 2 && iExam && iExam?.Thoigianbd && iExam?.Thoigiannb) return { text: 'Đã thi xong', disabled: true, action: 'closed' };
+    if (status === 2 && iExam && !iExam?.Thoigianbd && !iExam?.Thoigiannb) return { text: 'Vào thi', disabled: false, action: 'exam' };
     if (status === 3) return { text: 'Đóng lớp', disabled: true, action: 'closed' };
     return { text: 'Không xác định', disabled: true, action: 'unknown' };
   };
 
-  const buttonState = getButtonLabel(Number(dt_lophoc?.iTinhtrang), dt_baithi?.dt_baithi_hv);
+  const buttonState = getButtonLabel(Number(dt_lophoc?.iTinhtrang), dt_baithi?.baithihocvien_list[0]);
 
   return (
     <Card

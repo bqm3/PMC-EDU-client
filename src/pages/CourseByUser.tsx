@@ -101,16 +101,14 @@ export default function CourseByUser() {
     }
   };
 
+  const ngayThi = examData?.dt_baithi?.Ngaythi ? new Date(examData?.dt_baithi?.Ngaythi) : null;
+  const ngayKetThuc = examData?.dt_baithi?.Ngayketthuc ? new Date(examData?.dt_baithi?.Ngayketthuc) : null;
   const now = new Date();
 
-  // Lấy ngày thi và ngày kết thúc từ dữ liệu
-  const ngayThi = examData?.dt_baithi?.Ngaythi ? new Date(examData.dt_baithi.Ngaythi) : null;
-  const ngayKetThuc = examData?.dt_baithi?.Ngayketthuc ? new Date(examData.dt_baithi.Ngayketthuc) : null;
-
-  // Kiểm tra điều kiện vào thi
   const coTheVaoThi =
-    ngayThi &&
-    (ngayKetThuc ? ngayThi <= now && ngayKetThuc >= now : ngayThi <= now) &&
+    ngayThi !== null &&
+    now >= ngayThi &&
+    (ngayKetThuc === null || now <= ngayKetThuc) &&
     examData?.Hoanthanhhoc !== 0;
 
   return (

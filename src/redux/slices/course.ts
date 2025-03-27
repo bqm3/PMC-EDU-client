@@ -127,7 +127,7 @@ export function getClassCourse() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/v1/lophoc', {
+      const response = await axios.get('/api/v1/lophoc?client=true', {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

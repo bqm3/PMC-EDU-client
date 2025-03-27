@@ -11,6 +11,7 @@ import LoginLayout from '../../layouts/login';
 import AuthLoginForm from './AuthLoginForm';
 import AuthWithSocial from './AuthWithSocial';
 import Logo from 'src/components/logo';
+import AuthPrivacyPolicy from './AuthPrivacyPolicy';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ export default function Login() {
           Tạo tài khoản mới
         </Link>
       </Stack>
-      <AuthWithSocial />
+      <AuthPrivacyPolicy />
     </LoginLayout>
   );
 }

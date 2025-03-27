@@ -8,6 +8,7 @@ import { PATH_AUTH } from '../../routes/paths';
 //
 import AuthWithSocial from './AuthWithSocial';
 import AuthRegisterForm from './AuthRegisterForm';
+import AuthPrivacyPolicy from './AuthPrivacyPolicy';
 
 // ----------------------------------------------------------------------
 
@@ -28,22 +29,7 @@ export default function Register() {
 
       <AuthRegisterForm />
 
-      <Typography
-        component="div"
-        sx={{ color: 'text.secondary', mt: 3, typography: 'caption', textAlign: 'center' }}
-      >
-        {'Bằng cách đăng ký, tôi chấp nhận '}
-        <Link underline="always" color="text.primary">
-          Điều khoản
-        </Link>
-        {' và '}
-        <Link underline="always" color="text.primary">
-          Điều kiện
-        </Link>
-        .
-      </Typography>
-
-      <AuthWithSocial />
+      <AuthPrivacyPolicy />
     </LoginLayout>
   );
 }

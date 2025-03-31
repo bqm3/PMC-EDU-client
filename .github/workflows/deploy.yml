@@ -22,6 +22,10 @@ jobs:
       run: |
         npm install --legacy-peer-deps
         CI='' npm run build
+    - name: Debug secrets (sẽ không in ra key đâu, yên tâm)
+      run: |
+        echo "Host: ${{ secrets.PMC_EDU_VPS_HOST }}"
+        echo "User: ${{ secrets.PMC_EDU_VPS_USER }}"
 
     - name: Upload build to VPS via SCP
       uses: appleboy/scp-action@v0.1.3

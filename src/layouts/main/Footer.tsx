@@ -235,7 +235,7 @@ export default function Footer() {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          © 2024. Phòng Số Hóa - PMC
+          © 2025. Phòng Số Hóa - PMC
         </Typography>
       </Container>
     </Box>

@@ -27,7 +27,6 @@ jobs:
       run: |
         echo "🔍 Host: ${{ secrets.PMC_EDU_VPS_HOST }}"
         echo "👤 User: ${{ secrets.PMC_EDU_VPS_USER }}"
-        echo "🔑 SSH Key length: ${#{{ secrets.PMC_EDU_VPS_SSH_KEY }}} characters"
 
     - name: Upload build to VPS via SCP
       uses: appleboy/scp-action@v0.1.3

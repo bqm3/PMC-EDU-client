@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function ProfileSocialInfo({ socialLinks }: Props) {
-  const { facebookLink, instagramLink, linkedinLink, twitterLink } = socialLinks;
+  const { facebookLink, linkedinLink, twitterLink } = socialLinks;
 
   return (
     <Card>
@@ -33,7 +33,6 @@ export default function ProfileSocialInfo({ socialLinks }: Props) {
             />
             <Link component="span" variant="body2" color="text.primary">
               {(link.value === 'facebook' && facebookLink) ||
-                (link.value === 'instagram' && instagramLink) ||
                 (link.value === 'linkedin' && linkedinLink) ||
                 twitterLink}
             </Link>

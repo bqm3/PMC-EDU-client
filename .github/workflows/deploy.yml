@@ -21,6 +21,7 @@ jobs:
     - name: Install dependencies and build
       run: |
         npm install --legacy-peer-deps
+        npx update-browserslist-db@latest
         npm run build
 
     - name: Upload build to VPS via SCP

@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect, useCallback } from 'react';
-import orderBy from 'lodash/orderBy';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import _debounce from 'lodash/debounce';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack, Box, Pagination } from '@mui/material';
+import { Container, Stack, Box, Pagination } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../redux/store';
 import { getClassCourse, getUsersCourse, getUsersAwaitCourse } from '../redux/slices/course';
@@ -16,7 +16,7 @@ import {
   CourseSearch
 } from '../sections/class_course/list';
 
-import { ICourseFilter, ICourseTableFilterValue, IHocvien, IKhoahoc, ILophoc } from 'src/@types/course';
+import { ICourseFilter, ICourseTableFilterValue, ILophoc } from 'src/@types/course';
 
 // ----------------------------------------------------------------------
 const defaultValues = {
@@ -46,19 +46,10 @@ export default function CourseByUser() {
   });
 
   const {
-    reset,
-    watch,
     formState: { dirtyFields },
   } = methods;
 
-  const isDefault =
-    (!dirtyFields.gender &&
-      !dirtyFields.name &&
-      !dirtyFields.category &&
-      !dirtyFields.colors &&
-      !dirtyFields.priceRange &&
-      !dirtyFields.rating) ||
-    false;
+  const isDefault = !dirtyFields.name || false;
 
   const dataFiltered = applyFilter(class_courses, filters);
 
@@ -82,15 +73,16 @@ export default function CourseByUser() {
     setCurrentPage(value);
   };
 
-  const handleFilters = useCallback(
-    (name: string, value: ICourseTableFilterValue) => {
+  const debouncedHandleFilters = useMemo(() => {
+    return _debounce((name: string, value: ICourseTableFilterValue) => {
       setFilters((prevState) => ({
         ...prevState,
         [name]: value,
       }));
-    },
-    []
-  );
+      setCurrentPage(1); // reset page về 1 khi lọc
+    }, 300); // 300ms debounce
+  }, []);
+
 
   return (
     <>
@@ -118,7 +110,7 @@ export default function CourseByUser() {
           >
             <CourseSearch
               filters={filters}
-              onFilters={handleFilters}
+              onFilters={debouncedHandleFilters}
             //
             />
 
@@ -148,12 +140,6 @@ export default function CourseByUser() {
 function applyFilter(courses: ILophoc[], filters: ICourseFilter) {
   const { name } = filters;
 
-  // const min = priceRange[0];
-
-  // const max = priceRange[1];
-
-  // // NAME 
-
   if (name) {
     courses = courses?.filter(
       (item) =>
@@ -163,23 +149,5 @@ function applyFilter(courses: ILophoc[], filters: ICourseFilter) {
 
     );
   }
-
-  // SORT BY
-  // if (sortBy === 'featured') {
-  //   courses = orderBy(courses, ['sold'], ['desc']);
-  // }
-
-  // if (sortBy === 'newest') {
-  //   courses = orderBy(courses, ['createdAt'], ['desc']);
-  // }
-
-  // if (sortBy === 'priceDesc') {
-  //   courses = orderBy(courses, ['price'], ['desc']);
-  // }
-
-  // if (sortBy === 'priceAsc') {
-  //   courses = orderBy(courses, ['price'], ['asc']);
-  // }
-
   return courses;
 }

@@ -127,7 +127,7 @@ export default function Footer() {
 
               <Typography variant="body2" sx={{ pr: { md: 4 } }}>
                 PMC Knowledge cung cấp các chương trình đào tạo on the job training về chuyên môn,
-                kiến thức, kỹ năng cần thiết trong lĩnh dịch vụ Bất động sản.
+                kiến thức, kỹ năng cần thiết trong lĩnh vực dịch vụ Bất động sản.
               </Typography>
             </Stack>
             <Stack

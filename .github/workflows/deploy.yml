@@ -18,14 +18,11 @@ jobs:
       with:
         node-version: '18'
 
-    # Optional: kiểm tra có bị lỗi trước khi gửi code
     - name: Run Lint (optional)
       run: |
-        echo "✅ Running Lint Check"
         npm install --legacy-peer-deps
         npm run lint || echo "⚠️ Lint warning, vẫn tiếp tục build..."
 
-    # Upload toàn bộ source code (không build trên GitHub)
     - name: Upload full source code to VPS
       uses: appleboy/scp-action@v0.1.3
       with:
@@ -36,7 +33,6 @@ jobs:
         target: "/root/pmc/PMC-EDU-client"
         overwrite: true
 
-    # SSH vào VPS: build lại + restart PM2
     - name: Build and restart app on VPS
       uses: appleboy/ssh-action@v1.0.0
       with:
@@ -44,12 +40,10 @@ jobs:
         username: ${{ secrets.PMC_EDU_VPS_USER }}
         key: ${{ secrets.PMC_EDU_VPS_SSH_KEY }}
         script: |
-          echo "🔧 Installing dependencies & building..."
           cd /root/pmc/PMC-EDU-client
           npm install --legacy-peer-deps
           npm run build
 
-          echo "🚀 Restarting app with PM2..."
           pm2 restart pmc-client-edu || pm2 start server.js --name pmc-client-edu
           pm2 save
           echo "✅ App restarted successfully!"

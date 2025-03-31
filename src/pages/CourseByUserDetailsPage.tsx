@@ -126,9 +126,6 @@ export default function CourseByUserDetailsPage() {
                   <CourseDetailsReview
                     class_period={logs}
                     course={course}
-
-                  // accordionClicked={accordionClicked}
-                  // expandedAccordions={expandedAccordions}
                   />
                 </Grid>
               </Grid>

@@ -52,7 +52,7 @@ export const PATH_PAGE = {
     root: '/lop-hoc-cua-toi',
     list: '/lop-hoc-cua-toi',
     view: (name: string) => `/lop-hoc-cua-toi/${name}`,
-    learning: (name: string) => `/lop-hoc-cua-toi/learning/${name}`,
+    learning: (name: string, period: string) => `/lop-hoc-cua-toi/learning/${name}?period=${period}`,
   },
   courseOfCenter: {
     root: '/lop-hoc-trung-tam',

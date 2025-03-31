@@ -8,13 +8,12 @@ import { IKhoahoc } from 'src/@types/course';
 type Props = {
     currentVideo: any,
     currentKhoaHoc?: IKhoahoc
-    setFirstCurrent: any
     setListVideo: any
 };
 
 const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
 
-export default function LessonVideo({ currentVideo, currentKhoaHoc, setFirstCurrent, setListVideo }: Props) {
+export default function LessonVideo({ currentVideo, currentKhoaHoc, setListVideo }: Props) {
 
     const handleVideoWatched = async (ID_Lophoc: any, ID_Lichhoc: any, startTime: string, endTime: string, currentTimeStr: string) => {
 

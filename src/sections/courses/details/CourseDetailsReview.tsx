@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, ListItemIcon, IconButton, Typography } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemIcon, IconButton, Typography, ListItemButton } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Link, useNavigate } from 'react-router-dom';
@@ -45,9 +45,25 @@ export default function LessonList({ class_period, course }: Props) {
       {class_period?.map((lesson: any, index: number) => {
         const unlocked = isLessonUnlocked(lesson);
 
+        const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+          if (unlocked) {
+            e.stopPropagation();
+            navigate(
+              PATH_PAGE.courstByMe.learning(`${course?.Malop}`, `${lesson?.Slug}`),
+              {
+                replace: true,
+                state: { lophoc: course?.Tenlop },
+              }
+            );
+
+          }
+        };
+
         return (
-          <ListItem
+          <ListItemButton
+
             key={index}
+            onClick={unlocked ? handleClick : undefined}
             sx={{
               backgroundColor: "#fff",
               borderRadius: "4px",
@@ -55,19 +71,21 @@ export default function LessonList({ class_period, course }: Props) {
               boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
               display: "flex",
               alignItems: "center",
+              cursor: unlocked ? "pointer" : "default",
+              '&:hover': {
+                backgroundColor: unlocked ? '#f5f5f5' : undefined,
+              },
             }}
           >
-            {/* Icon bài học */}
             <ListItemIcon>
               {unlocked ? <PlayCircleIcon color="success" /> : <LockIcon color="disabled" />}
             </ListItemIcon>
 
-            {/* Tiêu đề bài học */}
             <ListItemText>
               <Typography variant="subtitle1" fontWeight="bold">
                 {lesson?.Tieude}
               </Typography>
-              <Typography variant="caption" >
+              <Typography variant="caption">
                 {formatDateTimeRange(lesson?.Giobatdau, lesson?.Gioketthuc)}
               </Typography>
             </ListItemText>
@@ -75,26 +93,30 @@ export default function LessonList({ class_period, course }: Props) {
             {`${course?.ID_Hinhthucdt}` === "2" ? (
               <IconButton
                 color="primary"
-                onClick={() =>
-                  navigate(PATH_PAGE.courstByMe.learning(`${course?.Malop}`), {
-                    state: { lophoc: course?.Tenlop }
-                  })
-                }
 
               >
                 📖
               </IconButton>
             ) : (
-              unlocked && lesson?.urlVideo && (
-                <IconButton component="a" href={lesson.urlVideo} target="_blank">
-                  🔗
-                </IconButton>
+              unlocked &&
+              lesson?.urlVideo && (
+                <ListItemIcon>
+                  <IconButton
+                    component="a"
+                    href={lesson.urlVideo}
+                    target="_blank"
+                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
+
+                  >
+                    🔗
+                  </IconButton>
+                </ListItemIcon>
               )
             )}
-
-          </ListItem>
+          </ListItemButton>
         );
       })}
+
     </List>
   );
 }

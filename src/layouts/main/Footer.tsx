@@ -25,10 +25,10 @@ const LINKS = [
   {
     headline: 'Cộng đồng',
     children: [
-      { name: 'CÂU HỎI THƯỜNG GẶP', href: PATH_PAGE.about },
-      { name: 'HỌC BỔNG', href: PATH_PAGE.contact },
-      { name: 'KHÓA HỌC MIỄN PHÍ', href: PATH_PAGE.faqs },
-      { name: 'TRỞ THÀNH GIẢNG VIÊN', href: PATH_PAGE.faqs },
+      { name: 'CÂU HỎI THƯỜNG GẶP', href: '#' },
+      { name: 'HỌC BỔNG', href: '#' },
+      { name: 'KHÓA HỌC MIỄN PHÍ', href: '#' },
+      { name: 'TRỞ THÀNH GIẢNG VIÊN', href: '#' },
     ],
   },
   {

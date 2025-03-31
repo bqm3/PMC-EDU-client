@@ -1,11 +1,8 @@
 import { Helmet } from 'react-helmet-async';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-
-import { IKhoahoc, ILichhoc, IVideoOnline } from 'src/@types/course';
-import { useAuthContext } from '../../auth/useAuthContext';
-// redux
-import { useDispatch, useSelector } from '../../redux/store';
+import { useSearchParams } from 'react-router-dom';
+import { IKhoahoc, ILichhoc } from 'src/@types/course';
 
 import { Box, Grid, Typography } from '@mui/material';
 // sections
@@ -13,17 +10,19 @@ import { LessonVideo, LessonList } from 'src/sections/lesson';
 import axios from '../../utils/axios';
 
 export default function LearningPage() {
-    const { user } = useAuthContext();
     const { name } = useParams();
     const location = useLocation();
 
-    const lophoc = location.state?.lophoc;
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const [firstCurrent, setFirstCurrent] = useState(false)
+    const lophoc = location.state?.lophoc;
+    const periodSlug = searchParams.get('period'); // -> "lich-ngay-2"
+
     const [diemDanhCheck, setDiemDanhCheck] = useState([]);
     const [videoKhoaHoc, setVideoKhoaHoc] = useState([]);
     const [currentVideo, setCurrentVideo] = useState<ILichhoc | null>();
     const [currentKhoaHoc, setCurrentKhoaHoc] = useState<IKhoahoc>();
+    const [listVideo, setListVideo] = useState<any[]>([]);
 
     const handleCheckKhoaHoc = async (name: string) => {
         const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
@@ -31,7 +30,6 @@ export default function LearningPage() {
         try {
             const response = await axios.get(
                 `/api/v1/lophoc/hoc-vien/diem-danh/${name}`,
-                // { SlugTenkhoahoc: name },
                 {
                     headers: {
                         Accept: 'application/json',
@@ -76,16 +74,17 @@ export default function LearningPage() {
     }, [name]);
 
     const handleVideoClick = (selectedVideo: any) => {
-        setCurrentVideo(null); // Đặt currentVideo thành null để reset trạng thái
+        setCurrentVideo(null);
+
+        if (selectedVideo.Slug) {
+            searchParams.set('period', selectedVideo.Slug);
+            setSearchParams(searchParams);
+        }
+
         setTimeout(() => {
             setCurrentVideo(selectedVideo);
-        }, 100); // Đợi một chút để React cập nhật lại component
+        }, 100);
     };
-
-
-
-
-    const [listVideo, setListVideo] = useState<any[]>([]);
 
     useEffect(() => {
 
@@ -105,16 +104,16 @@ export default function LearningPage() {
     }, [diemDanhCheck, videoKhoaHoc]);
 
     useEffect(() => {
-        if (!currentVideo && listVideo.length > 0) {
-            const remainingVideos = listVideo
-                .filter((video) => !video.isWatch) // Chỉ lấy video chưa xem
-                .sort((a, b) => a.ID_Tiethoc - b.ID_Tiethoc)[0];
+        if (!currentVideo && listVideo.length > 0 && periodSlug) {
+            const video = listVideo.find(
+                (video) => video.Slug === periodSlug && !video.isWatch
+            );
 
-            if (remainingVideos) {
-                setCurrentVideo(remainingVideos);
+            if (video) {
+                setCurrentVideo(video);
             }
         }
-    }, [listVideo]); // Xóa `currentVideo` khỏi dependency để tránh mất trạng thái
+    }, [listVideo, currentVideo, periodSlug]);
 
 
     return (
@@ -125,7 +124,7 @@ export default function LearningPage() {
 
             <Grid container spacing={2} my={3.5} sx={{ alignItems: 'stretch' }}>
                 <Grid item xs={12} md={8} lg={9} sx={{ minHeight: { md: '100vh' } }}>
-                    <LessonVideo currentVideo={currentVideo} currentKhoaHoc={currentKhoaHoc} setFirstCurrent={setFirstCurrent} setListVideo={setListVideo} />
+                    <LessonVideo currentVideo={currentVideo} currentKhoaHoc={currentKhoaHoc} setListVideo={setListVideo} />
                     <Box sx={{ ml: 4, display: { xs: 'none', md: 'block' } }}>
                         <Typography>
                             Tham gia các cộng đồng để cùng học hỏi, chia sẻ xem PMC sắp có gì mới nhé!

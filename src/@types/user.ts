@@ -2,7 +2,6 @@
 
 export type IUserSocialLink = {
   facebookLink: string;
-  instagramLink: string;
   linkedinLink: string;
   twitterLink: string;
 };

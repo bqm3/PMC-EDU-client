@@ -101,13 +101,7 @@ export const _socials = [
     color: '#1877F2',
     path: 'https://www.facebook.com/pmcknowledge.vn',
   },
-  {
-    value: 'instagram',
-    name: 'Instagram',
-    icon: 'ant-design:instagram-filled',
-    color: '#E02D69',
-    path: 'https://www.instagram.com/caitlyn.kerluke',
-  },
+ 
   {
     value: 'youtube',
     name: 'Youtube',

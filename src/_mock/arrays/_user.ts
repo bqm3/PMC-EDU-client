@@ -17,7 +17,6 @@ export const _userAbout = {
   school: _mock.company(2),
   socialLinks: {
     facebookLink: `https://www.facebook.com/caitlyn.kerluke`,
-    instagramLink: `https://www.instagram.com/caitlyn.kerluke`,
     linkedinLink: `https://www.linkedin.com/in/caitlyn.kerluke`,
     twitterLink: `https://www.twitter.com/caitlyn.kerluke`,
   },

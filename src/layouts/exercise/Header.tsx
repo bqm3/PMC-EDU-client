@@ -54,12 +54,7 @@ const socialMediaLinks = [
     hoverColor: 'rgba(255, 0, 0, 0.1)',
     Icon: YouTubeIcon,
   },
-  {
-    href: 'https://www.instagram.com/pmcknowledge',
-    color: '#8A3AB9',
-    hoverColor: 'rgba(138, 58, 185, 0.1)',
-    Icon: InstagramIcon,
-  },
+
 ];
 
 // ----------------------------------------------------------------------

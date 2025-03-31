@@ -44,7 +44,6 @@ export default function AccountSocialLinks({ socialLinks }: Props) {
 
   const defaultValues = {
     facebookLink: socialLinks.facebookLink,
-    instagramLink: socialLinks.instagramLink,
     linkedinLink: socialLinks.linkedinLink,
     twitterLink: socialLinks.twitterLink,
   };

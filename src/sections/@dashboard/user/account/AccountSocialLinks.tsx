@@ -17,10 +17,7 @@ const SOCIAL_LINKS = [
     value: 'facebookLink',
     icon: <Iconify icon="eva:facebook-fill" width={24} />,
   },
-  {
-    value: 'instagramLink',
-    icon: <Iconify icon="ant-design:instagram-filled" width={24} />,
-  },
+
   {
     value: 'linkedinLink',
     icon: <Iconify icon="eva:linkedin-fill" width={24} />,
@@ -44,7 +41,6 @@ export default function AccountSocialLinks({ socialLinks }: Props) {
 
   const defaultValues = {
     facebookLink: socialLinks.facebookLink,
-    instagramLink: socialLinks.instagramLink,
     linkedinLink: socialLinks.linkedinLink,
     twitterLink: socialLinks.twitterLink,
   };

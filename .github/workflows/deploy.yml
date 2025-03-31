@@ -1,0 +1,43 @@
+name: Deploy PMC EDU client to VPS
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies and build
+      run: |
+        npm install
+        npm run build
+
+    - name: Upload build to VPS via SCP
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.PMC_EDU_VPS_HOST }}
+        username: ${{ secrets.PMC_EDU_VPS_USER }}
+        key: ${{ secrets.PMC_EDU_VPS_SSH_KEY }}
+        source: "build/*"
+        target: "/root/pmc/PMC-EDU-client/build"
+
+    - name: Restart PM2 process on VPS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.PMC_EDU_VPS_HOST }}
+        username: ${{ secrets.PMC_EDU_VPS_USER }}
+        key: ${{ secrets.PMC_EDU_VPS_SSH_KEY }}
+        script: |
+          cd /root/pmc/PMC-EDU-client
+          pm2 restart pmc-client-edu || pm2 start serve --name pmc-client-edu -- -s build -l 8388

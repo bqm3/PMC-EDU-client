@@ -41,27 +41,48 @@ export default function LessonList({ class_period, course }: Props) {
   };
 
   return (
-    <List sx={{ backgroundColor: "#f9f9f9", display: 'flex', flexDirection: 'column', borderRadius: "4px", padding: "4px", gap: "4px", boxShadow: "0px 4px 6px rgba(0,0,0,0.1)" }}>
+    <List
+      sx={{
+        backgroundColor: "#f9f9f9",
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: "4px",
+        padding: "4px",
+        gap: "4px",
+        boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+      }}
+    >
       {class_period?.map((lesson: any, index: number) => {
         const unlocked = isLessonUnlocked(lesson);
+        const isVideoType = `${course?.ID_Hinhthucdt}` !== "2";
 
         const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-          if (unlocked) {
-            e.stopPropagation();
-            navigate(
-              PATH_PAGE.courstByMe.learning(`${course?.Malop}`, `${lesson?.Slug}`),
-              {
-                replace: true,
-                state: { lophoc: course?.Tenlop },
-              }
-            );
+          if (!unlocked) return;
 
+          e.stopPropagation();
+
+          if (`${course?.ID_Hinhthucdt}` !== "2") {
+            // Mở video trong tab mới
+            if (lesson?.urlVideo) {
+              window.open(lesson.urlVideo, "_blank");
+            }
+          } else {
+            // Điều hướng trong app
+            if (course?.Malop && lesson?.Slug) {
+              navigate(
+                PATH_PAGE.courstByMe.learning(`${course.Malop}`, `${lesson.Slug}`),
+                {
+                  replace: true,
+                  state: { lophoc: course?.Tenlop },
+                }
+              );
+            }
           }
         };
 
+
         return (
           <ListItemButton
-
             key={index}
             onClick={unlocked ? handleClick : undefined}
             sx={{
@@ -90,33 +111,24 @@ export default function LessonList({ class_period, course }: Props) {
               </Typography>
             </ListItemText>
 
-            {`${course?.ID_Hinhthucdt}` === "2" ? (
-              <IconButton
-                color="primary"
-
-              >
-                📖
-              </IconButton>
+            {`${course?.ID_Hinhthucdt}` !== "2" && unlocked && lesson?.urlVideo ? (
+              <ListItemIcon>
+                <IconButton onClick={(e) => e.stopPropagation()}>
+                  🔗
+                </IconButton>
+              </ListItemIcon>
             ) : (
-              unlocked &&
-              lesson?.urlVideo && (
-                <ListItemIcon>
-                  <IconButton
-                    component="a"
-                    href={lesson.urlVideo}
-                    target="_blank"
-                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
-
-                  >
-                    🔗
-                  </IconButton>
-                </ListItemIcon>
+              !unlocked === false && (
+                <IconButton color="primary">
+                  📖
+                </IconButton>
               )
             )}
           </ListItemButton>
+
         );
       })}
-
     </List>
+
   );
 }

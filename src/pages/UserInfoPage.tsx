@@ -74,7 +74,7 @@ function LearningHistory({ courses }: any) {
     setLoading(false);
   };
 
-  // Khi danh sách khóa học thay đổi, nếu chưa có khóa học nào được chọn thì tự động chọn khóa học đầu tiên
+  // Khi danh sách lớp học thay đổi, nếu chưa có khóa học nào được chọn thì tự động chọn khóa học đầu tiên
   useEffect(() => {
     if (courses && courses.length > 0 && !selectedCourse) {
       handleSelectCourse(courses[0]?.ID_Lophoc);
@@ -84,10 +84,10 @@ function LearningHistory({ courses }: any) {
 
   return (
     <Grid container spacing={2}>
-      {/* Cột bên trái: danh sách khóa học (3 cột) */}
+      {/* Cột bên trái: danh sách lớp học (3 cột) */}
       <Grid item xs={12} md={3}>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Danh sách khóa học
+          Danh sách lớp học
         </Typography>
         <List component="nav">
           {courses?.map((course: any) => (
@@ -157,6 +157,7 @@ function CourseDetails({ course }: any) {
 }
 function AttendanceSection({ attendanceData }: any) {
 
+  console.log('mergedAttendance', attendanceData)
   // Merge 2 mảng và thêm trạng thái điểm danh
   const mergedAttendance = [
     ...(attendanceData?.watchedDiemdanh?.map((item: any) => ({
@@ -177,7 +178,6 @@ function AttendanceSection({ attendanceData }: any) {
             <TableCell>Ngày</TableCell>
             <TableCell>Giờ bắt đầu</TableCell>
             <TableCell>Giờ kết thúc</TableCell>
-            <TableCell>Nội dung</TableCell>
             <TableCell>Địa điểm</TableCell>
             <TableCell>Điểm danh</TableCell>
           </TableRow>
@@ -188,7 +188,6 @@ function AttendanceSection({ attendanceData }: any) {
               <TableCell>{item?.Ngay}</TableCell>
               <TableCell>{item?.Giobatdau}</TableCell>
               <TableCell>{item?.Gioketthuc}</TableCell>
-              <TableCell dangerouslySetInnerHTML={{ __html: item?.Noidung }} />
               <TableCell>{item?.Noihoc}</TableCell>
               <TableCell sx={{ textAlign: 'center' }}>{item?.status}</TableCell>
             </TableRow>
@@ -227,7 +226,6 @@ function ExamResultsSection({ examResults }: any) {
       setLoading(false);
     }
   };
-  console.log('examResults', examResults)
 
   return (
     <Box>

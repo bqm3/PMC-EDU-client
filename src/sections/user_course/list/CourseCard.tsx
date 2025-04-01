@@ -6,6 +6,7 @@ import { PATH_PAGE } from '../../../routes/paths';
 import Image from '../../../components/image';
 import Label, { LabelColor } from '../../../components/label';
 import { IHocvien } from 'src/@types/course';
+import moment from 'moment';
 
 type Props = {
   hocvien: IHocvien;
@@ -46,9 +47,45 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
   const getButtonLabel = (status: number, iExam: any) => {
     if (status === 0 || status === 1) return { text: 'Vào học', disabled: false, action: 'study' };
     if (status === 2 && !iExam) return { text: 'Vào thi', disabled: false, action: 'exam' };
-    if (status === 2 && iExam && iExam?.Thoigianbd && iExam?.Thoigiannb) return { text: 'Đã thi xong', disabled: true, action: 'closed' };
-    if (status === 2 && iExam && !iExam?.Thoigianbd && !iExam?.Thoigiannb) return { text: 'Vào thi', disabled: false, action: 'exam' };
+
+    if (status === 2 && iExam) {
+      const { Thoigianbd, Thoigiannb } = iExam;
+      console.log('Thoigianbd, Thoigiannb', Thoigianbd, Thoigiannb)
+      console.log('dt_baithi', dt_baithi)
+      const thoigianthi = dt_baithi?.Thoigianthi || 0;
+      console.log('thoigianthi', thoigianthi)
+
+      if (Thoigianbd && !Thoigiannb) {
+        const examStart = moment(Thoigianbd, "YYYY-MM-DD HH:mm:ss");
+        const examEnd = examStart.clone().add(thoigianthi, "minutes");
+        const now = moment();
+        console.log('now', examEnd)
+
+        if (examStart.isValid() && examEnd.isValid()) {
+          if (now.isBefore(examEnd)) {
+            console.log('tiep tuc')
+            return { text: 'Tiếp tục thi', disabled: false, action: 'continue' };
+          } else {
+            console.log('het gio')
+            return { text: 'Đã hết thời gian thi', disabled: true, action: 'timeout' };
+          }
+        } else {
+          console.warn("❌ Không thể phân tích thời gian thi. Thoigianbd có thể sai định dạng.");
+          return { text: 'Lỗi thời gian', disabled: true, action: 'error' };
+        }
+      }
+
+      if (Thoigianbd && Thoigiannb) {
+        return { text: 'Đã thi xong', disabled: true, action: 'closed' };
+      }
+
+      if ((!Thoigianbd && !Thoigiannb) || (!Thoigianbd && Thoigiannb)) {
+        return { text: 'Vào thi', disabled: false, action: 'exam' };
+      }
+    }
+
     if (status === 3) return { text: 'Đóng lớp', disabled: true, action: 'closed' };
+
     return { text: 'Không xác định', disabled: true, action: 'unknown' };
   };
 
@@ -119,19 +156,19 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
               variant="contained"
               color="info"
               fullWidth
-              component={RouterLink} // Điều hướng đến trang học
+              component={RouterLink}
               to={linkTo}
               sx={{ mt: 1 }}
             >
               {buttonState.text}
             </Button>
-          ) : buttonState.action === 'exam' ? (
+          ) : buttonState.action === 'exam' || buttonState.action === 'continue' ? ( // ✅ thêm 'continue'
             <Button
               variant="contained"
-              color="success"
+              color={buttonState.action === 'continue' ? 'warning' : 'success'} // ✅ màu khác biệt nếu muốn
               fullWidth
               sx={{ mt: 1 }}
-              onClick={() => onOpenExamDialog(hocvien)} // 🟢 Gọi API lấy lịch thi
+              onClick={() => onOpenExamDialog(hocvien)}
             >
               {buttonState.text}
             </Button>
@@ -141,6 +178,7 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
             {buttonState.text}
           </Button>
         )}
+
       </Stack>
     </Card>
   );

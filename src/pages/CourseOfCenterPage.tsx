@@ -73,15 +73,15 @@ export default function CourseByUser() {
     setCurrentPage(value);
   };
 
-  const debouncedHandleFilters = useMemo(() => {
-    return _debounce((name: string, value: ICourseTableFilterValue) => {
+  const debouncedHandleFilters = useMemo(() =>
+    _debounce((name: string, value: ICourseTableFilterValue) => {
       setFilters((prevState) => ({
         ...prevState,
         [name]: value,
       }));
       setCurrentPage(1); // reset page về 1 khi lọc
-    }, 300); // 300ms debounce
-  }, []);
+    }, 100) // 300ms debounce
+    , []);
 
 
   return (

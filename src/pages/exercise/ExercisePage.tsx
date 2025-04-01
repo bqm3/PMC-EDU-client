@@ -32,6 +32,7 @@ export default function ExercisePage() {
     const [currentQuestion, setCurrentQuestion] = useState<any>();
     const [typeExam, setTypeExam] = useState<any>();
     const [currentExam, setCurrentExam] = useState<any>();
+    console.log('currentExam', currentExam)
     const [answers, setAnswers] = useState<Record<string, string | { fileData: string; fileName: string; isFile: boolean }>>({});
 
 
@@ -168,6 +169,7 @@ export default function ExercisePage() {
 
                 if (responseData) {
                     const { Thoigianconlai, isCheck, Thoigianthi, data } = responseData;
+                    console.log('responseData', responseData)
 
                     if (isCheck === "COUNTINUE") {
                         console.log("Tiếp tục bài thi...");

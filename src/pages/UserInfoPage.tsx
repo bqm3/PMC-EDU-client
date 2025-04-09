@@ -151,7 +151,7 @@ function CourseDetails({ course }: any) {
       </Tabs>
       {tabIndex === 0 && <AttendanceSection attendanceData={course?.diemDanh} />}
       {tabIndex === 1 && <ExamResultsSection examResults={course?.baiThi} />}
-      {tabIndex === 2 && <VBCCSection vbccData={course?.vbcc} />}
+      {tabIndex === 2 && <VBCCSection vbccData={course?.vanbang} />}
     </Box>
   );
 }
@@ -293,13 +293,48 @@ function ExamResultsSection({ examResults }: any) {
 }
 
 function VBCCSection({ vbccData }: any) {
+  const [loading, setLoading] = useState(false);
+  const handleDownloadVB = async (id: string, name: string) => {
+    setLoading(true);
+
+    try {
+      const response = await axios.post(`/api/v1/vanbang/download-vbcc/${id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        responseType: 'blob', // 🟢 QUAN TRỌNG: nhận dạng là file
+      });
+
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+
+      // Đặt tên file tải về
+      const contentDisposition = response.headers['content-disposition'];
+      const fileNameMatch = contentDisposition?.match(/filename="?(.+)"?/);
+      const filename = fileNameMatch ? fileNameMatch[1] : `${name || `vbcc-${id}`}.pdf`;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url); // Dọn bộ nhớ
+    } catch (error) {
+      console.error("❌ Lỗi khi tải văn bằng:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <Box>
       <Typography variant="subtitle1">VBCC:</Typography>
       {vbccData?.map((item: any, index: number) => (
         <Box key={index} sx={{ mb: 1 }}>
-          <Typography variant="body2">{item?.title}</Typography>
-          <Button variant="text">Xem chi tiết</Button>
+          <Typography variant="body2">{item?.Sohieu}</Typography>
+          <Button disabled={loading} onClick={() => handleDownloadVB(item.ID_Vanbang, item?.Sohieu)} variant="text">Tải xuống</Button>
         </Box>
       ))}
     </Box>

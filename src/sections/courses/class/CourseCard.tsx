@@ -54,12 +54,9 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
 
     if (!user) {
       localStorage.setItem('redirectAfterLogin', window.location.pathname);
-
       navigate('/auth/login')
     }
 
-    console.log(Malop,
-      Tenlop,)
     setIsSubmitting(true);
     await axios.post('/api/v1/dangky/create', {
       ID_Loainhom,

@@ -209,23 +209,19 @@ export default function AccountGeneral() {
               <RHFTextField name="CCCD" label="Căn cước công dân" />
               <DatePicker
                 label="Ngày cấp căn cước"
-                value={new Date(values.NgaycapCCCD)}
+                value={values.NgaycapCCCD ? new Date(values.NgaycapCCCD) : null}
                 onChange={(newValue: any) => setValue('NgaycapCCCD', newValue)}
                 renderInput={(params: any) => <TextField {...params} />}
+                inputFormat="dd/MM/yyyy" // tùy chọn hiển thị định dạng ngày
               />
 
-              {/* <DatePicker
-                        label="Start date"
-                        value={picker.startDate}
-                        onChange={picker.onChangeStartDate}
-                        renderInput={(params: any) => <TextField size="small" {...params} />}
-                      /> */}
               <RHFTextField name="Hochieu" label="Hộ chiếu" />
               <DatePicker
                 label="Ngày cấp hộ chiếu"
-                value={new Date(values.NgaycapHochieu)}
+                value={values.NgaycapHochieu ? new Date(values.NgaycapHochieu) : null}
                 onChange={(newValue: any) => setValue('NgaycapHochieu', newValue)}
                 renderInput={(params: any) => <TextField {...params} />}
+                inputFormat="dd/MM/yyyy" // tùy chọn hiển thị định dạng ngày
               />
               {/* <RHFTextField name="NgaycapHochieu" label="Ngày cấp hộ chiều" /> */}
               <RHFTextField name="DcTamtru" label="Địa chỉ tạm trú" />

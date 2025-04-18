@@ -14,7 +14,7 @@ import { useSettingsContext } from '../components/settings';
 import {
   CourseList,
   CourseSearch
-} from '../sections/class_course/list';
+} from '../sections/classes/list';
 
 import { ICourseFilter, ICourseTableFilterValue, ILophoc } from 'src/@types/course';
 

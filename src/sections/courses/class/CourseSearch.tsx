@@ -1,31 +1,15 @@
 import { useCallback, useState } from 'react';
-import { paramCase } from 'change-case';
-import parse from 'autosuggest-highlight/parse';
-import match from 'autosuggest-highlight/match';
-import { useNavigate } from 'react-router-dom';
 // @mui
 import {
-  Link,
-  Typography,
-  Autocomplete,
   TextField,
   InputAdornment,
   StackProps,
   Stack
 } from '@mui/material';
-
-import IconButton from '@mui/material/IconButton';
-// utils
-import axios from '../../../utils/axios';
-// routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
 // @types
 import { ICourseFilter, ICourseTableFilterValue } from 'src/@types/course';
 // components
-import Image from '../../../components/image';
 import Iconify from '../../../components/iconify';
-import { CustomTextField } from '../../../components/custom-input';
-import SearchNotFound from '../../../components/search-not-found';
 
 // ----------------------------------------------------------------------
 type Props = StackProps & {

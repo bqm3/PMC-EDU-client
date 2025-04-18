@@ -2,20 +2,14 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
 import { Container, Tab, Tabs, Box } from '@mui/material';
-// routes
-import { PATH_DASHBOARD, PATH_PAGE } from '../routes/paths';
 // _mock_
 import { _userPayment, _userAddressBook, _userInvoices, _userAbout } from '../_mock/arrays';
 // components
 import Iconify from '../components/iconify';
-import CustomBreadcrumbs from '../components/custom-breadcrumbs';
 import { useSettingsContext } from '../components/settings';
 // sections
 import {
   AccountGeneral,
-  AccountBilling,
-  AccountSocialLinks,
-  AccountNotifications,
   AccountChangePassword,
 } from '../sections/user/account';
 

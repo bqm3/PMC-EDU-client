@@ -31,7 +31,7 @@ import axios from '../utils/axios';
 import { useDispatch, useSelector } from '../redux/store';
 import { getUsersCourse } from '../redux/slices/course';
 import Iconify from 'src/components/iconify';
-import QuestionManager from 'src/sections/history_user';
+import QuestionManager from 'src/sections/user_history';
 
 export default function UserAccountPage() {
   const { themeStretch } = useSettingsContext();
@@ -157,7 +157,6 @@ function CourseDetails({ course }: any) {
 }
 function AttendanceSection({ attendanceData }: any) {
 
-  console.log('mergedAttendance', attendanceData)
   // Merge 2 mảng và thêm trạng thái điểm danh
   const mergedAttendance = [
     ...(attendanceData?.watchedDiemdanh?.map((item: any) => ({
@@ -221,12 +220,11 @@ function ExamResultsSection({ examResults }: any) {
       setOpenModal(true);
     } catch (error) {
       setError("Lỗi khi lấy bài thi! Vui lòng thử lại.");
-      console.error("Lỗi khi lấy bài thi:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  console.log('examResults', examResults)
   return (
     <Box>
       <Typography variant="subtitle1">Kết quả kiểm tra:</Typography>
@@ -240,7 +238,7 @@ function ExamResultsSection({ examResults }: any) {
         Thời gian nộp: {examResults?.Thoigiannb}
       </Typography>
       {
-        examResults !== null && <Button variant="outlined" onClick={handleOpenModal} sx={{ mt: 2 }} disabled={loading}>
+        examResults !== null && examResults?.ID_Baithi && <Button variant="outlined" onClick={handleOpenModal} sx={{ mt: 2 }} disabled={loading}>
           {loading ? <CircularProgress size={20} sx={{ color: "inherit" }} /> : "Xem chi tiết bài làm"}
         </Button>
       }

@@ -50,16 +50,12 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
 
     if (status === 2 && iExam) {
       const { Thoigianbd, Thoigiannb } = iExam;
-      console.log('Thoigianbd, Thoigiannb', Thoigianbd, Thoigiannb)
-      console.log('dt_baithi', dt_baithi)
       const thoigianthi = dt_baithi?.Thoigianthi || 0;
-      console.log('thoigianthi', thoigianthi)
 
       if (Thoigianbd && !Thoigiannb) {
         const examStart = moment(Thoigianbd, "YYYY-MM-DD HH:mm:ss");
         const examEnd = examStart.clone().add(thoigianthi, "minutes");
         const now = moment();
-        console.log('now', examEnd)
 
         if (examStart.isValid() && examEnd.isValid()) {
           if (now.isBefore(examEnd)) {

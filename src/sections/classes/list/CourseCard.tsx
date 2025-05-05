@@ -28,7 +28,8 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
     Ngaybt,
     Ngaykt,
     dm_khoahoc,
-    dm_loainhom
+    dm_loainhom,
+    dm_phongban
   } = data;
 
   const theme = useTheme();
@@ -127,6 +128,16 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
 
               <Typography variant="subtitle2" fontWeight="bold"> {dm_loainhom?.Loainhom}</Typography>
             </Stack>
+            {
+              dm_phongban?.Tenpb && (
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Typography color="text.primary" variant="body2">Phòng ban</Typography>
+
+                  <Typography variant="subtitle2" fontWeight="bold"> {dm_phongban?.Tenpb}</Typography>
+                </Stack>
+              )
+            }
+
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <Typography color="text.primary" variant="body2">Mã lớp học</Typography>
 
@@ -143,13 +154,13 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
               <Typography variant="subtitle2" fontWeight="bold"> {dm_khoahoc?.Tenkhoahoc}</Typography>
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography color="text.primary" variant="body2">Số lượng tham gia:</Typography>
+              <Typography color="text.primary" variant="body2">Số lượng tham gia</Typography>
 
               <Typography variant="subtitle2" fontWeight="bold"> {Number(Soluongdangky)}</Typography>
             </Stack>
 
             <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography color="text.primary" variant="body2">Thời gian học:</Typography>
+              <Typography color="text.primary" variant="body2">Thời gian học</Typography>
               <Typography variant="subtitle2" fontWeight="bold">
                 {formatDate(`${Ngaybt}`)} - {formatDate(`${Ngaykt}`)}
               </Typography>

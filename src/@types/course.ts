@@ -273,10 +273,20 @@ dm_khoahoc: IKhoahoc;
 dm_giangvien: IGiangvien;
 dm_loainhom: ILoainhom;
 dm_loaidangky: ILoaidangky;
+dm_phongban: IPhongban;
 dm_hinhthucdt: IHinhthucdt;
 dt_lichhocs: ILichhoc[]
 dt_hocviens: IHocvien[];
 };
+
+export type IPhongban = {
+  ID_Phongban: string;
+  Macty: string;
+  Machinhanh: string;
+  Mapb: string;
+  Tenpb: string
+}
+
 export type IGiangvien = {
   ID_Giangvien: string;
   Magv: string;

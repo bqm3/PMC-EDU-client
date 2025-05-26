@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Box } from "@mui/material";
 import ReactPlayer from "react-player";
+import SmartVideoPlayer from "./SmartVideoPlayer";
 
 const VideoPlayer = ({ video, onVideoWatched }: any) => {
     const playerRef = useRef<ReactPlayer | null>(null);
@@ -93,33 +94,28 @@ const VideoPlayer = ({ video, onVideoWatched }: any) => {
         };
     }, []);
 
+
     return (
-        <Box
-            sx={{
-                width: "95%",
-                height: { xs: 200, sm: 400, md: 600 },
-            }}
-        >
-            <ReactPlayer
-                key={video?.ID_Lichhoc} // Reset ReactPlayer khi đổi video
-                width="100%"
-                height="100%"
-                ref={playerRef}
-                url={video?.urlVideo}
-                controls
-                playing={isPlaying}
-                config={{
-                    file: {
-                        attributes: {
-                            disableRemotePlayback: true, // Tắt lưu cache trình duyệt
-                        },
-                    },
+        <div style={{ maxWidth: '800px', margin: 'auto' }}>
+            <SmartVideoPlayer
+                video={video}
+                isPlaying={isPlaying}
+                playerRef={playerRef}
+                onPlay={() => handlePlay()}
+                onPause={() => handlePause()}
+                onProgress={(progress) => handleProgress(progress)}
+                onWatchedExternal={(start, end) => {
+                    if (!watched) {
+                        setWatched(true);
+                        setStartTime(start);
+                        setEndTime(end);
+                        setElapsedTime(0);
+                        onVideoWatched(video.ID_Lophoc, video.ID_Lichhoc, start, end, 0);
+                    }
                 }}
-                onPlay={handlePlay}
-                onPause={handlePause}
-                onProgress={handleProgress}
             />
-        </Box>
+
+        </div>
     );
 };
 

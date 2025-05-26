@@ -265,7 +265,7 @@ Cacgtlq: string | null;
 Nguoitd: string;
 ID_Giangvien: string;
 iTinhtrang: string;
-Ngaybt: string | null; // YYYY-MM-DD
+Ngaybd: string | null; // YYYY-MM-DD
 Ngaykt: string | null; // YYYY-MM-DD
 Ghichu: string | null;
 isDelete: string;

@@ -31,13 +31,46 @@ export default function LessonList({ mergeListVideo, handleVideoClick, currentVi
             }}
             onClick={() => handleVideoClick(item)}
           >
-            <CardContent sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: "10px", pb: "10px  !important" }}>
-              {/* Giảm padding từ mặc định xuống 8px */}
-              <Typography variant="subtitle2" fontWeight="bold">
-                {item?.Tieude}
-              </Typography>
-              {isWatched && <CheckCircleIcon sx={{ color: "#2e7d32" }} />}
+            <CardContent
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                p: "10px",
+                pb: "10px !important",
+              }}
+            >
+              <Stack spacing={0.5} sx={{ flex: 1, overflow: 'hidden' }}>
+                <Typography
+                  variant="subtitle2"
+                  fontWeight="bold"
+                  color="text.primary"
+                  sx={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {item?.dm_tiethoc?.Tiethoc}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 1, // giới hạn 1 dòng, bạn có thể đổi thành 2
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {item?.Tieude}
+                </Typography>
+              </Stack>
+
+              {isWatched && <CheckCircleIcon sx={{ color: "#2e7d32", ml: 1 }} />}
             </CardContent>
+
           </Card>
 
         );

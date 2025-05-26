@@ -27,7 +27,7 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
     Tenlop,
     ID_Hinhthucdt,
     iTinhtrang,
-    Ngaybt,
+    Ngaybd,
     Ngaykt,
   } = data;
 
@@ -39,11 +39,15 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempTinhtrang, setTempTinhtrang] = useState(iTinhtrang);
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "";
-    const [year, month, day] = dateString.split("-");
+  const formatDate = (dateString: string | undefined | null) => {
+    if (!dateString || typeof dateString !== "string") return "";
+    const parts = dateString.split("-");
+    if (parts.length !== 3) return "";
+
+    const [year, month, day] = parts;
     return `${day}/${month}/${year}`;
   };
+
 
   // Kiểm tra trạng thái đăng ký
   const isRegistered = user_courses?.some(course => course.ID_Lophoc === ID_Lophoc);
@@ -151,7 +155,7 @@ export default function ClassCourseCard({ data, user_courses, await_courses }: P
             <Stack direction="row" alignItems="center" justifyContent="space-between">
               <Typography color="text.primary" variant="body2">Thời gian học</Typography>
               <Typography variant="subtitle2" fontWeight="bold">
-                {formatDate(`${Ngaybt}`)} - {formatDate(`${Ngaykt}`)}
+                {formatDate(`${Ngaybd}`)} - {formatDate(`${Ngaykt}`)}
               </Typography>
             </Stack>
           </Stack>

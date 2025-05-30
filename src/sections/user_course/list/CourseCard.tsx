@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
-  const { dm_khoahoc, dt_lophoc, dt_baithi } = hocvien;
+  const { dm_khoahoc, dt_lophoc, dt_baithi, baithihocvien_list } = hocvien;
 
   const linkTo = PATH_PAGE.courstByMe.view(`${dt_lophoc?.Malop}`);
 
@@ -44,48 +44,63 @@ export default function UserCourseCard({ hocvien, onOpenExamDialog }: Props) {
   }
 
   // Xác định trạng thái và text của button
-  const getButtonLabel = (status: number, iExam: any) => {
-    if (status === 0 || status === 1) return { text: 'Vào học', disabled: false, action: 'study' };
-    if (status === 2 && !iExam) return { text: 'Vào thi', disabled: false, action: 'exam' };
+  const getButtonLabel = (status: number, hocvien: IHocvien) => {
+    const { iExam, Ngaykt } = hocvien.dt_lophoc || {};
+    const now = moment();
+    const endDate = moment(Ngaykt);
 
-    if (status === 2 && iExam) {
-      const { Thoigianbd, Thoigiannb } = iExam;
-      const thoigianthi = dt_baithi?.Thoigianthi || 0;
+    // ✅ Nếu lớp đã kết thúc
+    if (endDate.isValid() && now.isAfter(endDate)) {
+      return { text: 'Hết hạn', disabled: true, action: 'expired' };
+    }
 
-      if (Thoigianbd && !Thoigiannb) {
-        const examStart = moment(Thoigianbd, "YYYY-MM-DD HH:mm:ss");
-        const examEnd = examStart.clone().add(thoigianthi, "minutes");
-        const now = moment();
+    const baithi = hocvien.dt_baithi;
+    const baithihv = hocvien?.baithihocvien_list?.[0];
+    const thoigianthi = baithi?.Thoigianthi || 0;
 
-        if (examStart.isValid() && examEnd.isValid()) {
-          if (now.isBefore(examEnd)) {
-            console.log('tiep tuc')
-            return { text: 'Tiếp tục thi', disabled: false, action: 'continue' };
-          } else {
-            console.log('het gio')
-            return { text: 'Đã hết thời gian thi', disabled: true, action: 'timeout' };
-          }
+    if (iExam === 0 && (status === 1 || status === 2)) {
+      return { text: 'Vào học', disabled: false, action: 'study' };
+    }
+
+    if (iExam === 1 && status === 1) {
+      return { text: 'Vào học', disabled: false, action: 'study' };
+    }
+
+    if (iExam === 1 && status === 2) {
+      if (!baithi) {
+        return { text: 'Vào thi', disabled: false, action: 'exam' };
+      }
+
+      if (baithihv?.Thoigianbd && !baithihv?.Thoigiannb) {
+        const examStart = moment(baithihv.Thoigianbd);
+        const examEnd = examStart.clone().add(thoigianthi, 'minutes');
+
+        if (now.isBefore(examEnd)) {
+          return { text: 'Tiếp tục thi', disabled: false, action: 'continue' };
         } else {
-          console.warn("❌ Không thể phân tích thời gian thi. Thoigianbd có thể sai định dạng.");
-          return { text: 'Lỗi thời gian', disabled: true, action: 'error' };
+          return { text: 'Đã hết thời gian thi', disabled: true, action: 'timeout' };
         }
       }
 
-      if (Thoigianbd && Thoigiannb) {
+      if (baithihv?.Thoigianbd && baithihv?.Thoigiannb) {
         return { text: 'Đã thi xong', disabled: true, action: 'closed' };
       }
 
-      if ((!Thoigianbd && !Thoigiannb) || (!Thoigianbd && Thoigiannb)) {
-        return { text: 'Vào thi', disabled: false, action: 'exam' };
-      }
+      return { text: 'Vào thi', disabled: false, action: 'exam' };
     }
 
-    if (status === 3) return { text: 'Đóng lớp', disabled: true, action: 'closed' };
+    if (iExam === 2) {
+      return { text: 'Vào học', disabled: false, action: 'study' };
+    }
+
+    if (status === 3) {
+      return { text: 'Lớp đã đóng', disabled: true, action: 'closed' };
+    }
 
     return { text: 'Không xác định', disabled: true, action: 'unknown' };
   };
+  const buttonState = getButtonLabel(Number(dt_lophoc?.iTinhtrang), hocvien);
 
-  const buttonState = getButtonLabel(Number(dt_lophoc?.iTinhtrang), dt_baithi?.baithihocvien_list[0]);
 
   return (
     <Card

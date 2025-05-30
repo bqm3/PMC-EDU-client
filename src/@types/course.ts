@@ -147,26 +147,34 @@ export type IKhoahoc = {
 
 export type IBaiThi = {
 ID_Baithi: string;
-ID_Khoahoc: string;
-ID_Hinhthucthi: string;
-iCheckthi: string;
-Tenbaikt: string;
-Gioithieubkt: string;
-Ngaythi: string;
-Ngayketthuc: string;
-Thoigianthi: string;
-Socauhoi: string;
-Diemchuan: string;
-Tongdiem: string;
-Nguoitao: string;
-Nguoixoa: string;
+  ID_Khoahoc: string;
+  ID_Lophoc: string;
+  ID_VBCCCN: string;
+  ID_Lichhoc: string;
+  ID_Phongban: string;
+  ID_Hinhthucthi: string;
+  ID_Loaibaithi: string;
+  iCheckthi: string;
+  Tenbaikt: string;
+  SlugTenbaikt: string;
+  Gioithieubkt: string;
+  Ngaythi: string;
+  Ngayketthuc: string;
+  Thoigianthi: string;
+  Socauhoi: string;
+  Diemchuan: string;
+  Tongdiem: string;
+  Nguoitao: string;
+  Nguoixoa: string;
+  iTrangthai: string;
+  isAll: string;
 dm_khoahoc: IKhoahoc;
 dm_hinhthucthi: IHinhthucthi;
 dt_baithi_hv: IBaiThiHV;
-
 baithihocvien_list: IBaiThiHV[];
 dt_baithi_cauhois: IBaithiCauhoi[];
 dt_baithi_phans: IBaithiPhan[];
+dsPhongban: IPhongban[];
 }
 
 export type IBaiThiHV = {
@@ -261,6 +269,7 @@ Malop: string;
 Tenlop: string;
 Noiycdt: string;
 ID_Hinhthucdt: string;
+iExam:  number;
 Cacgtlq: string | null;
 Nguoitd: string;
 ID_Giangvien: string;
@@ -275,8 +284,9 @@ dm_loainhom: ILoainhom;
 dm_loaidangky: ILoaidangky;
 dm_phongban: IPhongban;
 dm_hinhthucdt: IHinhthucdt;
-dt_lichhocs: ILichhoc[]
-dt_hocviens: IHocvien[];
+dt_lichhocs?: ILichhoc[]
+dt_hocviens?: IHocvien[];
+baithi_list?: IBaiThi[];
 };
 
 export type IPhongban = {
@@ -361,6 +371,7 @@ dt_baithi?: IBaiThi;
 dm_hinhthucthi: IHinhthucthi;
 dt_lophoc ?: ILophoc
 dm_khoahoc ?: IKhoahoc;
+baithihocvien_list?: IBaiThiHV[]
 }
 
 export type IDiemdanh = {

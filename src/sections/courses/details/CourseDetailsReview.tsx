@@ -2,15 +2,17 @@ import { List, ListItem, ListItemText, ListItemIcon, IconButton, Typography, Lis
 import LockIcon from '@mui/icons-material/Lock';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { Link, useNavigate } from 'react-router-dom';
-import { ILophoc } from 'src/@types/course';
+import { IBaiThi, ILophoc } from 'src/@types/course';
 import { PATH_PAGE } from 'src/routes/paths';
 
 type Props = {
   class_period?: any;
   course: ILophoc;
+  listBaiThi: IBaiThi[]
+  diemDanhCheck: any[];
 };
 
-export default function LessonList({ class_period, course }: Props) {
+export default function LessonList({ class_period, course, listBaiThi, diemDanhCheck }: Props) {
 
   const navigate = useNavigate();
 
@@ -40,6 +42,10 @@ export default function LessonList({ class_period, course }: Props) {
     return `${startTime} - ${endTime} ${day}/${month}/${year}`;
   };
 
+  const watchedVideos = new Set(
+    diemDanhCheck.map((dd: any) => dd.ID_Lichhoc).filter((id) => id != null)
+  );
+
   return (
     <List
       sx={{
@@ -54,39 +60,27 @@ export default function LessonList({ class_period, course }: Props) {
     >
       {class_period?.map((lesson: any, index: number) => {
         const unlocked = isLessonUnlocked(lesson);
-        const isVideoType = `${course?.ID_Hinhthucdt}` !== "2";
+        const isWatched = watchedVideos.has(lesson?.ID_Lichhoc);
 
         const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
           if (!unlocked) return;
-
           e.stopPropagation();
-
-          if (`${course?.ID_Hinhthucdt}` !== "2") {
-            // Mở video trong tab mới
-            if (lesson?.urlVideo) {
-              window.open(lesson.urlVideo, "_blank");
-            }
-          } else {
-            // Điều hướng trong app
-            if (course?.Malop && lesson?.Slug) {
-              navigate(
-                PATH_PAGE.courstByMe.learning(`${course.Malop}`, `${lesson.Slug}`),
-                {
-                  replace: true,
-                  state: { lophoc: course?.Tenlop },
-                }
-              );
-            }
+          if (`${course?.ID_Hinhthucdt}` !== "2" && lesson?.urlVideo) {
+            window.open(lesson.urlVideo, "_blank");
+          } else if (course?.Malop && lesson?.Slug) {
+            navigate(PATH_PAGE.courstByMe.learning(`${course.Malop}`, `${lesson.Slug}`), {
+              replace: true,
+              state: { lophoc: course?.Tenlop },
+            });
           }
         };
-
 
         return (
           <ListItemButton
             key={index}
             onClick={unlocked ? handleClick : undefined}
             sx={{
-              backgroundColor: "#fff",
+              backgroundColor: isWatched ? "#ACE7AEFF" : "#fff", // ✅ Đã xem thì xanh
               borderRadius: "4px",
               padding: "10px",
               boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
@@ -113,21 +107,17 @@ export default function LessonList({ class_period, course }: Props) {
 
             {`${course?.ID_Hinhthucdt}` !== "2" && unlocked && lesson?.urlVideo ? (
               <ListItemIcon>
-                <IconButton onClick={(e) => e.stopPropagation()}>
-                  🔗
-                </IconButton>
+                <IconButton onClick={(e) => e.stopPropagation()}>🔗</IconButton>
               </ListItemIcon>
             ) : (
               !unlocked === false && (
-                <IconButton color="primary">
-                  📖
-                </IconButton>
+                <IconButton color="primary">📖</IconButton>
               )
             )}
           </ListItemButton>
-
         );
       })}
+
     </List>
 
   );

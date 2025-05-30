@@ -88,6 +88,7 @@ export default function CourseByUser() {
       state: {
         exam: examData?.dt_baithi,
         hocvien: examData,
+        type: 'all'
       },
     });
     setOpenDialog(false);

@@ -224,7 +224,7 @@ function ExamResultsSection({ examResults }: any) {
       setLoading(false);
     }
   };
-  console.log('examResults', examResults)
+
   return (
     <Box>
       <Typography variant="subtitle1">Kết quả kiểm tra:</Typography>
@@ -296,7 +296,7 @@ function VBCCSection({ vbccData }: any) {
     setLoading(true);
 
     try {
-      const response = await axios.post(`/api/v1/vanbang/download-vbcc/${id}`, {}, {
+      const response = await axios.get(`/api/v1/vanbang/download-vbcc/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },

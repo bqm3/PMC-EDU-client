@@ -17,22 +17,35 @@ export default function ExercisePage() {
     const location = useLocation()
     const navigate = useNavigate();
 
+
     const [questions, setQuestions] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false)
     const infoQues = useMemo(() => location.state?.exam, [location.state.exam]);
     const infoHocvien = useMemo(() => location.state?.hocvien, [location.state.hocvien]);
+    const infoLichHoc = useMemo(() => location.state?.lichHoc, [location.state.lichHoc]);
 
     useEffect(() => {
-        if (!location.state || !location.state.exam || !location.state.hocvien) {
-            alert("Không có dữ liệu hợp lệ, chuyển về trang chủ!");
-            navigate("/", { replace: true });
+        const state = location.state;
+
+        const hasExam = !!state?.exam;
+        const hasHocvien = !!state?.hocvien;
+        const type = state?.type;
+
+        if (!hasExam && !hasHocvien) {
+            if (type === "item") {
+                navigate(-1);
+            } else if (type === "all") {
+                navigate("/lop-hoc-cua-toi", { replace: true });
+            } else {
+                alert("Không có dữ liệu hợp lệ, chuyển về trang chủ!");
+                navigate("/", { replace: true });
+            }
         }
     }, [location, navigate]);
 
     const [currentQuestion, setCurrentQuestion] = useState<any>();
     const [typeExam, setTypeExam] = useState<any>();
     const [currentExam, setCurrentExam] = useState<any>();
-    console.log('currentExam', currentExam)
     const [answers, setAnswers] = useState<Record<string, string | { fileData: string; fileName: string; isFile: boolean }>>({});
 
 
@@ -40,6 +53,7 @@ export default function ExercisePage() {
     const [startExercise, setStartExercise] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
     const [doneExam, setDoneExam] = useState<string>("")
+
 
     useEffect(() => {
         // Khi danh sách câu hỏi thay đổi, đặt câu hỏi đầu tiên làm mặc định
@@ -145,15 +159,12 @@ export default function ExercisePage() {
         const initiateExam = async () => {
             try {
                 setLoadingPage(true); // Bắt đầu loading
-
-                // Lấy địa chỉ IP + vị trí
-                // const ipResponse = await axios.get("https://ipinfo.io/json");
-                // const ipAddress = ipResponse.data.ip;
-                // const location = `${ipResponse.data.city}, ${ipResponse.data.country}`;
-
                 // Gửi request bắt đầu bài thi
                 const response = await axios.post('api/v1/baithi/start', {
                     ID_Baithi: infoQues?.ID_Baithi,
+                    ID_Lichhoc: infoLichHoc?.ID_Lichhoc,
+                    ID_Lophoc: infoLichHoc?.ID_Lophoc,
+                    ID_VBCCCN: infoLichHoc?.ID_VBCCCN ?? null,
                     Thoigianbd: new Date(),
                     ID_Hocvien: infoHocvien?.ID_Hocvien,
                     Thoigianthi: infoQues?.Thoigianthi,
@@ -169,7 +180,6 @@ export default function ExercisePage() {
 
                 if (responseData) {
                     const { Thoigianconlai, isCheck, Thoigianthi, data } = responseData;
-                    console.log('responseData', responseData)
 
                     if (isCheck === "COUNTINUE") {
                         console.log("Tiếp tục bài thi...");
@@ -326,7 +336,7 @@ export default function ExercisePage() {
     return (
         <>
             <Helmet>
-                <title>{`PMC Knowledge | ${name}`} </title>
+                <title>{`PMC Knowledge`} </title>
             </Helmet>
 
             <Container sx={{ mt: 3, display: "flex" }}>

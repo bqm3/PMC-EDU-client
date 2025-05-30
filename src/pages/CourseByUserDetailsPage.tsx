@@ -14,6 +14,8 @@ import {
   CourseDetailsReview,
 } from '../sections/courses/details';
 import { getDetailLopHoc } from 'src/redux/slices/course';
+import { IBaiThi, ILichhoc } from 'src/@types/course';
+import axios from '../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +28,9 @@ export default function CourseByUserDetailsPage() {
 
   const { course, isLoading } = useSelector((state) => state.course);
 
-  const [logs, setLogs] = useState<any>(course?.dt_lichhocs);
+  const [logs, setLogs] = useState<ILichhoc[]>([]);
+  const [listBaiThi, setListBaiThi] = useState<IBaiThi[]>([]);
+  const [diemDanhCheck, setDiemDanhCheck] = useState([]);
 
   useEffect(() => {
     if (name) {
@@ -42,8 +46,35 @@ export default function CourseByUserDetailsPage() {
 
 
   useEffect(() => {
-    setLogs(course?.dt_lichhocs);
+    setLogs(course?.dt_lichhocs ?? []);
+    setListBaiThi(course?.baithi_list ?? []);
   }, [course]);
+
+  const handleCheckKhoaHoc = async (name: string) => {
+    const accessToken = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : '';
+
+    try {
+      const response = await axios.get(
+        `/api/v1/lophoc/hoc-vien/diem-danh/${name}`,
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        setDiemDanhCheck(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleCheckKhoaHoc(name as string);
+  }, [])
 
   return (
     <>
@@ -126,6 +157,8 @@ export default function CourseByUserDetailsPage() {
                   <CourseDetailsReview
                     class_period={logs}
                     course={course}
+                    listBaiThi={listBaiThi}
+                    diemDanhCheck={diemDanhCheck}
                   />
                 </Grid>
               </Grid>

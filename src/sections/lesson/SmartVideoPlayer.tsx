@@ -37,7 +37,7 @@ const SmartVideoPlayer: React.FC<SmartVideoPlayerProps> = ({
 
 
 
-    if (!url) return <div>⏳ Đang tải video...</div>;
+    if (!url) return <div ><p style={{ color: 'white' }}>⏳ Đang tải video... </p></div>;
 
     if (isYouTubeUrl(url)) {
         return (

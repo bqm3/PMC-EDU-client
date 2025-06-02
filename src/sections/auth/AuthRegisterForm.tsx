@@ -89,23 +89,37 @@ export default function AuthRegisterForm() {
   const onSubmit = async (data: FormValuesProps) => {
     try {
       if (register) {
-        await register(data.Email, data.Matkhau, data.Hodem, data.Ten, data.Tendangnhap, data.Dctamtru);
+        await register(
+          data.Email,
+          data.Matkhau,
+          data.Hodem,
+          data.Ten,
+          data.Tendangnhap,
+          data.Dctamtru
+        );
       }
-      navigate(PATH_AUTH.verify)
+
+      navigate(PATH_AUTH.verify);
+
       enqueueSnackbar('Vui lòng nhập mã OTP để xác nhận tài khoản', {
         variant: 'success',
         autoHideDuration: 5000,
       });
+
       reset();
-    } catch (error) {
-      console.error(error);
-      // reset();
+    } catch (error: any) {
+      console.error('====', error?.response?.data?.message)
+      const message =
+        error?.response?.data?.message || 'Đã xảy ra lỗi không xác định';
+
+      // ✅ Nếu muốn hiển thị ở dưới form bằng React Hook Form
       setError('afterSubmit', {
-        ...error,
-        message: error.message,
+        type: 'manual',
+        message,
       });
     }
   };
+
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

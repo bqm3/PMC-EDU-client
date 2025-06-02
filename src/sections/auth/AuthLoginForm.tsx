@@ -32,12 +32,7 @@ export default function AuthLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    Tendangnhap: Yup.string().required('Số điện thoại là bắt buộc')
-      .matches(
-        /^(03|05|07|08|09)\d{8}$|^PMC\d+$/i,
-        'Chưa đúng định dạng số điện thoại hoặc mã PMC'
-      )
-    ,
+    Tendangnhap: Yup.string().required('Phải có tên đăng nhập'),
     Matkhau: Yup.string().required('Mật khẩu là bắt buộc'),
   });
 

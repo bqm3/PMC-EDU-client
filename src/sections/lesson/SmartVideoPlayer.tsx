@@ -33,7 +33,7 @@ const SmartVideoPlayer: React.FC<SmartVideoPlayerProps> = ({
         /youtube\.com|youtu\.be/.test(url);
 
     const isSharePointStreamPage = (url: string) =>
-        url.includes('sharepoint.com') && url.includes('stream.aspx');
+        url.includes('sharepoint.com');
 
 
 

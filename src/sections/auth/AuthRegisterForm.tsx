@@ -108,7 +108,6 @@ export default function AuthRegisterForm() {
 
       reset();
     } catch (error: any) {
-      console.error('====', error?.response?.data?.message)
       const message =
         error?.response?.data?.message || 'Đã xảy ra lỗi không xác định';
 
